@@ -36,7 +36,7 @@ self.addEventListener('activate', event => {
   );
 });
 
-// 请求澢截策略
+// 请求拦截策略
 self.addEventListener('fetch', event => {
   const url = event.request.url;
 
