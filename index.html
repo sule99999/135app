@@ -48,6 +48,13 @@
       --mod-s1:#141422; --mod-s2:#0a0a16;
       --mod-b1:#130d06; --mod-b2:#090600;
 
+      --card-gold-bg:    linear-gradient(160deg,rgba(255,215,0,0.16) 0%,rgba(255,165,0,0.07) 55%,rgba(180,100,0,0.10) 100%);
+      --card-gold-shad:  inset 0 1px 0 rgba(255,215,0,0.24),inset 0 -1px 0 rgba(0,0,0,0.20);
+      --card-silver-bg:  linear-gradient(160deg,rgba(220,220,248,0.14) 0%,rgba(180,180,220,0.06) 55%,rgba(120,120,165,0.10) 100%);
+      --card-silver-shad:inset 0 1px 0 rgba(220,220,255,0.22),inset 0 -1px 0 rgba(0,0,0,0.20);
+      --card-bronze-bg:  linear-gradient(160deg,rgba(205,127,50,0.17) 0%,rgba(160,80,20,0.07) 55%,rgba(100,50,10,0.12) 100%);
+      --card-bronze-shad:inset 0 1px 0 rgba(205,127,50,0.30),inset 0 -1px 0 rgba(0,0,0,0.20);
+
       --overlay-bg:       rgba(0,0,0,0.88);
       --timer-overlay-bg: rgba(0,0,0,0.93);
       --header-border:    rgba(255,255,255,0.05);
@@ -105,6 +112,13 @@
       --dialog-bg:var(--bg-secondary);
       --cancel-color:rgba(0,0,0,0.28); --cancel-hover:rgba(0,0,0,0.55);
       --scrollbar-thumb:rgba(0,0,0,0.15);
+      --card-gold-bg:    linear-gradient(160deg,rgba(200,144,10,0.14) 0%,rgba(180,100,0,0.06) 55%,rgba(140,70,0,0.08) 100%);
+      --card-gold-shad:  inset 0 1px 0 rgba(200,144,10,0.22),inset 0 -1px 0 rgba(0,0,0,0.07);
+      --card-silver-bg:  linear-gradient(160deg,rgba(80,80,110,0.11) 0%,rgba(60,60,90,0.05) 55%,rgba(40,40,70,0.08) 100%);
+      --card-silver-shad:inset 0 1px 0 rgba(80,80,130,0.18),inset 0 -1px 0 rgba(0,0,0,0.07);
+      --card-bronze-bg:  linear-gradient(160deg,rgba(139,69,19,0.14) 0%,rgba(100,45,10,0.06) 55%,rgba(70,30,5,0.09) 100%);
+      --card-bronze-shad:inset 0 1px 0 rgba(139,69,19,0.22),inset 0 -1px 0 rgba(0,0,0,0.07);
+
       --all-done-bg:linear-gradient(135deg,rgba(200,144,10,0.07),rgba(200,100,10,0.04));
       --all-done-border:rgba(200,144,10,0.22);
       --dash-prog-bg:rgba(0,0,0,0.04); --dash-prog-brd:rgba(0,0,0,0.06);
@@ -219,9 +233,9 @@
 
     /* ─── TASK CARD ─── */
     .task-card{border-radius:13px;padding:13px 15px;margin-bottom:8px;cursor:pointer;transition:transform .18s,box-shadow .18s,opacity .3s;position:relative;overflow:hidden;user-select:none}
-    .task-card-gold  {background:var(--gold-bg);  border:1px solid var(--gold-border)}
-    .task-card-silver{background:var(--silver-bg);border:1px solid var(--silver-border)}
-    .task-card-bronze{background:var(--bronze-bg);border:1px solid var(--bronze-border)}
+    .task-card-gold  {background:var(--card-gold-bg);  border:1px solid var(--gold-border);  box-shadow:var(--card-gold-shad)}
+    .task-card-silver{background:var(--card-silver-bg);border:1px solid var(--silver-border);box-shadow:var(--card-silver-shad)}
+    .task-card-bronze{background:var(--card-bronze-bg);border:1px solid var(--bronze-border);box-shadow:var(--card-bronze-shad)}
     .task-card.locked{opacity:.35;cursor:not-allowed;pointer-events:none}
     /* DONE cards keep their tier color — just slightly muted */
     .task-card.done-card{opacity:.78;cursor:pointer}
@@ -237,7 +251,8 @@
     .badge-silver{background:var(--silver-bg);color:var(--silver)}
     .badge-bronze{background:var(--bronze-bg);color:var(--bronze)}
     .card-meta{margin-top:6px;font-size:11px;color:var(--text-secondary);display:flex;gap:12px;align-items:center}
-    .card-edit-btn{margin-left:auto;background:none;border:none;cursor:pointer;font-size:13px;opacity:.45;padding:2px 4px;border-radius:6px;line-height:1;transition:opacity .15s}
+    .card-edit-btn{background:none;border:none;cursor:pointer;font-size:13px;opacity:.45;padding:2px 4px;border-radius:6px;line-height:1;transition:opacity .15s}
+    .card-btn-group{margin-left:auto;display:flex;gap:2px;flex-shrink:0}
     .card-edit-btn:hover{opacity:1}
     .add-task-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:11px;border-radius:13px;border:1.5px dashed var(--subtle-border);background:none;color:var(--text-secondary);font-size:13px;font-weight:600;cursor:pointer;margin-top:4px;transition:border-color .2s,color .2s}
     .add-task-btn:hover{border-color:var(--gold);color:var(--gold)}
@@ -693,22 +708,13 @@ function WelcomeModal({onStart}){
   );
 }
 
-// ── THEME PANEL ──────────────────────────────────────
-function ThemePanel({current,onChange,onClose,soundEnabled,onSoundChange}){
+// ── THEME PANEL (仅主题颜色) ─────────────────────────
+function ThemePanel({current,onChange,onClose}){
   return(
     <div className="overlay" onClick={onClose}>
       <div className="modal-box modal-welcome" style={{maxWidth:360}} onClick={e=>e.stopPropagation()}>
-        <div style={{fontSize:16,fontWeight:700,marginBottom:3,color:'var(--text-primary)'}}>🎨 设置</div>
-        <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:14}}>主题与音效，立即生效自动保存</div>
-
-        {/* Sound toggle */}
-        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:16,padding:'10px 12px',borderRadius:11,background:'var(--bg-secondary)',border:'1px solid var(--subtle-border)'}}>
-          <div>
-            <div style={{fontSize:13,fontWeight:600,color:'var(--text-primary)'}}>🔔 系统音效</div>
-            <div style={{fontSize:11,color:'var(--text-secondary)',marginTop:2}}>点击音、计时完成提示音</div>
-          </div>
-          <button className={`sound-toggle ${soundEnabled?'on':'off'}`} onClick={()=>onSoundChange(!soundEnabled)} title={soundEnabled?'点击关闭音效':'点击开启音效'}/>
-        </div>
+        <div style={{fontSize:16,fontWeight:700,marginBottom:3,color:'var(--text-primary)'}}>🎨 主题颜色</div>
+        <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:14}}>选择主题，立即生效自动保存</div>
         <div className="theme-btn-row">
           {THEMES.map(t=>(
             <button key={t.id} className={`theme-opt${current===t.id?' selected':''}`} onClick={()=>{onChange(t.id);onClose();}}>
@@ -719,16 +725,36 @@ function ThemePanel({current,onChange,onClose,soundEnabled,onSoundChange}){
           ))}
         </div>
         <button className="btn btn-ghost" style={{marginTop:13}} onClick={onClose}>关闭</button>
+      </div>
+    </div>
+  );
+}
 
-        {/* ── New day reset ── */}
-        <div style={{marginTop:16,paddingTop:14,borderTop:'1px solid var(--subtle-border)'}}>
+// ── SETTINGS PANEL (系统设置) ─────────────────────────
+function SettingsPanel({onClose,soundEnabled,onSoundChange}){
+  return(
+    <div className="overlay" onClick={onClose}>
+      <div className="modal-box modal-welcome" style={{maxWidth:360}} onClick={e=>e.stopPropagation()}>
+        <div style={{fontSize:16,fontWeight:700,marginBottom:3,color:'var(--text-primary)'}}>⚙️ 设置</div>
+        <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:14}}>系统设置与数据管理</div>
+
+        {/* Sound toggle */}
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:16,padding:'10px 12px',borderRadius:11,background:'var(--bg-secondary)',border:'1px solid var(--subtle-border)'}}>
+          <div>
+            <div style={{fontSize:13,fontWeight:600,color:'var(--text-primary)'}}>🔔 系统音效</div>
+            <div style={{fontSize:11,color:'var(--text-secondary)',marginTop:2}}>点击音、计时完成提示音</div>
+          </div>
+          <button className={`sound-toggle ${soundEnabled?'on':'off'}`} onClick={()=>onSoundChange(!soundEnabled)} title={soundEnabled?'点击关闭音效':'点击开启音效'}/>
+        </div>
+
+        {/* New day reset */}
+        <div style={{marginBottom:16,paddingBottom:16,borderBottom:'1px solid var(--subtle-border)'}}>
           <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:8}}>新一天</div>
           <button
             className="btn btn-gold"
             style={{width:'100%',padding:'11px 0',fontWeight:700,fontSize:13}}
             onClick={()=>{
               if(window.confirm('开始新的一天？\n将重新制定今日计划，所有历史数据完整保留。')){
-                // SAFE: only clears the "active date" flag — zero data deleted
                 localStorage.removeItem(SK.ACTIVE_DATE);
                 window.location.reload();
               }
@@ -740,8 +766,8 @@ function ThemePanel({current,onChange,onClose,soundEnabled,onSoundChange}){
           </div>
         </div>
 
-        {/* ── Data backup ── */}
-        <div style={{marginTop:16,paddingTop:14,borderTop:'1px solid var(--subtle-border)'}}>
+        {/* Data backup */}
+        <div style={{marginBottom:16,paddingBottom:16,borderBottom:'1px solid var(--subtle-border)'}}>
           <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:8}}>数据备份</div>
           <button className="btn btn-ghost" style={{width:'100%',fontSize:12,padding:'9px 0',marginBottom:8}}
             onClick={()=>{
@@ -780,8 +806,8 @@ function ThemePanel({current,onChange,onClose,soundEnabled,onSoundChange}){
           </div>
         </div>
 
-        {/* ── Danger zone ── */}
-        <div style={{marginTop:14,paddingTop:14,borderTop:'1px solid var(--subtle-border)'}}>
+        {/* Danger zone */}
+        <div style={{marginBottom:8}}>
           <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:8}}>危险区域</div>
           <button
             className="btn"
@@ -795,6 +821,8 @@ function ThemePanel({current,onChange,onClose,soundEnabled,onSoundChange}){
             }}
           >🗑️ 清除所有数据，重新开始</button>
         </div>
+
+        <button className="btn btn-ghost" style={{marginTop:8}} onClick={onClose}>关闭</button>
       </div>
     </div>
   );
@@ -1113,11 +1141,11 @@ function TaskCard({task,locked,onStart,onEdit,onDelete}){
             <div className="card-meta">
               {task.actualMinutes&&<span>实际 {task.actualMinutes}min</span>}
               <span style={{opacity:.5,fontSize:10}}>点击查看详情 →</span>
-              {onEdit && (
-                <button className="card-edit-btn" onClick={e=>{e.stopPropagation();onEdit(task);}} title="编辑任务">✏️</button>
-              )}
-              {onDelete && (
-                <button className="card-edit-btn" onClick={e=>{e.stopPropagation();onDelete(task);}} title="删除任务" style={{color:'var(--danger)'}}>🗑️</button>
+              {(onEdit||onDelete)&&(
+                <span className="card-btn-group">
+                  {onEdit&&<button className="card-edit-btn" onClick={e=>{e.stopPropagation();onEdit(task);}} title="编辑任务">✏️</button>}
+                  {onDelete&&<button className="card-edit-btn" onClick={e=>{e.stopPropagation();onDelete(task);}} title="删除任务" style={{color:'var(--danger)'}}>🗑️</button>}
+                </span>
               )}
             </div>
             <div className={stampClass}>DONE</div>
@@ -1165,11 +1193,11 @@ function TaskCard({task,locked,onStart,onEdit,onDelete}){
             ? <span>⏸ 剩余约 {remainMins} 分钟</span>
             : <span>⏱ {task.estimatedMinutes}分钟</span>
         }
-        {!locked && onEdit && (
-          <button className="card-edit-btn" onClick={e=>{e.stopPropagation();onEdit(task);}} title="编辑任务">✏️</button>
-        )}
-        {!locked && onDelete && (
-          <button className="card-edit-btn" onClick={e=>{e.stopPropagation();onDelete(task);}} title="删除任务" style={{color:'var(--danger)'}}>🗑️</button>
+        {!locked&&(onEdit||onDelete)&&(
+          <span className="card-btn-group">
+            {onEdit&&<button className="card-edit-btn" onClick={e=>{e.stopPropagation();onEdit(task);}} title="编辑任务">✏️</button>}
+            {onDelete&&<button className="card-edit-btn" onClick={e=>{e.stopPropagation();onDelete(task);}} title="删除任务" style={{color:'var(--danger)'}}>🗑️</button>}
+          </span>
         )}
       </div>
     </div>
@@ -1577,8 +1605,9 @@ function App(){
   // activeDate tracks the last day the user officially set up a plan.
   // When activeDate !== today, the planning modal shows — NO data is ever deleted.
   const [activeDate, setActiveDate] = useLS(SK.ACTIVE_DATE, null);
-  const [view,       setView]       = useState('dash');
-  const [showTheme,  setShowTheme]  = useState(false);
+  const [view,         setView]         = useState('dash');
+  const [showTheme,    setShowTheme]    = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   // Compute today fresh every render — never stale, immune to state init bugs
   const today = todayStr();
   // Force re-render every 30s and on visibilitychange so midnight is caught immediately
@@ -1671,7 +1700,8 @@ function App(){
       {view==='review'      &&<DataReview plans={plans}/>}
       {!welcomed&&<WelcomeModal onStart={()=>setWelcomed(true)}/>}
       {welcomed&&!plan&&<DailyPlanModal onDone={savePlan} dayN={dc} today={today}/>}
-      {showTheme&&<ThemePanel current={theme} onChange={setTheme} onClose={()=>setShowTheme(false)} soundEnabled={soundEnabled} onSoundChange={setSoundEnabled}/>}
+      {showTheme&&<ThemePanel current={theme} onChange={setTheme} onClose={()=>setShowTheme(false)}/>}
+      {showSettings&&<SettingsPanel onClose={()=>setShowSettings(false)} soundEnabled={soundEnabled} onSoundChange={setSoundEnabled}/>}
 
       <div className="bottom-nav">
         <button className={`nav-btn${view==='dash'?' active':''}`} onClick={()=>setView('dash')}>
@@ -1682,6 +1712,9 @@ function App(){
         </button>
         <button className={`nav-btn${view==='review'?' active':''}`} onClick={()=>setView('review')}>
           <span className="nav-icon">📊</span>数据复盘
+        </button>
+        <button className="nav-btn" onClick={()=>setShowSettings(true)}>
+          <span className="nav-icon">⚙️</span>设置
         </button>
       </div>
     </div>
