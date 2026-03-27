@@ -48,12 +48,20 @@
       --mod-s1:#141422; --mod-s2:#0a0a16;
       --mod-b1:#130d06; --mod-b2:#090600;
 
-      --card-gold-bg:    linear-gradient(160deg,rgba(255,215,0,0.16) 0%,rgba(255,165,0,0.07) 55%,rgba(180,100,0,0.10) 100%);
-      --card-gold-shad:  inset 0 1px 0 rgba(255,215,0,0.24),inset 0 -1px 0 rgba(0,0,0,0.20);
-      --card-silver-bg:  linear-gradient(160deg,rgba(220,220,248,0.14) 0%,rgba(180,180,220,0.06) 55%,rgba(120,120,165,0.10) 100%);
-      --card-silver-shad:inset 0 1px 0 rgba(220,220,255,0.22),inset 0 -1px 0 rgba(0,0,0,0.20);
-      --card-bronze-bg:  linear-gradient(160deg,rgba(205,127,50,0.17) 0%,rgba(160,80,20,0.07) 55%,rgba(100,50,10,0.12) 100%);
-      --card-bronze-shad:inset 0 1px 0 rgba(205,127,50,0.30),inset 0 -1px 0 rgba(0,0,0,0.20);
+      --card-gold-bg:    linear-gradient(155deg,rgba(255,245,130,0.26) 0%,rgba(255,215,0,0.20) 28%,rgba(190,135,0,0.15) 58%,rgba(240,185,0,0.19) 80%,rgba(145,95,0,0.18) 100%);
+      --card-gold-border:rgba(255,215,0,0.68);
+      --card-gold-shad:  0 7px 22px rgba(200,148,0,0.38),0 2px 7px rgba(0,0,0,0.55),inset 0 1.5px 0 rgba(255,248,140,0.55),inset 0 -1.5px 0 rgba(0,0,0,0.42);
+      --card-gold-stripe:linear-gradient(180deg,#FFF398 0%,#FFD700 42%,#B87E00 100%);
+
+      --card-silver-bg:  linear-gradient(155deg,rgba(242,242,255,0.22) 0%,rgba(205,205,248,0.16) 28%,rgba(148,148,200,0.13) 58%,rgba(215,215,252,0.17) 80%,rgba(120,120,172,0.15) 100%);
+      --card-silver-border:rgba(210,210,255,0.65);
+      --card-silver-shad:0 7px 22px rgba(155,155,215,0.32),0 2px 7px rgba(0,0,0,0.55),inset 0 1.5px 0 rgba(242,242,255,0.55),inset 0 -1.5px 0 rgba(0,0,0,0.42);
+      --card-silver-stripe:linear-gradient(180deg,#F2F2FF 0%,#C0C0E0 42%,#7878A8 100%);
+
+      --card-bronze-bg:  linear-gradient(155deg,rgba(225,148,68,0.28) 0%,rgba(205,127,50,0.22) 28%,rgba(145,82,20,0.16) 58%,rgba(198,118,44,0.21) 80%,rgba(112,64,14,0.18) 100%);
+      --card-bronze-border:rgba(215,135,52,0.68);
+      --card-bronze-shad:0 7px 22px rgba(170,105,28,0.40),0 2px 7px rgba(0,0,0,0.55),inset 0 1.5px 0 rgba(255,195,95,0.55),inset 0 -1.5px 0 rgba(0,0,0,0.42);
+      --card-bronze-stripe:linear-gradient(180deg,#FFBE74 0%,#CD7F32 42%,#7A4510 100%);
 
       --overlay-bg:       rgba(0,0,0,0.88);
       --timer-overlay-bg: rgba(0,0,0,0.93);
@@ -112,12 +120,20 @@
       --dialog-bg:var(--bg-secondary);
       --cancel-color:rgba(0,0,0,0.28); --cancel-hover:rgba(0,0,0,0.55);
       --scrollbar-thumb:rgba(0,0,0,0.15);
-      --card-gold-bg:    linear-gradient(160deg,rgba(200,144,10,0.14) 0%,rgba(180,100,0,0.06) 55%,rgba(140,70,0,0.08) 100%);
-      --card-gold-shad:  inset 0 1px 0 rgba(200,144,10,0.22),inset 0 -1px 0 rgba(0,0,0,0.07);
-      --card-silver-bg:  linear-gradient(160deg,rgba(80,80,110,0.11) 0%,rgba(60,60,90,0.05) 55%,rgba(40,40,70,0.08) 100%);
-      --card-silver-shad:inset 0 1px 0 rgba(80,80,130,0.18),inset 0 -1px 0 rgba(0,0,0,0.07);
-      --card-bronze-bg:  linear-gradient(160deg,rgba(139,69,19,0.14) 0%,rgba(100,45,10,0.06) 55%,rgba(70,30,5,0.09) 100%);
-      --card-bronze-shad:inset 0 1px 0 rgba(139,69,19,0.22),inset 0 -1px 0 rgba(0,0,0,0.07);
+      --card-gold-bg:    linear-gradient(155deg,rgba(200,155,10,0.18) 0%,rgba(185,130,0,0.13) 35%,rgba(140,90,0,0.10) 65%,rgba(180,125,0,0.14) 100%);
+      --card-gold-border:rgba(180,130,0,0.52);
+      --card-gold-shad:  0 5px 16px rgba(160,110,0,0.22),0 2px 5px rgba(0,0,0,0.12),inset 0 1.5px 0 rgba(230,185,40,0.38),inset 0 -1.5px 0 rgba(0,0,0,0.10);
+      --card-gold-stripe:linear-gradient(180deg,#E8C040 0%,#B87E00 42%,#7A5000 100%);
+
+      --card-silver-bg:  linear-gradient(155deg,rgba(70,70,105,0.14) 0%,rgba(60,60,95,0.10) 35%,rgba(45,45,78,0.08) 65%,rgba(65,65,100,0.12) 100%);
+      --card-silver-border:rgba(80,80,130,0.45);
+      --card-silver-shad:0 5px 16px rgba(80,80,140,0.18),0 2px 5px rgba(0,0,0,0.12),inset 0 1.5px 0 rgba(120,120,180,0.32),inset 0 -1.5px 0 rgba(0,0,0,0.10);
+      --card-silver-stripe:linear-gradient(180deg,#9090C0 0%,#606090 42%,#404068 100%);
+
+      --card-bronze-bg:  linear-gradient(155deg,rgba(140,72,20,0.16) 0%,rgba(120,58,14,0.11) 35%,rgba(90,42,8,0.09) 65%,rgba(130,65,16,0.13) 100%);
+      --card-bronze-border:rgba(150,85,25,0.50);
+      --card-bronze-shad:0 5px 16px rgba(130,78,18,0.20),0 2px 5px rgba(0,0,0,0.12),inset 0 1.5px 0 rgba(190,130,50,0.35),inset 0 -1.5px 0 rgba(0,0,0,0.10);
+      --card-bronze-stripe:linear-gradient(180deg,#C08030 0%,#8B5014 42%,#5C3008 100%);
 
       --all-done-bg:linear-gradient(135deg,rgba(200,144,10,0.07),rgba(200,100,10,0.04));
       --all-done-border:rgba(200,144,10,0.22);
@@ -223,33 +239,47 @@
     .progress-track{height:5px;background:var(--progress-track);border-radius:3px;overflow:hidden}
     .progress-fill{height:100%;background:linear-gradient(90deg,#FFD700,#FF9500);border-radius:3px;transition:width .6s cubic-bezier(.2,.8,.4,1)}
 
-    .dash-section{padding:12px 12px 0}
-    .section-header{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-    .section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px}
+    /* ─── SECTION ─── */
+    .dash-section{padding:14px 12px 0;margin-bottom:2px}
+    .section-header{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding:8px 12px;border-radius:11px}
+    .section-gold  .section-header{background:linear-gradient(90deg,rgba(255,215,0,0.14),rgba(255,165,0,0.04));border-left:3px solid rgba(255,215,0,0.7)}
+    .section-silver.section-header,.section-silver .section-header{background:linear-gradient(90deg,rgba(200,200,255,0.12),rgba(160,160,220,0.03));border-left:3px solid rgba(200,200,255,0.6)}
+    .section-bronze .section-header{background:linear-gradient(90deg,rgba(205,127,50,0.15),rgba(160,90,20,0.04));border-left:3px solid rgba(205,127,50,0.65)}
+    .section-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.4px}
     .section-gold   .section-label{color:var(--gold)}
     .section-silver .section-label{color:var(--silver)}
     .section-bronze .section-label{color:var(--bronze)}
-    .section-count{margin-left:auto;font-size:11px;color:var(--text-secondary)}
+    .section-count{margin-left:auto;font-size:12px;font-weight:700;color:var(--text-secondary)}
+    .section-icon{font-size:20px;line-height:1}
 
     /* ─── TASK CARD ─── */
-    .task-card{border-radius:13px;padding:13px 15px;margin-bottom:8px;cursor:pointer;transition:transform .18s,box-shadow .18s,opacity .3s;position:relative;overflow:hidden;user-select:none}
-    .task-card-gold  {background:var(--card-gold-bg);  border:1px solid var(--gold-border);  box-shadow:var(--card-gold-shad)}
-    .task-card-silver{background:var(--card-silver-bg);border:1px solid var(--silver-border);box-shadow:var(--card-silver-shad)}
-    .task-card-bronze{background:var(--card-bronze-bg);border:1px solid var(--bronze-border);box-shadow:var(--card-bronze-shad)}
+    .task-card{border-radius:15px;padding:0;margin-bottom:10px;cursor:pointer;transition:transform .20s,box-shadow .20s,opacity .3s;position:relative;overflow:hidden;user-select:none}
+    /* Left metallic stripe via ::before */
+    .task-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;z-index:2}
+    .task-card-gold  {background:var(--card-gold-bg);  border:1.5px solid var(--card-gold-border);  box-shadow:var(--card-gold-shad)}
+    .task-card-silver{background:var(--card-silver-bg);border:1.5px solid var(--card-silver-border);box-shadow:var(--card-silver-shad)}
+    .task-card-bronze{background:var(--card-bronze-bg);border:1.5px solid var(--card-bronze-border);box-shadow:var(--card-bronze-shad)}
+    .task-card-gold  ::before,.task-card-gold  .card-inner::before,.task-card-gold::before  {background:var(--card-gold-stripe)}
+    .task-card-silver::before{background:var(--card-silver-stripe)}
+    .task-card-bronze::before{background:var(--card-bronze-stripe)}
+    /* Top shine overlay */
+    .task-card::after{content:'';position:absolute;top:0;left:0;right:0;height:42%;background:linear-gradient(180deg,rgba(255,255,255,0.07) 0%,transparent 100%);border-radius:15px 15px 0 0;pointer-events:none;z-index:1}
+    /* Inner padding wrapper (handles the left-stripe offset) */
+    .card-inner{padding:13px 14px 13px 18px;position:relative;z-index:2}
     .task-card.locked{opacity:.35;cursor:not-allowed;pointer-events:none}
-    /* DONE cards keep their tier color — just slightly muted */
-    .task-card.done-card{opacity:.78;cursor:pointer}
-    .task-card:not(.locked):hover{transform:translateY(-2px)}
-    .task-card-gold:not(.locked):hover  {box-shadow:0 6px 22px var(--gold-glow)}
-    .task-card-silver:not(.locked):hover{box-shadow:0 6px 22px var(--silver-glow)}
-    .task-card-bronze:not(.locked):hover{box-shadow:0 6px 22px var(--bronze-glow)}
+    .task-card.done-card{opacity:.80;cursor:pointer}
+    .task-card:not(.locked):active{transform:scale(0.985)}
+    .task-card:not(.locked):hover{transform:translateY(-3px)}
+    .task-card-gold:not(.locked):hover  {box-shadow:0 12px 32px rgba(200,148,0,0.48),0 4px 10px rgba(0,0,0,0.50),inset 0 1.5px 0 rgba(255,248,140,0.60),inset 0 -1.5px 0 rgba(0,0,0,0.42)}
+    .task-card-silver:not(.locked):hover{box-shadow:0 12px 32px rgba(155,155,215,0.42),0 4px 10px rgba(0,0,0,0.50),inset 0 1.5px 0 rgba(242,242,255,0.60),inset 0 -1.5px 0 rgba(0,0,0,0.42)}
+    .task-card-bronze:not(.locked):hover{box-shadow:0 12px 32px rgba(170,105,28,0.50),0 4px 10px rgba(0,0,0,0.50),inset 0 1.5px 0 rgba(255,195,95,0.60),inset 0 -1.5px 0 rgba(0,0,0,0.42)}
 
     .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
     .card-title{font-size:14px;font-weight:600;line-height:1.4;flex:1}
-    .card-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap;flex-shrink:0}
-    .badge-gold  {background:var(--gold-bg);  color:var(--gold)}
-    .badge-silver{background:var(--silver-bg);color:var(--silver)}
-    .badge-bronze{background:var(--bronze-bg);color:var(--bronze)}
+    .card-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap;flex-shrink:0;border:1px solid}
+    .badge-gold  {background:rgba(255,215,0,0.15);color:var(--gold);  border-color:rgba(255,215,0,0.40)}
+    .badge-silver{background:rgba(200,200,240,0.15);color:var(--silver);border-color:rgba(200,200,240,0.40)}
+    .badge-bronze{background:rgba(205,127,50,0.15);color:var(--bronze);border-color:rgba(205,127,50,0.40)}
     .card-meta{margin-top:6px;font-size:11px;color:var(--text-secondary);display:flex;gap:12px;align-items:center}
     .card-edit-btn{background:none;border:none;cursor:pointer;font-size:13px;opacity:.45;padding:2px 4px;border-radius:6px;line-height:1;transition:opacity .15s}
     .card-btn-group{margin-left:auto;display:flex;gap:2px;flex-shrink:0}
@@ -261,6 +291,7 @@
     .tier-btn.active-gold{border-color:var(--gold);background:var(--gold-bg);color:var(--gold)}
     .tier-btn.active-silver{border-color:var(--silver);background:var(--silver-bg);color:var(--silver)}
     .tier-btn.active-bronze{border-color:var(--bronze);background:var(--bronze-bg);color:var(--bronze)}
+    .tier-btn.tier-full{opacity:.35;cursor:not-allowed;pointer-events:none}
     .custom-time-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
     .custom-time-input{width:72px;padding:5px 8px;border-radius:8px;border:1px solid var(--subtle-border);background:var(--bg-card);color:var(--text-primary);font-size:13px;text-align:center}
     .sound-toggle{position:relative;width:46px;height:26px;border-radius:13px;border:none;cursor:pointer;transition:background .22s;flex-shrink:0;padding:0}
@@ -529,6 +560,14 @@ function getAudioCtx(){
     return _audioCtx;
   }catch(e){ return null; }
 }
+// ── 移动端后台恢复：页面重新可见或任意触摸时自动 resume AudioContext ──
+function _tryResumeAudio(){
+  if(_audioCtx && _audioCtx.state==='suspended') _audioCtx.resume().catch(()=>{});
+}
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden) _tryResumeAudio(); });
+['touchstart','pointerdown','click'].forEach(ev=>
+  document.addEventListener(ev, _tryResumeAudio, {passive:true, capture:true})
+);
 function playTone(ctx,freq,start,dur,vol=0.25,type='sine'){
   const osc=ctx.createOscillator(),g=ctx.createGain();
   osc.connect(g);g.connect(ctx.destination);
@@ -579,7 +618,13 @@ function playSuccess(){  // cheerful arpeggio on task complete
 function haptic(pattern=[100]){ try{ navigator.vibrate&&navigator.vibrate(pattern); }catch(e){} }
 const fmtDate  = d => { const x=new Date(d+' 12:00'); return `${x.getFullYear()}年${x.getMonth()+1}月${x.getDate()}日`; };
 const fmtDateShort = d => { const x=new Date(d+' 12:00'); return `${x.getMonth()+1}月${x.getDate()}日`; };
-const dayCount = f => f?Math.max(1,Math.floor((new Date()-new Date(f))/864e5)+1):1;
+const dayCount = f => {
+  if(!f) return 1;
+  // Parse both dates as local noon to avoid UTC-offset day-boundary errors
+  const start=new Date(f+' 12:00:00'); start.setHours(12,0,0,0);
+  const now=new Date(); now.setHours(12,0,0,0);
+  return Math.max(1,Math.floor((now-start)/864e5)+1);
+};
 const weekOf   = d => { const x=new Date(d+' 12:00'),dy=x.getDay(); x.setDate(x.getDate()-dy+(dy===0?-6:1)); return x.toISOString().split('T')[0]; };
 const planTasks= p => p?[p.goldTask,...p.silverTasks,...p.bronzeTasks].filter(Boolean):[];
 
@@ -731,28 +776,28 @@ function ThemePanel({current,onChange,onClose}){
 }
 
 // ── SETTINGS PANEL (系统设置) ─────────────────────────
-function SettingsPanel({onClose,soundEnabled,onSoundChange}){
+function SettingsPanel({soundEnabled,onSoundChange}){
   return(
-    <div className="overlay" onClick={onClose}>
-      <div className="modal-box modal-welcome" style={{maxWidth:360}} onClick={e=>e.stopPropagation()}>
-        <div style={{fontSize:16,fontWeight:700,marginBottom:3,color:'var(--text-primary)'}}>⚙️ 设置</div>
-        <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:14}}>系统设置与数据管理</div>
+    <div className="view-scroll" style={{padding:'20px 16px 40px'}}>
+      <div style={{maxWidth:460,margin:'0 auto'}}>
+        <div style={{fontSize:18,fontWeight:700,marginBottom:4,color:'var(--text-primary)'}}>⚙️ 设置</div>
+        <div style={{fontSize:12,color:'var(--text-secondary)',marginBottom:20}}>系统设置与数据管理</div>
 
         {/* Sound toggle */}
-        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:16,padding:'10px 12px',borderRadius:11,background:'var(--bg-secondary)',border:'1px solid var(--subtle-border)'}}>
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:14,padding:'12px 14px',borderRadius:13,background:'var(--bg-secondary)',border:'1px solid var(--subtle-border)'}}>
           <div>
-            <div style={{fontSize:13,fontWeight:600,color:'var(--text-primary)'}}>🔔 系统音效</div>
-            <div style={{fontSize:11,color:'var(--text-secondary)',marginTop:2}}>点击音、计时完成提示音</div>
+            <div style={{fontSize:14,fontWeight:600,color:'var(--text-primary)'}}>🔔 系统音效</div>
+            <div style={{fontSize:11,color:'var(--text-secondary)',marginTop:3}}>点击音、计时完成提示音</div>
           </div>
           <button className={`sound-toggle ${soundEnabled?'on':'off'}`} onClick={()=>onSoundChange(!soundEnabled)} title={soundEnabled?'点击关闭音效':'点击开启音效'}/>
         </div>
 
         {/* New day reset */}
-        <div style={{marginBottom:16,paddingBottom:16,borderBottom:'1px solid var(--subtle-border)'}}>
-          <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:8}}>新一天</div>
+        <div style={{marginBottom:14,padding:'14px',borderRadius:13,background:'var(--bg-secondary)',border:'1px solid var(--subtle-border)'}}>
+          <div style={{fontSize:11,fontWeight:600,color:'var(--text-secondary)',marginBottom:10,textTransform:'uppercase',letterSpacing:'.5px'}}>新一天</div>
           <button
             className="btn btn-gold"
-            style={{width:'100%',padding:'11px 0',fontWeight:700,fontSize:13}}
+            style={{width:'100%',padding:'12px 0',fontWeight:700,fontSize:13}}
             onClick={()=>{
               if(window.confirm('开始新的一天？\n将重新制定今日计划，所有历史数据完整保留。')){
                 localStorage.removeItem(SK.ACTIVE_DATE);
@@ -761,15 +806,15 @@ function SettingsPanel({onClose,soundEnabled,onSoundChange}){
             }}>
             🌅 开始新的一天
           </button>
-          <div style={{fontSize:10,color:'var(--text-secondary)',lineHeight:1.5,marginTop:6}}>
+          <div style={{fontSize:10,color:'var(--text-secondary)',lineHeight:1.5,marginTop:8}}>
             历史记录完整保留，仅重新制定今日计划
           </div>
         </div>
 
         {/* Data backup */}
-        <div style={{marginBottom:16,paddingBottom:16,borderBottom:'1px solid var(--subtle-border)'}}>
-          <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:8}}>数据备份</div>
-          <button className="btn btn-ghost" style={{width:'100%',fontSize:12,padding:'9px 0',marginBottom:8}}
+        <div style={{marginBottom:14,padding:'14px',borderRadius:13,background:'var(--bg-secondary)',border:'1px solid var(--subtle-border)'}}>
+          <div style={{fontSize:11,fontWeight:600,color:'var(--text-secondary)',marginBottom:10,textTransform:'uppercase',letterSpacing:'.5px'}}>数据备份</div>
+          <button className="btn btn-ghost" style={{width:'100%',fontSize:12,padding:'10px 0',marginBottom:8}}
             onClick={()=>{
               const data={version:2,exportedAt:new Date().toISOString(),
                 first:localStorage.getItem('135app_first'),
@@ -781,7 +826,7 @@ function SettingsPanel({onClose,soundEnabled,onSoundChange}){
               a.href=url;a.download=`135app-backup-${new Date().toISOString().slice(0,10)}.json`;
               a.click();URL.revokeObjectURL(url);
             }}>💾 保存数据备份</button>
-          <label className="btn btn-ghost" style={{width:'100%',fontSize:12,padding:'9px 0',textAlign:'center',cursor:'pointer',display:'block',boxSizing:'border-box'}}>
+          <label className="btn btn-ghost" style={{width:'100%',fontSize:12,padding:'10px 0',textAlign:'center',cursor:'pointer',display:'block',boxSizing:'border-box'}}>
             📥 恢复备份（从文件导入）
             <input type="file" accept=".json" style={{display:'none'}} onChange={e=>{
               const file=e.target.files[0]; if(!file)return;
@@ -806,12 +851,29 @@ function SettingsPanel({onClose,soundEnabled,onSoundChange}){
           </div>
         </div>
 
+        {/* Reset start date */}
+        <div style={{marginBottom:14,padding:'14px',borderRadius:13,background:'var(--bg-secondary)',border:'1px solid var(--subtle-border)'}}>
+          <div style={{fontSize:11,fontWeight:600,color:'var(--text-secondary)',marginBottom:10,textTransform:'uppercase',letterSpacing:'.5px'}}>使用天数</div>
+          <button className="btn btn-ghost" style={{width:'100%',fontSize:12,padding:'10px 0'}}
+            onClick={()=>{
+              if(window.confirm('将今天设为第1天？\n所有任务记录和数据完整保留，仅重置天数计数。')){
+                const today=new Date();
+                const s=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+                localStorage.setItem('135app_first',JSON.stringify(s));
+                window.location.reload();
+              }
+            }}>📅 将今天重置为第 1 天</button>
+          <div style={{fontSize:10,color:'var(--text-secondary)',lineHeight:1.5,marginTop:8}}>
+            仅修改天数显示，历史任务数据不受影响
+          </div>
+        </div>
+
         {/* Danger zone */}
-        <div style={{marginBottom:8}}>
-          <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:8}}>危险区域</div>
+        <div style={{padding:'14px',borderRadius:13,background:'rgba(255,82,82,0.06)',border:'1px solid rgba(255,82,82,0.18)'}}>
+          <div style={{fontSize:11,fontWeight:600,color:'var(--danger)',marginBottom:10,textTransform:'uppercase',letterSpacing:'.5px'}}>危险区域</div>
           <button
             className="btn"
-            style={{width:'100%',background:'rgba(255,82,82,0.12)',color:'var(--danger)',border:'1px solid rgba(255,82,82,0.3)',borderRadius:10,padding:'9px 0',fontWeight:700,fontSize:13,cursor:'pointer'}}
+            style={{width:'100%',background:'rgba(255,82,82,0.12)',color:'var(--danger)',border:'1px solid rgba(255,82,82,0.3)',borderRadius:10,padding:'10px 0',fontWeight:700,fontSize:13,cursor:'pointer'}}
             onClick={()=>{
               if(window.confirm('确定要清除所有数据吗？\n计划、记录、日历事件都会被删除，且无法恢复。')){
                 Object.values({FIRST:'135app_first',PLANS:'135app_plans',THEME:'135app_theme',EVENTS:'135app_events'})
@@ -821,8 +883,6 @@ function SettingsPanel({onClose,soundEnabled,onSoundChange}){
             }}
           >🗑️ 清除所有数据，重新开始</button>
         </div>
-
-        <button className="btn btn-ghost" style={{marginTop:8}} onClick={onClose}>关闭</button>
       </div>
     </div>
   );
@@ -1055,8 +1115,11 @@ function PomodoroTimer({task,onComplete,onPause}){
 }
 
 // ── ADD TASK MODAL ───────────────────────────────────
-function AddTaskModal({onSave,onClose}){
-  const [tier,setTier]=useState('silver');
+function AddTaskModal({onSave,onClose,plan}){
+  const goldFull  = plan && !!plan.goldTask;
+  const silverFull= plan && (plan.silverTasks||[]).length >= 3;
+  const defaultTier= goldFull ? (silverFull ? 'bronze' : 'silver') : 'gold';
+  const [tier,setTier]=useState(defaultTier);
   const [title,setTitle]=useState('');
   const [time,setTime]=useState(25);
   const [isCI,setIsCI]=useState(false);
@@ -1069,8 +1132,8 @@ function AddTaskModal({onSave,onClose}){
         <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:14}}>为今日计划补充任务</div>
         <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:6}}>任务类别</label>
         <div className="tier-btn-row">
-          <button className={`tier-btn${tier==='gold'?' active-gold':''}`} onClick={()=>setTier('gold')}>🥇 金牌</button>
-          <button className={`tier-btn${tier==='silver'?' active-silver':''}`} onClick={()=>setTier('silver')}>🥈 银牌</button>
+          <button className={`tier-btn${tier==='gold'?' active-gold':''}${goldFull?' tier-full':''}`} onClick={()=>setTier('gold')}>🥇 金牌{goldFull?' ✓':''}</button>
+          <button className={`tier-btn${tier==='silver'?' active-silver':''}${silverFull?' tier-full':''}`} onClick={()=>setTier('silver')}>🥈 银牌{silverFull?' 3/3':''}</button>
           <button className={`tier-btn${tier==='bronze'?' active-bronze':''}`} onClick={()=>setTier('bronze')}>🥉 铜牌</button>
         </div>
         <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:6}}>任务名称</label>
@@ -1128,51 +1191,55 @@ function TaskCard({task,locked,onStart,onEdit,onDelete}){
     onStart(task);
   };
 
+  const tierEmoji = tier==='gold'?'🥇':tier==='silver'?'🥈':'🥉';
+
   if(done){
     const stampClass=`done-stamp done-stamp-${tier}`;
     return(
       <div className={`task-card task-card-${tier} done-card`} onClick={handleClick}>
-        {!flipped?(
-          <>
-            <div className="card-top">
-              <div className="card-title">{task.title}</div>
-              <span className={`card-badge badge-${tier}`}>✅ 完成</span>
-            </div>
-            <div className="card-meta">
-              {task.actualMinutes&&<span>实际 {task.actualMinutes}min</span>}
-              <span style={{opacity:.5,fontSize:10}}>点击查看详情 →</span>
-              {(onEdit||onDelete)&&(
-                <span className="card-btn-group">
-                  {onEdit&&<button className="card-edit-btn" onClick={e=>{e.stopPropagation();onEdit(task);}} title="编辑任务">✏️</button>}
-                  {onDelete&&<button className="card-edit-btn" onClick={e=>{e.stopPropagation();onDelete(task);}} title="删除任务" style={{color:'var(--danger)'}}>🗑️</button>}
-                </span>
-              )}
-            </div>
-            <div className={stampClass}>DONE</div>
-          </>
-        ):(
-          <>
-            <div className="card-top">
-              <div className="card-title">{task.title}</div>
-              <span style={{fontSize:11,color:'var(--text-secondary)'}}>← 收起</span>
-            </div>
-            <div className="card-detail-row">
-              <div className="card-detail-col"><label>计划用时</label><span style={{color:'var(--gold)'}}>{task.estimatedMinutes}min</span></div>
-              <div className="card-detail-col"><label>实际用时</label>
-                <span style={{color:(task.actualMinutes||0)<=task.estimatedMinutes?'var(--success)':'var(--danger)'}}>
-                  {task.actualMinutes??'—'}min
-                </span>
+        <div className="card-inner">
+          {!flipped?(
+            <>
+              <div className="card-top">
+                <div className="card-title"><span style={{marginRight:5}}>{tierEmoji}</span>{task.title}</div>
+                <span className={`card-badge badge-${tier}`}>✅ 完成</span>
               </div>
-              {task.actualMinutes&&(
-                <div className="card-detail-col"><label>偏差</label>
-                  <span style={{color:task.actualMinutes<=task.estimatedMinutes?'var(--success)':'var(--danger)'}}>
-                    {task.actualMinutes<=task.estimatedMinutes?`-${task.estimatedMinutes-task.actualMinutes}`:`+${task.actualMinutes-task.estimatedMinutes}`}min
+              <div className="card-meta">
+                {task.actualMinutes&&<span>实际 {task.actualMinutes}min</span>}
+                <span style={{opacity:.5,fontSize:10}}>点击查看详情 →</span>
+                {(onEdit||onDelete)&&(
+                  <span className="card-btn-group">
+                    {onEdit&&<button className="card-edit-btn" onClick={e=>{e.stopPropagation();onEdit(task);}} title="编辑任务">✏️</button>}
+                    {onDelete&&<button className="card-edit-btn" onClick={e=>{e.stopPropagation();onDelete(task);}} title="删除任务" style={{color:'var(--danger)'}}>🗑️</button>}
+                  </span>
+                )}
+              </div>
+              <div className={stampClass}>DONE</div>
+            </>
+          ):(
+            <>
+              <div className="card-top">
+                <div className="card-title"><span style={{marginRight:5}}>{tierEmoji}</span>{task.title}</div>
+                <span style={{fontSize:11,color:'var(--text-secondary)'}}>← 收起</span>
+              </div>
+              <div className="card-detail-row">
+                <div className="card-detail-col"><label>计划用时</label><span style={{color:'var(--gold)'}}>{task.estimatedMinutes}min</span></div>
+                <div className="card-detail-col"><label>实际用时</label>
+                  <span style={{color:(task.actualMinutes||0)<=task.estimatedMinutes?'var(--success)':'var(--danger)'}}>
+                    {task.actualMinutes??'—'}min
                   </span>
                 </div>
-              )}
-            </div>
-          </>
-        )}
+                {task.actualMinutes&&(
+                  <div className="card-detail-col"><label>偏差</label>
+                    <span style={{color:task.actualMinutes<=task.estimatedMinutes?'var(--success)':'var(--danger)'}}>
+                      {task.actualMinutes<=task.estimatedMinutes?`-${task.estimatedMinutes-task.actualMinutes}`:`+${task.actualMinutes-task.estimatedMinutes}`}min
+                    </span>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+        </div>
       </div>
     );
   }
@@ -1182,23 +1249,25 @@ function TaskCard({task,locked,onStart,onEdit,onDelete}){
   const remainMins = isPaused && task.remainingSeconds!=null ? Math.ceil(task.remainingSeconds/60) : null;
   return(
     <div className={`task-card task-card-${tier}${locked?' locked':''}`} onClick={handleClick}>
-      <div className="card-top">
-        <div className="card-title">{task.title}</div>
-        <span className={`card-badge badge-${tier}`}>{locked?'🔒':isCI?'✓ 打卡':isPaused?'⏸ 继续':'▶ 开始'}</span>
-      </div>
-      <div className="card-meta">
-        {isCI
-          ? <span>点击即完成，无需计时</span>
-          : isPaused && remainMins!=null
-            ? <span>⏸ 剩余约 {remainMins} 分钟</span>
-            : <span>⏱ {task.estimatedMinutes}分钟</span>
-        }
-        {!locked&&(onEdit||onDelete)&&(
-          <span className="card-btn-group">
-            {onEdit&&<button className="card-edit-btn" onClick={e=>{e.stopPropagation();onEdit(task);}} title="编辑任务">✏️</button>}
-            {onDelete&&<button className="card-edit-btn" onClick={e=>{e.stopPropagation();onDelete(task);}} title="删除任务" style={{color:'var(--danger)'}}>🗑️</button>}
-          </span>
-        )}
+      <div className="card-inner">
+        <div className="card-top">
+          <div className="card-title"><span style={{marginRight:5}}>{tierEmoji}</span>{task.title}</div>
+          <span className={`card-badge badge-${tier}`}>{locked?'🔒':isCI?'✓ 打卡':isPaused?'⏸ 继续':'▶ 开始'}</span>
+        </div>
+        <div className="card-meta">
+          {isCI
+            ? <span>点击即完成，无需计时</span>
+            : isPaused && remainMins!=null
+              ? <span>⏸ 剩余约 {remainMins} 分钟</span>
+              : <span>⏱ {task.estimatedMinutes}分钟</span>
+          }
+          {!locked&&(onEdit||onDelete)&&(
+            <span className="card-btn-group">
+              {onEdit&&<button className="card-edit-btn" onClick={e=>{e.stopPropagation();onEdit(task);}} title="编辑任务">✏️</button>}
+              {onDelete&&<button className="card-edit-btn" onClick={e=>{e.stopPropagation();onDelete(task);}} title="删除任务" style={{color:'var(--danger)'}}>🗑️</button>}
+            </span>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -1275,7 +1344,7 @@ function Dashboard({plan,onUpdate,onAddTask,onDeleteTask}){
       <button className="add-task-btn" onClick={()=>setShowAddTask(true)}>➕ 新增任务</button>
       {activeTask&&<PomodoroTimer task={activeTask} onComplete={complete} onPause={pause}/>}
       {editTask&&<EditTaskModal task={editTask} onSave={handleSaveEdit} onClose={()=>setEditTask(null)}/>}
-      {showAddTask&&<AddTaskModal onSave={handleAddTask} onClose={()=>setShowAddTask(false)}/>}
+      {showAddTask&&<AddTaskModal onSave={handleAddTask} onClose={()=>setShowAddTask(false)} plan={plan}/>}
       {deleteConfirm&&(
         <div className="overlay" onClick={()=>setDeleteConfirm(null)}>
           <div className="dialog-box" onClick={e=>e.stopPropagation()}>
@@ -1449,6 +1518,13 @@ function CalendarView({plans, events, onAddEvent, onDeleteEvent}){
   const nextMonth=()=>{ if(curMonth===11){setCurYear(y=>y+1);setCurMonth(0);}else setCurMonth(m=>m+1); };
   const goToday=()=>{ const n=new Date(); setCurYear(n.getFullYear()); setCurMonth(n.getMonth()); setSelDate(todayStr()); };
 
+  // Navigate days (in day view)
+  const shiftDay=(delta)=>{
+    const d=new Date(selDate+'T12:00:00');
+    d.setDate(d.getDate()+delta);
+    setSelDate(d.toISOString().split('T')[0]);
+  };
+
   // Build month grid
   const monthGrid=useMemo(()=>{
     const firstDay=new Date(curYear,curMonth,1).getDay();
@@ -1541,7 +1617,11 @@ function CalendarView({plans, events, onAddEvent, onDeleteEvent}){
       <div>
         <div className="cal-day-header">
           <button className="cal-back-btn" onClick={()=>setView('month')}>‹ 月历</button>
-          <div className="cal-day-title">{fmtDateShort(selDate)} {selDate===today?'· 今天':''}</div>
+          <div style={{display:'flex',alignItems:'center',gap:4,flex:1,justifyContent:'center'}}>
+            <button className="cal-nav-btn" style={{fontSize:18}} onClick={()=>shiftDay(-1)}>‹</button>
+            <div className="cal-day-title" style={{minWidth:100,textAlign:'center'}}>{fmtDateShort(selDate)}{selDate===today?' · 今天':''}</div>
+            <button className="cal-nav-btn" style={{fontSize:18}} onClick={()=>shiftDay(1)}>›</button>
+          </div>
           <button className="cal-add-btn" onClick={()=>setShowAdd(true)}>+ 添加</button>
         </div>
 
@@ -1607,7 +1687,6 @@ function App(){
   const [activeDate, setActiveDate] = useLS(SK.ACTIVE_DATE, null);
   const [view,         setView]         = useState('dash');
   const [showTheme,    setShowTheme]    = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
   // Compute today fresh every render — never stale, immune to state init bugs
   const today = todayStr();
   // Force re-render every 30s and on visibilitychange so midnight is caught immediately
@@ -1650,7 +1729,10 @@ function App(){
     if(meta) meta.content=themeColors[theme]||'#ffffff';
   },[theme]);
 
-  const dc    = dayCount(first||today);
+  const dc    = React.useMemo(()=>{
+    const keys=Object.keys(plans).sort();
+    return dayCount(keys.length>0 ? keys[0] : (first||today));
+  },[plans,first,today]);
   // Plan is valid only when user has officially activated today via the planning modal.
   // Historical plans are NEVER deleted — they stay in `plans` for calendar & review.
   const plan  = activeDate === today ? (plans[today] || null) : null;
@@ -1695,13 +1777,13 @@ function App(){
         <button className="settings-btn" onClick={()=>setShowTheme(true)} title="选择主题">🎨</button>
       </div>
 
-      {view==='dash'  &&plan &&<Dashboard plan={plan} onUpdate={updateTask} onAddTask={addTask} onDeleteTask={deleteTask}/>}
-      {view==='cal'         &&<CalendarView plans={plans} events={events} onAddEvent={addEvent} onDeleteEvent={delEvent}/>}
-      {view==='review'      &&<DataReview plans={plans}/>}
+      {view==='dash'     &&plan &&<Dashboard plan={plan} onUpdate={updateTask} onAddTask={addTask} onDeleteTask={deleteTask}/>}
+      {view==='cal'            &&<CalendarView plans={plans} events={events} onAddEvent={addEvent} onDeleteEvent={delEvent}/>}
+      {view==='review'         &&<DataReview plans={plans}/>}
+      {view==='settings'       &&<SettingsPanel soundEnabled={soundEnabled} onSoundChange={setSoundEnabled}/>}
       {!welcomed&&<WelcomeModal onStart={()=>setWelcomed(true)}/>}
       {welcomed&&!plan&&<DailyPlanModal onDone={savePlan} dayN={dc} today={today}/>}
       {showTheme&&<ThemePanel current={theme} onChange={setTheme} onClose={()=>setShowTheme(false)}/>}
-      {showSettings&&<SettingsPanel onClose={()=>setShowSettings(false)} soundEnabled={soundEnabled} onSoundChange={setSoundEnabled}/>}
 
       <div className="bottom-nav">
         <button className={`nav-btn${view==='dash'?' active':''}`} onClick={()=>setView('dash')}>
@@ -1713,7 +1795,7 @@ function App(){
         <button className={`nav-btn${view==='review'?' active':''}`} onClick={()=>setView('review')}>
           <span className="nav-icon">📊</span>数据复盘
         </button>
-        <button className="nav-btn" onClick={()=>setShowSettings(true)}>
+        <button className={`nav-btn${view==='settings'?' active':''}`} onClick={()=>setView('settings')}>
           <span className="nav-icon">⚙️</span>设置
         </button>
       </div>
