@@ -2,7 +2,7 @@
 <html lang="zh-CN" data-theme="white">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -156,8 +156,8 @@
        BASE
     ═══════════════════════════════════════ */
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    html{transition:background .25s}
-    body{background:var(--bg-primary);color:var(--text-primary);font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-serif;min-height:100vh;overflow-x:hidden;transition:background .25s,color .25s}
+    html{transition:background .25s;touch-action:pan-x pan-y;-ms-touch-action:pan-x pan-y}
+    body{background:var(--bg-primary);color:var(--text-primary);font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-serif;min-height:100vh;overflow-x:hidden;transition:background .25s,color .25s;touch-action:pan-x pan-y;-ms-touch-action:pan-x pan-y}
     ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--scrollbar-thumb);border-radius:2px}
     #app-root{max-width:480px;margin:0 auto;min-height:100vh;position:relative}
 
@@ -267,7 +267,7 @@
     /* Inner padding wrapper (handles the left-stripe offset) */
     .card-inner{padding:13px 14px 13px 18px;position:relative;z-index:2}
     .task-card.locked{opacity:.35;cursor:not-allowed;pointer-events:none}
-    .task-card.done-card{opacity:.80;cursor:pointer}
+    .task-card.done-card{opacity:.60;cursor:default}
     .task-card:not(.locked):active{transform:scale(0.985)}
     .task-card:not(.locked):hover{transform:translateY(-3px)}
     .task-card-gold:not(.locked):hover  {box-shadow:0 12px 32px rgba(200,148,0,0.48),0 4px 10px rgba(0,0,0,0.50),inset 0 1.5px 0 rgba(255,248,140,0.60),inset 0 -1.5px 0 rgba(0,0,0,0.42)}
@@ -275,14 +275,15 @@
     .task-card-bronze:not(.locked):hover{box-shadow:0 12px 32px rgba(170,105,28,0.50),0 4px 10px rgba(0,0,0,0.50),inset 0 1.5px 0 rgba(255,195,95,0.60),inset 0 -1.5px 0 rgba(0,0,0,0.42)}
 
     .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
-    .card-title{font-size:14px;font-weight:600;line-height:1.4;flex:1}
+    .card-title{font-size:14px;font-weight:600;line-height:1.4;flex:1;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
+    .card-title.title-expanded{-webkit-line-clamp:unset;display:block}
     .card-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap;flex-shrink:0;border:1px solid}
     .badge-gold  {background:rgba(255,215,0,0.15);color:var(--gold);  border-color:rgba(255,215,0,0.40)}
     .badge-silver{background:rgba(200,200,240,0.15);color:var(--silver);border-color:rgba(200,200,240,0.40)}
     .badge-bronze{background:rgba(205,127,50,0.15);color:var(--bronze);border-color:rgba(205,127,50,0.40)}
     .card-meta{margin-top:6px;font-size:11px;color:var(--text-secondary);display:flex;gap:12px;align-items:center}
-    .card-edit-btn{background:none;border:none;cursor:pointer;font-size:13px;opacity:.45;padding:2px 4px;border-radius:6px;line-height:1;transition:opacity .15s}
-    .card-btn-group{margin-left:auto;display:flex;gap:2px;flex-shrink:0}
+    .card-edit-btn{background:none;border:none;cursor:pointer;font-size:15px;opacity:.5;border-radius:8px;line-height:1;transition:opacity .15s;min-width:40px;min-height:40px;display:inline-flex;align-items:center;justify-content:center;padding:0;margin:-8px -2px;-webkit-tap-highlight-color:transparent}
+    .card-btn-group{margin-left:auto;display:flex;gap:0;flex-shrink:0;align-items:center}
     .card-edit-btn:hover{opacity:1}
     .add-task-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:11px;border-radius:13px;border:1.5px dashed var(--subtle-border);background:none;color:var(--text-secondary);font-size:13px;font-weight:600;cursor:pointer;margin-top:4px;transition:border-color .2s,color .2s}
     .add-task-btn:hover{border-color:var(--gold);color:var(--gold)}
@@ -291,7 +292,16 @@
     .tier-btn.active-gold{border-color:var(--gold);background:var(--gold-bg);color:var(--gold)}
     .tier-btn.active-silver{border-color:var(--silver);background:var(--silver-bg);color:var(--silver)}
     .tier-btn.active-bronze{border-color:var(--bronze);background:var(--bronze-bg);color:var(--bronze)}
-    .tier-btn.tier-full{opacity:.35;cursor:not-allowed;pointer-events:none}
+    .tier-btn.tier-full{opacity:.45;cursor:pointer}
+    .toast-inline{background:rgba(255,160,0,.1);border:1px solid rgba(255,160,0,.3);color:var(--gold);font-size:11px;font-weight:600;padding:8px 12px;border-radius:10px;margin-bottom:12px;line-height:1.5;animation:toastSlide .2s ease}
+    @keyframes toastSlide{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+    .tier-prog-bar{display:flex;align-items:center;gap:12px;padding:10px 15px;background:var(--dash-prog-bg);border-bottom:1px solid var(--dash-prog-brd);flex-wrap:wrap}
+    .tier-prog-group{display:flex;align-items:center;gap:2px}
+    .tier-prog-pip{font-size:13px;color:var(--text-secondary);line-height:1;transition:color .3s,transform .3s}
+    .tier-prog-pip.pip-done{color:var(--gold);transform:scale(1.15)}
+    .tier-prog-badge{font-size:9px;font-weight:700;color:var(--success);background:rgba(76,175,80,.13);padding:2px 6px;border-radius:8px;margin-left:4px}
+    @keyframes goldPop{0%{opacity:0;transform:scale(.65)}65%{transform:scale(1.1)}100%{opacity:1;transform:scale(1)}}
+    .gold-celebrate{animation:goldPop .55s cubic-bezier(.34,1.56,.64,1) both;text-align:center;padding:6px 0}
     .custom-time-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
     .custom-time-input{width:72px;padding:5px 8px;border-radius:8px;border:1px solid var(--subtle-border);background:var(--bg-card);color:var(--text-primary);font-size:13px;text-align:center}
     .sound-toggle{position:relative;width:46px;height:26px;border-radius:13px;border:none;cursor:pointer;transition:background .22s;flex-shrink:0;padding:0}
@@ -410,10 +420,10 @@
     .theme-btn-row{display:flex;flex-direction:column;gap:6px}
     .theme-opt{display:flex;align-items:center;gap:11px;padding:10px 13px;border-radius:11px;border:1.5px solid transparent;background:var(--chip-bg);cursor:pointer;font-family:inherit;text-align:left;transition:all .15s}
     .theme-opt:hover{background:var(--gold-bg);border-color:var(--gold-border)}
-    .theme-opt.selected{border-color:var(--gold);background:var(--gold-bg)}
+    .theme-opt.selected{border-color:var(--gold);background:var(--gold-bg);box-shadow:0 0 0 2px var(--gold)}
     .theme-swatch{width:28px;height:28px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border:1.5px solid rgba(0,0,0,0.1);font-size:13px}
     .theme-label{font-size:13px;font-weight:500;color:var(--text-primary);flex:1}
-    .theme-check{color:var(--gold);font-size:15px;font-weight:700}
+    .theme-check{color:var(--gold);font-size:13px;font-weight:900;width:20px;height:20px;border-radius:50%;border:2px solid var(--gold);display:inline-flex;align-items:center;justify-content:center;background:rgba(255,215,0,.18);flex-shrink:0}
 
     /* ═══════════════════════════════════════
        CALENDAR STYLES
@@ -494,7 +504,62 @@
     .content-pad{padding-bottom:74px}
     input[type="date"]::-webkit-calendar-picker-indicator{opacity:.5;cursor:pointer;filter:var(--cal-icon-filter,none)}
     html[data-theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1)}
+
+    /* ── GOLD CARD PROMINENCE (1.5-2x visual size) ── */
+    .section-gold .task-card:not(.done-card){min-height:80px}
+    .section-gold .task-card:not(.done-card) .card-inner{padding:18px 16px 16px 22px}
+    .section-gold .task-card:not(.done-card) .card-title{font-size:16px;-webkit-line-clamp:3;letter-spacing:.01em}
+    .section-gold .task-card:not(.done-card) .card-meta{font-size:12px;margin-top:9px}
+    .section-gold .task-card:not(.done-card) .card-badge{font-size:11px;padding:4px 11px}
+    .section-gold .task-card:not(.done-card)::before{width:7px}
+
+    /* ── INLINE EDIT ── */
+    .inline-edit-wrap{flex:1;display:flex}
+    .inline-edit-input{flex:1;border:none;background:rgba(255,215,0,0.12);color:var(--text-primary);font-size:14px;font-weight:600;font-family:inherit;line-height:1.4;outline:2px solid var(--gold);border-radius:7px;padding:3px 8px;width:100%;box-sizing:border-box}
+    .section-gold .inline-edit-input{font-size:16px;outline-color:var(--gold)}
+    .section-silver .inline-edit-input{background:rgba(200,200,220,0.12);outline-color:var(--silver)}
+    .section-bronze .inline-edit-input{background:rgba(205,127,50,0.12);outline-color:var(--bronze)}
+
+    /* ── TOAST ── */
+    #app-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:rgba(18,18,28,0.94);color:#f0f0f8;padding:12px 20px;border-radius:14px;font-size:13px;max-width:300px;width:calc(100% - 40px);text-align:center;z-index:9999;opacity:0;pointer-events:none;transition:opacity .25s;line-height:1.55;box-shadow:0 6px 24px rgba(0,0,0,0.35)}
+    #app-toast.toast-visible{opacity:1}
+
+    /* ── STATUS BANNERS (offline / incognito) ── */
+    .status-banner{display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 16px;font-size:11.5px;font-weight:600;line-height:1.4;text-align:center;animation:bannerIn .3s ease}
+    @keyframes bannerIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+    .banner-offline{background:rgba(255,82,82,0.10);color:var(--danger);border-bottom:1px solid rgba(255,82,82,0.22)}
+    .banner-incognito{background:rgba(255,160,0,0.09);color:var(--gold);border-bottom:1px solid rgba(255,160,0,0.24)}
   </style>
+  <script>
+    /* ── 防缩放：三重保险 ──────────────────────────────
+       1. viewport meta 已设 maximum-scale=1 user-scalable=no
+       2. CSS touch-action:pan-x pan-y 禁止浏览器缩放手势
+       3. JS 拦截 gesturestart / wheel(ctrlKey) / touchmove 多指
+    ─────────────────────────────────────────────────── */
+    // iOS Safari gesture zoom
+    document.addEventListener('gesturestart', function(e){ e.preventDefault(); }, {passive:false});
+    document.addEventListener('gesturechange', function(e){ e.preventDefault(); }, {passive:false});
+    document.addEventListener('gestureend',   function(e){ e.preventDefault(); }, {passive:false});
+    // Ctrl+滚轮缩放（桌面端）
+    document.addEventListener('wheel', function(e){ if(e.ctrlKey){ e.preventDefault(); } }, {passive:false});
+    // 多指 touchmove → 捏合缩放
+    document.addEventListener('touchmove', function(e){ if(e.touches.length>1){ e.preventDefault(); } }, {passive:false});
+    // 兜底：若 scale 被意外改变则强制重置 viewport
+    (function resetZoomIfNeeded(){
+      var vp=document.querySelector('meta[name=viewport]');
+      function fix(){
+        if(Math.round(window.innerWidth)!==Math.round(screen.width/window.devicePixelRatio) && window.visualViewport){
+          if(window.visualViewport.scale>1.01){
+            vp.setAttribute('content',
+              'width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover');
+          }
+        }
+      }
+      if(window.visualViewport){
+        window.visualViewport.addEventListener('resize', fix);
+      }
+    })();
+  </script>
 </head>
 <body>
 <div id="root"></div>
@@ -507,7 +572,7 @@
 const { useState, useEffect, useCallback, useRef, useMemo } = React;
 
 // ── CONSTANTS ────────────────────────────────────────
-const SK = { FIRST:'135app_first', PLANS:'135app_plans', THEME:'135app_theme', EVENTS:'135app_events', SOUND:'135app_sound', WELCOMED:'135app_welcomed', ACTIVE_DATE:'135app_active_date' };
+const SK = { FIRST:'135app_first', PLANS:'135app_plans', THEME:'135app_theme', EVENTS:'135app_events', SOUND:'135app_sound', HAPTIC:'135app_haptic', WELCOMED:'135app_welcomed', ACTIVE_DATE:'135app_active_date' };
 const TIME_OPTS = [5,10,15,25,30,45,60,90,120];
 const THEMES = [
   {id:'white',    label:'☀️ 纯白',   desc:'简洁明亮白色',swatch:'#ffffff', text:'#c8900a'},
@@ -552,13 +617,30 @@ const fmt      = s => { const a=Math.abs(s); return `${String(Math.floor(a/60)).
 
 // ── AUDIO / HAPTIC ────────────────────────────────────
 function isSoundOn(){ try{ const v=localStorage.getItem(SK.SOUND); return v===null?true:JSON.parse(v); }catch(e){ return true; } }
+function isHapticOn(){ try{ const v=localStorage.getItem(SK.HAPTIC); return v===null?true:JSON.parse(v); }catch(e){ return true; } }
 let _audioCtx=null;
+let _reverbBuf=null; // 缓存混响冲激响应，只生成一次
 function getAudioCtx(){
   try{
-    if(!_audioCtx||_audioCtx.state==='closed') _audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+    if(!_audioCtx||_audioCtx.state==='closed'){
+      _audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+      _reverbBuf=null; // ctx 重建时清除缓存
+    }
     if(_audioCtx.state==='suspended') _audioCtx.resume();
     return _audioCtx;
   }catch(e){ return null; }
+}
+function _getReverbBuf(ctx){
+  if(_reverbBuf) return _reverbBuf;
+  const sr=ctx.sampleRate;
+  const revLen=Math.floor(sr*0.13);
+  _reverbBuf=ctx.createBuffer(2,revLen,sr);
+  for(let c=0;c<2;c++){
+    const d=_reverbBuf.getChannelData(c);
+    for(let i=0;i<revLen;i++)
+      d[i]=(Math.random()*2-1)*Math.pow(1-i/revLen,2.2)*0.28;
+  }
+  return _reverbBuf;
 }
 // ── 移动端后台恢复：页面重新可见或任意触摸时自动 resume AudioContext ──
 function _tryResumeAudio(){
@@ -577,24 +659,40 @@ function playTone(ctx,freq,start,dur,vol=0.25,type='sine'){
   g.gain.exponentialRampToValueAtTime(0.001,start+dur);
   osc.start(start);osc.stop(start+dur+0.05);
 }
-function playClick(){  // keyboard/mouse click sound using filtered noise burst
+function playClick(){  // 老式相机快门咔嚓声 + 桶内空间混响感
   if(!isSoundOn()) return;
   const ctx=getAudioCtx(); if(!ctx)return;
   const t=ctx.currentTime;
-  // Short noise burst simulating key/mouse click
-  const bufLen=Math.floor(ctx.sampleRate*0.035);
-  const buf=ctx.createBuffer(1,bufLen,ctx.sampleRate);
-  const d=buf.getChannelData(0);
-  for(let i=0;i<bufLen;i++) d[i]=(Math.random()*2-1);
-  const src=ctx.createBufferSource(); src.buffer=buf;
-  // Highpass to remove rumble, gives crisp "tick"
-  const hpf=ctx.createBiquadFilter(); hpf.type='highpass'; hpf.frequency.value=3500;
-  // Quick exponential decay envelope
-  const gain=ctx.createGain();
-  gain.gain.setValueAtTime(0.28,t);
-  gain.gain.exponentialRampToValueAtTime(0.001,t+0.035);
-  src.connect(hpf); hpf.connect(gain); gain.connect(ctx.destination);
-  src.start(t);
+  const sr=ctx.sampleRate;
+  // 复用缓存的混响冲激响应，避免每次点击重新计算
+  const conv=ctx.createConvolver(); conv.buffer=_getReverbBuf(ctx);
+  // Dry/Wet 混合：直达声 60% + 混响 40%
+  const dry=ctx.createGain(); dry.gain.value=0.60;
+  const wet=ctx.createGain(); wet.gain.value=0.40;
+  dry.connect(ctx.destination);
+  conv.connect(wet); wet.connect(ctx.destination);
+  // Helper: 带通滤波噪声爆破，同时送入 dry 和混响
+  function shutterBurst(t0,vol,dur,bpFreq,bpQ){
+    const len=Math.floor(sr*dur);
+    const buf=ctx.createBuffer(1,len,sr);
+    const d=buf.getChannelData(0);
+    for(let i=0;i<len;i++) d[i]=(Math.random()*2-1);
+    const src=ctx.createBufferSource(); src.buffer=buf;
+    const bpf=ctx.createBiquadFilter(); bpf.type='bandpass';
+    bpf.frequency.value=bpFreq; bpf.Q.value=bpQ;
+    const g=ctx.createGain();
+    g.gain.setValueAtTime(vol,t0);
+    g.gain.exponentialRampToValueAtTime(0.001,t0+dur);
+    src.connect(bpf); bpf.connect(g);
+    g.connect(dry); g.connect(conv);
+    src.start(t0);
+  }
+  // "咔"：第一帘撞击 — 频率再压（1800Hz），更闷厚
+  shutterBurst(t,        0.28, 0.022, 1800, 0.8);
+  shutterBurst(t,        0.22, 0.038,  800, 0.5);
+  // "嚓"：第二帘弹开 — 65ms后，略低略轻
+  shutterBurst(t+0.065,  0.20, 0.018, 1600, 0.8);
+  shutterBurst(t+0.065,  0.14, 0.030,  700, 0.5);
 }
 function playBeep(){  // soft single ping when overtime starts
   if(!isSoundOn()) return;
@@ -615,7 +713,7 @@ function playSuccess(){  // cheerful arpeggio on task complete
   const t=ctx.currentTime;
   [523,659,784,1047].forEach((f,i)=>playTone(ctx,f,t+i*0.12,0.45,0.18));
 }
-function haptic(pattern=[100]){ try{ navigator.vibrate&&navigator.vibrate(pattern); }catch(e){} }
+function haptic(pattern=[100]){ if(!isHapticOn()) return; try{ navigator.vibrate&&navigator.vibrate(pattern); }catch(e){} }
 const fmtDate  = d => { const x=new Date(d+' 12:00'); return `${x.getFullYear()}年${x.getMonth()+1}月${x.getDate()}日`; };
 const fmtDateShort = d => { const x=new Date(d+' 12:00'); return `${x.getMonth()+1}月${x.getDate()}日`; };
 const dayCount = f => {
@@ -626,7 +724,22 @@ const dayCount = f => {
   return Math.max(1,Math.floor((now-start)/864e5)+1);
 };
 const weekOf   = d => { const x=new Date(d+' 12:00'),dy=x.getDay(); x.setDate(x.getDate()-dy+(dy===0?-6:1)); return x.toISOString().split('T')[0]; };
-const planTasks= p => p?[p.goldTask,...p.silverTasks,...p.bronzeTasks].filter(Boolean):[];
+const planTasks= p => p?[p.goldTask,...(p.silverTasks||[]),...(p.bronzeTasks||[])].filter(Boolean):[];
+
+// ── TOAST ────────────────────────────────────────────
+function showToast(msg, duration=4500){
+  let el=document.getElementById('app-toast');
+  if(!el){ el=document.createElement('div'); el.id='app-toast'; document.body.appendChild(el); }
+  el.textContent=msg;
+  el.className='toast-visible';
+  clearTimeout(window._toastTimer);
+  window._toastTimer=setTimeout(()=>{ el.className=''; },duration);
+}
+// 检测 localStorage 是否可用（无痕模式/禁用状态下会抛出异常）
+function checkStorageAvailable(){
+  try{ localStorage.setItem('__chk__','1'); localStorage.removeItem('__chk__'); return true; }
+  catch{ return false; }
+}
 
 function isDark() { return document.documentElement.getAttribute('data-theme')==='dark'; }
 function getEvtColor(colorKey) {
@@ -636,7 +749,19 @@ function getEvtColor(colorKey) {
 
 function useLS(key,def){
   const [v,setV]=useState(()=>{ try{const s=localStorage.getItem(key);return s?JSON.parse(s):def;}catch{return def;} });
-  const set=useCallback(u=>setV(prev=>{ const nv=typeof u==='function'?u(prev):u; try{localStorage.setItem(key,JSON.stringify(nv));}catch{} return nv; }),[key]);
+  const set=useCallback(u=>setV(prev=>{
+    const nv=typeof u==='function'?u(prev):u;
+    try{
+      localStorage.setItem(key,JSON.stringify(nv));
+    }catch(e){
+      if(e&&(e.name==='QuotaExceededError'||e.name==='NS_ERROR_DOM_QUOTA_REACHED'||e.code===22)){
+        showToast('⚠️ 本地存储空间已满！请先在设置页导出数据备份，再清理浏览器缓存。',6000);
+      }else{
+        showToast('⚠️ 数据保存失败，可能处于无痕模式或浏览器禁用了本地存储。',5000);
+      }
+    }
+    return nv;
+  }),[key]);
   return [v,set];
 }
 
@@ -720,34 +845,65 @@ function TimePicker({value,onChange,tier,isCheckIn,onCheckInChange}){
 
 // ── WELCOME MODAL ────────────────────────────────────
 function WelcomeModal({onStart}){
-  const steps=[
-    {emoji:'🥇',title:'1个金牌任务',desc:'今天最重要的一件事。全力以赴，不可妥协。'},
-    {emoji:'🥈',title:'3个银牌任务',desc:'次要但必做的事项，完成金牌后逐一攻克。'},
-    {emoji:'🥉',title:'5个铜牌任务',desc:'锦上添花的小事，有余力时完成，不强求。'},
-  ];
-  return(
-    <div className="overlay">
-      <div className="modal-box modal-welcome" style={{maxWidth:380,textAlign:'center'}} onClick={e=>e.stopPropagation()}>
-        <div style={{fontSize:36,marginBottom:8}}>👋</div>
-        <div style={{fontSize:20,fontWeight:800,color:'var(--text-primary)',marginBottom:4}}>欢迎使用 1·3·5 效率系统</div>
-        <div style={{fontSize:12,color:'var(--text-secondary)',marginBottom:20,lineHeight:1.6}}>一种简单而强大的时间管理方法，帮助你每天聚焦真正重要的事</div>
-        <div style={{display:'flex',flexDirection:'column',gap:10,marginBottom:22,textAlign:'left'}}>
-          {steps.map(s=>(
-            <div key={s.emoji} style={{display:'flex',alignItems:'flex-start',gap:12,padding:'10px 12px',borderRadius:11,background:'var(--bg-secondary)',border:'1px solid var(--subtle-border)'}}>
-              <span style={{fontSize:26,lineHeight:1}}>{s.emoji}</span>
+  const [step,setStep]=useState(0);
+  const SLIDES=[
+    {
+      emoji:'🌟',
+      title:'欢迎使用 1·3·5 效率系统',
+      body:(
+        <div style={{fontSize:13,color:'var(--text-secondary)',lineHeight:1.8,marginBottom:24}}>
+          一种简单而强大的时间管理法<br/>
+          每天只需 <span style={{color:'var(--gold)',fontWeight:700}}>5 分钟规划</span>，<br/>
+          聚焦真正重要的事，告别无效忙碌。
+        </div>
+      ),
+      cta:'了解用法 →',
+    },
+    {
+      emoji:'📋',
+      title:'每天三层任务，优先级一目了然',
+      body:(
+        <div style={{display:'flex',flexDirection:'column',gap:9,marginBottom:22,textAlign:'left'}}>
+          {[
+            {emoji:'🥇',title:'1 个金牌任务',desc:'今天最重要的一件事，必须完成。',color:'var(--gold)'},
+            {emoji:'🥈',title:'3 个银牌任务',desc:'次要但重要，完成金牌后逐一攻克。',color:'var(--silver)'},
+            {emoji:'🥉',title:'5 个铜牌任务',desc:'锦上添花，有余力时完成，不强求。',color:'var(--bronze)'},
+          ].map(s=>(
+            <div key={s.emoji} style={{display:'flex',alignItems:'center',gap:11,padding:'9px 12px',borderRadius:11,background:'var(--bg-secondary)',border:'1px solid var(--subtle-border)'}}>
+              <span style={{fontSize:24,lineHeight:1,flexShrink:0}}>{s.emoji}</span>
               <div>
-                <div style={{fontSize:13,fontWeight:700,color:'var(--text-primary)',marginBottom:2}}>{s.title}</div>
-                <div style={{fontSize:11,color:'var(--text-secondary)',lineHeight:1.5}}>{s.desc}</div>
+                <div style={{fontSize:13,fontWeight:700,color:s.color,marginBottom:1}}>{s.title}</div>
+                <div style={{fontSize:11,color:'var(--text-secondary)',lineHeight:1.4}}>{s.desc}</div>
               </div>
             </div>
           ))}
         </div>
-        <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:16,padding:'8px 12px',borderRadius:9,background:'var(--bg-secondary)',lineHeight:1.6}}>
-          💡 每天开始时制定计划，计时专注完成，日历回顾成果
+      ),
+      cta:'明白了，开始吧 🚀',
+    },
+  ];
+  const cur=SLIDES[step];
+  const isLast=step===SLIDES.length-1;
+  return(
+    <div className="overlay">
+      <div className="modal-box modal-welcome" style={{maxWidth:360,textAlign:'center'}} onClick={e=>e.stopPropagation()}>
+        {/* 步骤指示点 */}
+        <div style={{display:'flex',justifyContent:'center',gap:6,marginBottom:20}}>
+          {SLIDES.map((_,i)=>(
+            <div key={i} style={{width:i===step?20:7,height:7,borderRadius:4,background:i===step?'var(--gold)':'var(--chip-bg)',transition:'width .25s,background .25s'}}/>
+          ))}
         </div>
-        <button className="btn btn-gold" style={{width:'100%',padding:14,fontSize:15,fontWeight:700}} onClick={onStart}>
-          🚀 开始今天的计划
+        <div style={{fontSize:34,marginBottom:10}}>{cur.emoji}</div>
+        <div style={{fontSize:18,fontWeight:800,color:'var(--text-primary)',marginBottom:14,lineHeight:1.3}}>{cur.title}</div>
+        {cur.body}
+        <button className="btn btn-gold" style={{width:'100%',padding:'13px 0',fontSize:14,fontWeight:700}}
+          onClick={()=>{ if(isLast) onStart(); else setStep(s=>s+1); }}>
+          {cur.cta}
         </button>
+        {step>0&&(
+          <button className="btn btn-ghost" style={{width:'100%',marginTop:8,padding:'9px 0',fontSize:12}}
+            onClick={()=>setStep(s=>s-1)}>← 上一步</button>
+        )}
       </div>
     </div>
   );
@@ -776,20 +932,32 @@ function ThemePanel({current,onChange,onClose}){
 }
 
 // ── SETTINGS PANEL (系统设置) ─────────────────────────
-function SettingsPanel({soundEnabled,onSoundChange}){
+function SettingsPanel({soundEnabled,onSoundChange,hapticEnabled,onHapticChange}){
+  const canVibrate = typeof navigator!=='undefined' && !!navigator.vibrate;
   return(
     <div className="view-scroll" style={{padding:'20px 16px 40px'}}>
       <div style={{maxWidth:460,margin:'0 auto'}}>
         <div style={{fontSize:18,fontWeight:700,marginBottom:4,color:'var(--text-primary)'}}>⚙️ 设置</div>
         <div style={{fontSize:12,color:'var(--text-secondary)',marginBottom:20}}>系统设置与数据管理</div>
 
-        {/* Sound toggle */}
-        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:14,padding:'12px 14px',borderRadius:13,background:'var(--bg-secondary)',border:'1px solid var(--subtle-border)'}}>
-          <div>
-            <div style={{fontSize:14,fontWeight:600,color:'var(--text-primary)'}}>🔔 系统音效</div>
-            <div style={{fontSize:11,color:'var(--text-secondary)',marginTop:3}}>点击音、计时完成提示音</div>
+        {/* Sound & Haptic group */}
+        <div style={{marginBottom:14,borderRadius:13,background:'var(--bg-secondary)',border:'1px solid var(--subtle-border)',overflow:'hidden'}}>
+          {/* Sound toggle */}
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'12px 14px',borderBottom:'1px solid var(--subtle-border)'}}>
+            <div>
+              <div style={{fontSize:14,fontWeight:600,color:'var(--text-primary)'}}>🔔 系统音效</div>
+              <div style={{fontSize:11,color:'var(--text-secondary)',marginTop:3}}>点击音、计时完成提示音</div>
+            </div>
+            <button className={`sound-toggle ${soundEnabled?'on':'off'}`} onClick={()=>onSoundChange(!soundEnabled)} title={soundEnabled?'点击关闭音效':'点击开启音效'}/>
           </div>
-          <button className={`sound-toggle ${soundEnabled?'on':'off'}`} onClick={()=>onSoundChange(!soundEnabled)} title={soundEnabled?'点击关闭音效':'点击开启音效'}/>
+          {/* Haptic toggle */}
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'12px 14px',opacity:canVibrate?1:0.4}}>
+            <div>
+              <div style={{fontSize:14,fontWeight:600,color:'var(--text-primary)'}}>📳 触感震动</div>
+              <div style={{fontSize:11,color:'var(--text-secondary)',marginTop:3}}>{canVibrate?'点击轻微震动反馈':'当前设备不支持震动'}</div>
+            </div>
+            <button className={`sound-toggle ${hapticEnabled?'on':'off'}`} onClick={()=>canVibrate&&onHapticChange(!hapticEnabled)} title={hapticEnabled?'点击关闭震动':'点击开启震动'}/>
+          </div>
         </div>
 
         {/* New day reset */}
@@ -808,6 +976,21 @@ function SettingsPanel({soundEnabled,onSoundChange}){
           </button>
           <div style={{fontSize:10,color:'var(--text-secondary)',lineHeight:1.5,marginTop:8}}>
             历史记录完整保留，仅重新制定今日计划
+          </div>
+        </div>
+
+        {/* 数据存储风险提示 */}
+        <div style={{marginBottom:14,padding:'14px',borderRadius:13,background:'rgba(255,160,0,0.07)',border:'1px solid rgba(255,160,0,0.22)'}}>
+          <div style={{fontSize:11,fontWeight:700,color:'var(--gold)',marginBottom:10,textTransform:'uppercase',letterSpacing:'.5px'}}>⚠️ 数据存储风险提示</div>
+          <div style={{fontSize:12,color:'var(--text-primary)',lineHeight:1.75}}>
+            <div style={{marginBottom:6}}>📌 本工具所有数据存储在浏览器本地（localStorage），以下情况会导致数据丢失：</div>
+            <div style={{fontSize:11,color:'var(--text-secondary)',paddingLeft:12,lineHeight:2}}>
+              · 无痕 / 隐身模式下使用，关闭窗口即丢失<br/>
+              · 手动清除浏览器缓存 / Cookie<br/>
+              · 浏览器自动清理存储（移动端常见）<br/>
+              · localStorage 配额耗尽时，新数据无法保存
+            </div>
+            <div style={{marginTop:8,fontSize:11,color:'var(--gold)',fontWeight:600}}>💡 建议：定期使用下方「保存数据备份」导出 JSON 文件，妥善保管。</div>
           </div>
         </div>
 
@@ -933,7 +1116,7 @@ function DailyPlanModal({onDone,dayN,today}){
     <div className="modal-title">🥇 今日最重要的一件事</div>
     <div className="modal-hint">这件事必须完成。如果今天只能做一件事，就是它。</div>
     <div className="form-group"><label className="form-label">任务名称</label>
-      <input className="form-input" placeholder="今天最重要的事情是…" value={goldTitle} onChange={e=>setGoldTitle(e.target.value)} onKeyDown={e=>e.key==='Enter'&&goldTitle.trim()&&setStep(3)} autoFocus/></div>
+      <input className="form-input" placeholder="今天最重要的事情是…" value={goldTitle} onChange={e=>setGoldTitle(e.target.value)} onKeyDown={e=>e.key==='Enter'&&goldTitle.trim()&&setStep(3)} maxLength={100} autoFocus/></div>
     <div className="form-group"><label className="form-label">预计用时</label><TimePicker value={goldTime} onChange={setGoldTime} tier="gold" isCheckIn={goldIsCheckIn} onCheckInChange={setGoldIsCheckIn}/></div>
     <button className="btn btn-gold" disabled={!goldTitle.trim()} onClick={()=>setStep(3)}>确定 →</button>
   </div></div>);
@@ -942,7 +1125,7 @@ function DailyPlanModal({onDone,dayN,today}){
     <div className="modal-title">🥈 重要的事 ({svStep+1}/3)</div>
     <div className="modal-hint">这些事很重要，今天尽量完成。可以跳过某项。</div>
     <div className="form-group"><label className="form-label">任务名称（可跳过）</label>
-      <input className="form-input" placeholder={`第 ${svStep+1} 件重要的事…`} value={curIn} onChange={e=>setCurIn(e.target.value)} onKeyDown={e=>e.key==='Enter'&&curIn.trim()&&doSilver(false)} autoFocus/></div>
+      <input className="form-input" placeholder={`第 ${svStep+1} 件重要的事…`} value={curIn} onChange={e=>setCurIn(e.target.value)} onKeyDown={e=>e.key==='Enter'&&curIn.trim()&&doSilver(false)} maxLength={100} autoFocus/></div>
     <div className="form-group"><label className="form-label">预计用时</label><TimePicker value={curT} onChange={setCurT} tier="silver" isCheckIn={curIsCheckIn} onCheckInChange={setCurIsCheckIn}/></div>
     <button className="btn btn-silver" disabled={!curIn.trim()} onClick={()=>doSilver(false)}>确定 →</button>
     <button className="btn btn-ghost" onClick={()=>doSilver(true)}>跳过，完成银牌计划</button>
@@ -952,7 +1135,7 @@ function DailyPlanModal({onDone,dayN,today}){
     <div className="modal-title">🥉 还需要做的事 ({bzStep+1}/5)</div>
     <div className="modal-hint">这些是今日待办，完成更好，完不成也不要紧。</div>
     <div className="form-group"><label className="form-label">任务名称（可跳过）</label>
-      <input className="form-input" placeholder={`第 ${bzStep+1} 件待办…`} value={curIn} onChange={e=>setCurIn(e.target.value)} onKeyDown={e=>!isLast&&e.key==='Enter'&&curIn.trim()&&doBronze(false)} autoFocus/></div>
+      <input className="form-input" placeholder={`第 ${bzStep+1} 件待办…`} value={curIn} onChange={e=>setCurIn(e.target.value)} onKeyDown={e=>!isLast&&e.key==='Enter'&&curIn.trim()&&doBronze(false)} maxLength={100} autoFocus/></div>
     <div className="form-group"><label className="form-label">预计用时</label><TimePicker value={curT} onChange={setCurT} tier="bronze" isCheckIn={curIsCheckIn} onCheckInChange={setCurIsCheckIn}/></div>
     {isLast?<button className="btn btn-bronze" disabled={!curIn.trim()} onClick={()=>doBronze(false)}>完成今日计划 🎯</button>
            :<button className="btn btn-bronze" disabled={!curIn.trim()} onClick={()=>doBronze(false)}>确定 →</button>}
@@ -1118,34 +1301,69 @@ function PomodoroTimer({task,onComplete,onPause}){
 function AddTaskModal({onSave,onClose,plan}){
   const goldFull  = plan && !!plan.goldTask;
   const silverFull= plan && (plan.silverTasks||[]).length >= 3;
-  const defaultTier= goldFull ? (silverFull ? 'bronze' : 'silver') : 'gold';
+  const bronzeFull = plan && (plan.bronzeTasks||[]).length >= 5;
+  const isFull = t=>(t==='gold'&&goldFull)||(t==='silver'&&silverFull)||(t==='bronze'&&bronzeFull);
+  const TIER_LABEL={gold:'金牌',silver:'银牌',bronze:'铜牌'};
+  const TIER_LIMIT={gold:1,silver:3,bronze:5};
+  const defaultTier= goldFull ? (silverFull ? (bronzeFull?'gold':'bronze') : 'silver') : 'gold';
   const [tier,setTier]=useState(defaultTier);
   const [title,setTitle]=useState('');
   const [time,setTime]=useState(25);
   const [isCI,setIsCI]=useState(false);
+  const [toastMsg,setToastMsg]=useState('');
+  const [showOverride,setShowOverride]=useState(false);
+  const tierFull=isFull(tier);
   const mkTask=()=>({id:genId(),title:title.trim(),estimatedMinutes:isCI?0:time,tier,status:'idle',actualMinutes:null,pauseCount:0,timerStartedAt:null,completedAt:null,remainingSeconds:null,isCheckIn:isCI});
-  const canSave=(title.trim()||isCI)&&title.trim();
+  const canSave=!!(title.trim());
+  const handleTierClick=t=>{
+    setTier(t);
+    if(isFull(t)){
+      setToastMsg(`1·3·5 效率法建议${TIER_LABEL[t]}任务仅设置 ${TIER_LIMIT[t]} 个，过多会分散注意力哦`);
+      setTimeout(()=>setToastMsg(''),3000);
+    } else { setToastMsg(''); }
+  };
+  const handleSave=()=>{
+    if(!canSave) return;
+    if(tierFull){ setShowOverride(true); return; }
+    onSave(mkTask());
+  };
   return(
     <div className="overlay" onClick={onClose}>
       <div className="modal-box modal-welcome" style={{maxWidth:360}} onClick={e=>e.stopPropagation()}>
         <div style={{fontSize:16,fontWeight:700,marginBottom:3,color:'var(--text-primary)'}}>➕ 新增任务</div>
         <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:14}}>为今日计划补充任务</div>
+        {toastMsg&&<div className="toast-inline">💡 {toastMsg}</div>}
         <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:6}}>任务类别</label>
         <div className="tier-btn-row">
-          <button className={`tier-btn${tier==='gold'?' active-gold':''}${goldFull?' tier-full':''}`} onClick={()=>setTier('gold')}>🥇 金牌{goldFull?' ✓':''}</button>
-          <button className={`tier-btn${tier==='silver'?' active-silver':''}${silverFull?' tier-full':''}`} onClick={()=>setTier('silver')}>🥈 银牌{silverFull?' 3/3':''}</button>
-          <button className={`tier-btn${tier==='bronze'?' active-bronze':''}`} onClick={()=>setTier('bronze')}>🥉 铜牌</button>
+          <button className={`tier-btn${tier==='gold'?' active-gold':''}${goldFull?' tier-full':''}`} onClick={()=>handleTierClick('gold')}>🥇 金牌{goldFull?' ✓':''}</button>
+          <button className={`tier-btn${tier==='silver'?' active-silver':''}${silverFull?' tier-full':''}`} onClick={()=>handleTierClick('silver')}>🥈 银牌{silverFull?' 3/3':''}</button>
+          <button className={`tier-btn${tier==='bronze'?' active-bronze':''}${bronzeFull?' tier-full':''}`} onClick={()=>handleTierClick('bronze')}>🥉 铜牌{bronzeFull?' 5/5':''}</button>
         </div>
         <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:6}}>任务名称</label>
         <input className="plan-input" value={title} onChange={e=>setTitle(e.target.value)}
-          onKeyDown={e=>{if(e.key==='Enter'&&canSave) onSave(mkTask());}}
-          placeholder="任务内容…" autoFocus style={{width:'100%',marginBottom:14,boxSizing:'border-box'}}/>
+          onKeyDown={e=>{if(e.key==='Enter'&&canSave) handleSave();}}
+          placeholder="任务内容…" maxLength={100} autoFocus style={{width:'100%',marginBottom:14,boxSizing:'border-box'}}/>
         <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:8}}>预计用时</label>
         <TimePicker value={time} onChange={setTime} tier={tier} isCheckIn={isCI} onCheckInChange={setIsCI}/>
         <div style={{display:'flex',gap:8,marginTop:16}}>
-          <button className="btn btn-green" style={{flex:1}} disabled={!canSave} onClick={()=>onSave(mkTask())}>✅ 添加</button>
+          <button className="btn btn-green" style={{flex:1,opacity:tierFull?.6:1,transition:'opacity .2s'}} disabled={!canSave} onClick={handleSave}>
+            {tierFull?'⚠️ 超限添加':'✅ 添加'}
+          </button>
           <button className="btn btn-ghost" style={{flex:1}} onClick={onClose}>取消</button>
         </div>
+        {showOverride&&(
+          <div className="overlay" onClick={()=>setShowOverride(false)}>
+            <div className="dialog-box" onClick={e=>e.stopPropagation()}>
+              <div className="dialog-emoji">💡</div>
+              <div className="dialog-title">超出建议数量</div>
+              <div className="dialog-sub">1·3·5 效率法建议{TIER_LABEL[tier]}任务仅设置 {TIER_LIMIT[tier]} 个，过多容易分散注意力。<br/><br/>仍然确认添加吗？</div>
+              <div className="dialog-row">
+                <button className="dialog-btn" style={{background:'rgba(255,160,0,.12)',color:'var(--gold)',border:'1px solid rgba(255,160,0,.3)'}} onClick={()=>{setShowOverride(false);onSave(mkTask());}}>坚持添加</button>
+                <button className="dialog-btn dialog-no" onClick={()=>setShowOverride(false)}>取消</button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -1166,7 +1384,7 @@ function EditTaskModal({task, onSave, onClose}){
         <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:16}}>{tierLabel}</div>
         <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:6}}>任务名称</label>
         <input className="plan-input" value={title} onChange={e=>setTitle(e.target.value)}
-          onKeyDown={e=>{if(e.key==='Enter') handleSave();}} autoFocus
+          onKeyDown={e=>{if(e.key==='Enter') handleSave();}} maxLength={100} autoFocus
           style={{width:'100%',marginBottom:16,boxSizing:'border-box'}}/>
         <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:8}}>预计用时</label>
         <TimePicker value={time} onChange={setTime} tier={tier} isCheckIn={isCI} onCheckInChange={setIsCI}/>
@@ -1180,65 +1398,30 @@ function EditTaskModal({task, onSave, onClose}){
 }
 
 // ── TASK CARD ────────────────────────────────────────
-function TaskCard({task,locked,onStart,onEdit,onDelete}){
-  const [flipped,setFlipped]=useState(false);
+function TaskCard({task,locked,onStart,onEdit,onDelete,onUndoComplete,onQuickSave}){
   const done=task.status==='completed';
   const tier=task.tier;
-
-  const handleClick=()=>{
-    if(locked) return;
-    if(done){setFlipped(f=>!f);return;}
-    onStart(task);
-  };
-
   const tierEmoji = tier==='gold'?'🥇':tier==='silver'?'🥈':'🥉';
 
   if(done){
     const stampClass=`done-stamp done-stamp-${tier}`;
     return(
-      <div className={`task-card task-card-${tier} done-card`} onClick={handleClick}>
+      <div className={`task-card task-card-${tier} done-card`}>
         <div className="card-inner">
-          {!flipped?(
-            <>
-              <div className="card-top">
-                <div className="card-title"><span style={{marginRight:5}}>{tierEmoji}</span>{task.title}</div>
-                <span className={`card-badge badge-${tier}`}>✅ 完成</span>
-              </div>
-              <div className="card-meta">
-                {task.actualMinutes&&<span>实际 {task.actualMinutes}min</span>}
-                <span style={{opacity:.5,fontSize:10}}>点击查看详情 →</span>
-                {(onEdit||onDelete)&&(
-                  <span className="card-btn-group">
-                    {onEdit&&<button className="card-edit-btn" onClick={e=>{e.stopPropagation();onEdit(task);}} title="编辑任务">✏️</button>}
-                    {onDelete&&<button className="card-edit-btn" onClick={e=>{e.stopPropagation();onDelete(task);}} title="删除任务" style={{color:'var(--danger)'}}>🗑️</button>}
-                  </span>
-                )}
-              </div>
-              <div className={stampClass}>DONE</div>
-            </>
-          ):(
-            <>
-              <div className="card-top">
-                <div className="card-title"><span style={{marginRight:5}}>{tierEmoji}</span>{task.title}</div>
-                <span style={{fontSize:11,color:'var(--text-secondary)'}}>← 收起</span>
-              </div>
-              <div className="card-detail-row">
-                <div className="card-detail-col"><label>计划用时</label><span style={{color:'var(--gold)'}}>{task.estimatedMinutes}min</span></div>
-                <div className="card-detail-col"><label>实际用时</label>
-                  <span style={{color:(task.actualMinutes||0)<=task.estimatedMinutes?'var(--success)':'var(--danger)'}}>
-                    {task.actualMinutes??'—'}min
-                  </span>
-                </div>
-                {task.actualMinutes&&(
-                  <div className="card-detail-col"><label>偏差</label>
-                    <span style={{color:task.actualMinutes<=task.estimatedMinutes?'var(--success)':'var(--danger)'}}>
-                      {task.actualMinutes<=task.estimatedMinutes?`-${task.estimatedMinutes-task.actualMinutes}`:`+${task.actualMinutes-task.estimatedMinutes}`}min
-                    </span>
-                  </div>
-                )}
-              </div>
-            </>
-          )}
+          <div className="card-top">
+            <div className="card-title" style={{textDecoration:'line-through',opacity:.65}}>
+              <span style={{marginRight:5}}>{tierEmoji}</span>{task.title}
+            </div>
+            <span className={`card-badge badge-${tier}`}>✅</span>
+          </div>
+          <div className="card-meta">
+            {task.actualMinutes>0&&<span>用时 {task.actualMinutes}min</span>}
+            <span className="card-btn-group">
+              {onUndoComplete&&<button className="card-edit-btn" onClick={e=>{e.stopPropagation();onUndoComplete(task);}} title="撤销完成">↩️</button>}
+              {onDelete&&<button className="card-edit-btn" onClick={e=>{e.stopPropagation();onDelete(task);}} title="删除任务" style={{color:'var(--danger)'}}>🗑️</button>}
+            </span>
+          </div>
+          <div className={stampClass}>DONE</div>
         </div>
       </div>
     );
@@ -1247,11 +1430,56 @@ function TaskCard({task,locked,onStart,onEdit,onDelete}){
   const isPaused = task.status==='paused';
   const isCI = !!task.isCheckIn;
   const remainMins = isPaused && task.remainingSeconds!=null ? Math.ceil(task.remainingSeconds/60) : null;
+  const [titleExpanded,setTitleExpanded]=useState(false);
+  // ── 内联编辑状态 ──
+  const [isInlineEdit,setIsInlineEdit]=useState(false);
+  const [editVal,setEditVal]=useState('');
+  const inlineRef=useRef(null);
+  const longPressTimer=useRef(null);
+
+  useEffect(()=>{ if(isInlineEdit&&inlineRef.current) inlineRef.current.focus(); },[isInlineEdit]);
+
+  const startInlineEdit=e=>{
+    if(locked||!onQuickSave) return;
+    e.stopPropagation();
+    setEditVal(task.title);
+    setIsInlineEdit(true);
+  };
+  const saveInlineEdit=()=>{
+    const v=editVal.trim();
+    if(v&&v!==task.title&&onQuickSave) onQuickSave({...task,title:v});
+    setIsInlineEdit(false);
+  };
+  const cancelInlineEdit=()=>setIsInlineEdit(false);
+  // 长按 (移动端)
+  const handleTouchStart=()=>{
+    if(locked||!onQuickSave) return;
+    longPressTimer.current=setTimeout(()=>{ setEditVal(task.title); setIsInlineEdit(true); },600);
+  };
+  const handleTouchEnd=()=>clearTimeout(longPressTimer.current);
+
+  const handleClick=()=>{ if(locked||isInlineEdit) return; onStart(task); };
   return(
-    <div className={`task-card task-card-${tier}${locked?' locked':''}`} onClick={handleClick}>
+    <div className={`task-card task-card-${tier}${locked?' locked':''}`} onClick={handleClick}
+         onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} onTouchMove={handleTouchEnd}>
       <div className="card-inner">
         <div className="card-top">
-          <div className="card-title"><span style={{marginRight:5}}>{tierEmoji}</span>{task.title}</div>
+          {isInlineEdit?(
+            <div className="inline-edit-wrap">
+              <input ref={inlineRef} className="inline-edit-input" value={editVal} maxLength={100}
+                onChange={e=>setEditVal(e.target.value)}
+                onBlur={saveInlineEdit}
+                onClick={e=>e.stopPropagation()}
+                onKeyDown={e=>{ e.stopPropagation(); if(e.key==='Enter') saveInlineEdit(); if(e.key==='Escape') cancelInlineEdit(); }}/>
+            </div>
+          ):(
+            <div className={`card-title${titleExpanded?' title-expanded':''}`}
+                 onClick={e=>{e.stopPropagation();setTitleExpanded(x=>!x);}}
+                 onDoubleClick={startInlineEdit}
+                 title={'双击编辑标题·单击展开'}>
+              <span style={{marginRight:5}}>{tierEmoji}</span>{task.title}
+            </div>
+          )}
           <span className={`card-badge badge-${tier}`}>{locked?'🔒':isCI?'✓ 打卡':isPaused?'⏸ 继续':'▶ 开始'}</span>
         </div>
         <div className="card-meta">
@@ -1273,12 +1501,30 @@ function TaskCard({task,locked,onStart,onEdit,onDelete}){
   );
 }
 
+// ── GOLD COMPLETE MODAL ───────────────────────────────
+function GoldCompleteModal({onClose}){
+  useEffect(()=>{ const t=setTimeout(onClose,3500); return ()=>clearTimeout(t); },[]);
+  return(
+    <div className="overlay" onClick={onClose}>
+      <div className="modal-box modal-welcome" style={{maxWidth:300,textAlign:'center'}} onClick={e=>e.stopPropagation()}>
+        <div className="gold-celebrate">
+          <div style={{fontSize:56,marginBottom:8}}>🏆</div>
+          <div style={{fontSize:19,fontWeight:800,color:'var(--gold)',marginBottom:8}}>太棒了！</div>
+          <div style={{fontSize:14,color:'var(--text-primary)',lineHeight:1.7}}>今天最重要的事<br/>已经完成 🎉</div>
+          <div style={{fontSize:11,color:'var(--text-secondary)',marginTop:10}}>专注在最重要的事上<br/>这就是高效的秘诀</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── DASHBOARD ────────────────────────────────────────
 function Dashboard({plan,onUpdate,onAddTask,onDeleteTask}){
   const [activeId,setActiveId]=useState(null);
   const [editTask,setEditTask]=useState(null);
   const [showAddTask,setShowAddTask]=useState(false);
   const [deleteConfirm,setDeleteConfirm]=useState(null);
+  const [showGoldComplete,setShowGoldComplete]=useState(false);
   const all=planTasks(plan);
   const activeTask=activeId?all.find(t=>t.id===activeId):null;
   const done=all.filter(t=>t.status==='completed').length;
@@ -1288,6 +1534,7 @@ function Dashboard({plan,onUpdate,onAddTask,onDeleteTask}){
     // Check-in task: complete immediately, no timer
     if(t.isCheckIn){
       onUpdate({...t,status:'completed',actualMinutes:0,completedAt:new Date().toISOString()});
+      if(t.tier==='gold') setShowGoldComplete(true);
       return;
     }
     if(t.status==='idle'){
@@ -1298,7 +1545,7 @@ function Dashboard({plan,onUpdate,onAddTask,onDeleteTask}){
     // If paused: just reopen timer — keep original timerStartedAt
     setActiveId(t.id);
   };
-  const complete=t=>{ onUpdate(t); setActiveId(null); };
+  const complete=t=>{ onUpdate(t); setActiveId(null); if(t.tier==='gold') setShowGoldComplete(true); };
   const pause=(t, remaining)=>{
     // Save remaining seconds so the timer can resume from where it left off
     onUpdate({...t, status:'paused', remainingSeconds: remaining});
@@ -1308,11 +1555,15 @@ function Dashboard({plan,onUpdate,onAddTask,onDeleteTask}){
   const handleAddTask=t=>{ onAddTask(t); setShowAddTask(false); };
   const handleDeleteReq=t=>setDeleteConfirm(t);
   const confirmDelete=()=>{ if(deleteConfirm){ onDeleteTask(deleteConfirm); setDeleteConfirm(null); } };
+  // 撤销完成：恢复为 idle，清除完成数据
+  const undoComplete=t=>onUpdate({...t,status:'idle',completedAt:null,actualMinutes:null,remainingSeconds:null});
 
   const Sec=({tier,items})=>{
     const dc=items.filter(t=>t.status==='completed').length;
     const label=tier==='gold'?'今日必做':tier==='silver'?'重要任务':'待办事项';
     const icon=tier==='gold'?'🥇':tier==='silver'?'🥈':'🥉';
+    // 未完成任务在前，已完成任务沉底
+    const sorted=[...items].sort((a,b)=>(a.status==='completed'?1:0)-(b.status==='completed'?1:0));
     return(
       <div className={`dash-section section-${tier}`}>
         <div className="section-header">
@@ -1320,16 +1571,43 @@ function Dashboard({plan,onUpdate,onAddTask,onDeleteTask}){
           <span className="section-label">{label}</span>
           <span className="section-count">{dc}/{items.length}</span>
         </div>
-        {items.map(t=>(<TaskCard key={t.id} task={t} locked={!!activeId&&activeId!==t.id} onStart={start} onEdit={setEditTask} onDelete={handleDeleteReq}/>))}
+        {sorted.map(t=>(<TaskCard key={t.id} task={t} locked={!!activeId&&activeId!==t.id} onStart={start} onEdit={setEditTask} onDelete={handleDeleteReq} onUndoComplete={undoComplete} onQuickSave={onUpdate}/>))}
       </div>
     );
   };
 
   return(
     <div className="content-pad">
-      <div className="dash-progress">
-        <div className="dash-progress-row"><span>今日进度</span><span>{done}/{all.length} 完成</span></div>
-        <div className="progress-track"><div className="progress-fill" style={{width:`${all.length>0?(done/all.length)*100:0}%`}}/></div>
+      {/* 1·3·5 权重进度条 */}
+      <div className="tier-prog-bar">
+        {plan.goldTask&&(
+          <div className="tier-prog-group">
+            <span style={{fontSize:16,marginRight:2}}>🥇</span>
+            <span className={`tier-prog-pip${plan.goldTask.status==='completed'?' pip-done':''}`}>
+              {plan.goldTask.status==='completed'?'✔':'○'}
+            </span>
+            {plan.goldTask.status==='completed'&&<span className="tier-prog-badge">已获得</span>}
+          </div>
+        )}
+        {plan.silverTasks.length>0&&(
+          <div className="tier-prog-group">
+            <span style={{fontSize:16,marginRight:2}}>🥈</span>
+            {plan.silverTasks.map((t,i)=>(
+              <span key={i} className={`tier-prog-pip${t.status==='completed'?' pip-done':''}`}>{t.status==='completed'?'✔':'○'}</span>
+            ))}
+            {plan.silverTasks.length>0&&plan.silverTasks.every(t=>t.status==='completed')&&<span className="tier-prog-badge">已获得</span>}
+          </div>
+        )}
+        {plan.bronzeTasks.length>0&&(
+          <div className="tier-prog-group">
+            <span style={{fontSize:16,marginRight:2}}>🥉</span>
+            {plan.bronzeTasks.map((t,i)=>(
+              <span key={i} className={`tier-prog-pip${t.status==='completed'?' pip-done':''}`}>{t.status==='completed'?'✔':'○'}</span>
+            ))}
+            {plan.bronzeTasks.length>0&&plan.bronzeTasks.every(t=>t.status==='completed')&&<span className="tier-prog-badge">已获得</span>}
+          </div>
+        )}
+        <div style={{marginLeft:'auto',fontSize:11,color:'var(--text-secondary)',fontWeight:600}}>{done}/{all.length}</div>
       </div>
       {plan.goldTask&&<Sec tier="gold"   items={[plan.goldTask]}/>}
       {plan.silverTasks.length>0&&<Sec tier="silver" items={plan.silverTasks}/>}
@@ -1342,6 +1620,7 @@ function Dashboard({plan,onUpdate,onAddTask,onDeleteTask}){
         </div>
       )}
       <button className="add-task-btn" onClick={()=>setShowAddTask(true)}>➕ 新增任务</button>
+      {showGoldComplete&&<GoldCompleteModal onClose={()=>setShowGoldComplete(false)}/>}
       {activeTask&&<PomodoroTimer task={activeTask} onComplete={complete} onPause={pause}/>}
       {editTask&&<EditTaskModal task={editTask} onSave={handleSaveEdit} onClose={()=>setEditTask(null)}/>}
       {showAddTask&&<AddTaskModal onSave={handleAddTask} onClose={()=>setShowAddTask(false)} plan={plan}/>}
@@ -1681,6 +1960,7 @@ function App(){
   const [theme,    setTheme]    = useLS(SK.THEME, 'white');
   const [events,   setEvents]   = useLS(SK.EVENTS, {});
   const [soundEnabled, setSoundEnabled] = useLS(SK.SOUND, true);
+  const [hapticEnabled, setHapticEnabled] = useLS(SK.HAPTIC, true);
   const [welcomed,   setWelcomed]   = useLS(SK.WELCOMED, false);
   // activeDate tracks the last day the user officially set up a plan.
   // When activeDate !== today, the planning modal shows — NO data is ever deleted.
@@ -1710,13 +1990,20 @@ function App(){
 
   useEffect(()=>{ if(!first) setFirst(today); },[]);
 
-  // Global click sound — fires on every non-disabled interactive element
+  // Global click sound + haptic — fires on every non-disabled interactive element
   useEffect(()=>{
     const handler=e=>{
       const btn=e.target.closest('button');
-      if(btn&&!btn.disabled){ playClick(); return; }
+      if(btn&&!btn.disabled){
+        playClick();
+        haptic([15]);
+        return;
+      }
       // Non-button interactive elements
-      if(e.target.closest('.task-card:not(.locked),.cal-day-cell,.theme-opt,.cal-month-header')) playClick();
+      if(e.target.closest('.task-card:not(.locked),.cal-day-cell,.theme-opt,.cal-month-header')){
+        playClick();
+        haptic([15]);
+      }
     };
     document.addEventListener('click',handler,true);
     return ()=>document.removeEventListener('click',handler,true);
@@ -1728,6 +2015,20 @@ function App(){
     const meta=document.getElementById('theme-color-meta');
     if(meta) meta.content=themeColors[theme]||'#ffffff';
   },[theme]);
+
+  // ── 网络状态 + 存储可用性检测 ────────────────────────
+  const [isOnline,    setIsOnline]    = useState(typeof navigator!=='undefined'?navigator.onLine:true);
+  const [storageOk,   setStorageOk]   = useState(true);
+  useEffect(()=>{
+    // 检测 localStorage 可用性（无痕模式/禁用时为 false）
+    setStorageOk(checkStorageAvailable());
+    // 监听网络变化
+    const onOnline  = ()=>setIsOnline(true);
+    const onOffline = ()=>{ setIsOnline(false); showToast('📡 当前无网络，数据已保存在本地，联网后恢复正常',4000); };
+    window.addEventListener('online',  onOnline);
+    window.addEventListener('offline', onOffline);
+    return ()=>{ window.removeEventListener('online',onOnline); window.removeEventListener('offline',onOffline); };
+  },[]);
 
   const dc    = React.useMemo(()=>{
     const keys=Object.keys(plans).sort();
@@ -1765,6 +2066,10 @@ function App(){
 
   return(
     <div id="app-root">
+      {/* 无痕模式 / 存储不可用提示 */}
+      {!storageOk&&<div className="status-banner banner-incognito">⚠️ 无痕模式或存储被禁用，关闭页面后数据将丢失，建议切换为普通模式使用</div>}
+      {/* 离线提示 */}
+      {!isOnline&&<div className="status-banner banner-offline">📡 当前无网络，数据已保存在本地，联网后即可正常访问</div>}
       <div className="app-header">
         <div className="header-left">
           <div className="app-header-title">1·3·5 效率系统</div>
@@ -1780,7 +2085,7 @@ function App(){
       {view==='dash'     &&plan &&<Dashboard plan={plan} onUpdate={updateTask} onAddTask={addTask} onDeleteTask={deleteTask}/>}
       {view==='cal'            &&<CalendarView plans={plans} events={events} onAddEvent={addEvent} onDeleteEvent={delEvent}/>}
       {view==='review'         &&<DataReview plans={plans}/>}
-      {view==='settings'       &&<SettingsPanel soundEnabled={soundEnabled} onSoundChange={setSoundEnabled}/>}
+      {view==='settings'       &&<SettingsPanel soundEnabled={soundEnabled} onSoundChange={setSoundEnabled} hapticEnabled={hapticEnabled} onHapticChange={setHapticEnabled}/>}
       {!welcomed&&<WelcomeModal onStart={()=>setWelcomed(true)}/>}
       {welcomed&&!plan&&<DailyPlanModal onDone={savePlan} dayN={dc} today={today}/>}
       {showTheme&&<ThemePanel current={theme} onChange={setTheme} onClose={()=>setShowTheme(false)}/>}
