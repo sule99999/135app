@@ -1,0 +1,2124 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="white">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="1·3·5" />
+  <meta name="theme-color" content="#ffffff" id="theme-color-meta" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <title>1·3·5 效率系统</title>
+  <style>
+    /* ═══════════════════════════════════════
+       CSS VARIABLES — DEFAULT (DARK)
+    ═══════════════════════════════════════ */
+    :root {
+      --bg-primary:    #090912;
+      --bg-secondary:  #10101a;
+      --bg-card:       #16162a;
+      --text-primary:  #f0f0f8;
+      --text-secondary:#7070a0;
+
+      --gold:          #FFD700;
+      --gold-dim:      #a88000;
+      --gold-glow:     rgba(255,215,0,0.18);
+      --gold-border:   rgba(255,215,0,0.38);
+      --gold-bg:       rgba(255,215,0,0.09);
+
+      --silver:        #d8d8e8;
+      --silver-dim:    #888898;
+      --silver-glow:   rgba(200,200,220,0.18);
+      --silver-border: rgba(200,200,220,0.38);
+      --silver-bg:     rgba(200,200,220,0.08);
+
+      --bronze:        #cd7f32;
+      --bronze-dim:    #7a4a1a;
+      --bronze-glow:   rgba(205,127,50,0.18);
+      --bronze-border: rgba(205,127,50,0.38);
+      --bronze-bg:     rgba(205,127,50,0.08);
+
+      --success:       #3ddc84;
+      --danger:        #ff5252;
+
+      --mod-w1:#0e0e1c; --mod-w2:#06060e;
+      --mod-g1:#16100a; --mod-g2:#0c0900;
+      --mod-s1:#141422; --mod-s2:#0a0a16;
+      --mod-b1:#130d06; --mod-b2:#090600;
+
+      --card-gold-bg:    linear-gradient(155deg,rgba(255,245,130,0.26) 0%,rgba(255,215,0,0.20) 28%,rgba(190,135,0,0.15) 58%,rgba(240,185,0,0.19) 80%,rgba(145,95,0,0.18) 100%);
+      --card-gold-border:rgba(255,215,0,0.68);
+      --card-gold-shad:  0 7px 22px rgba(200,148,0,0.38),0 2px 7px rgba(0,0,0,0.55),inset 0 1.5px 0 rgba(255,248,140,0.55),inset 0 -1.5px 0 rgba(0,0,0,0.42);
+      --card-gold-stripe:linear-gradient(180deg,#FFF398 0%,#FFD700 42%,#B87E00 100%);
+
+      --card-silver-bg:  linear-gradient(155deg,rgba(242,242,255,0.22) 0%,rgba(205,205,248,0.16) 28%,rgba(148,148,200,0.13) 58%,rgba(215,215,252,0.17) 80%,rgba(120,120,172,0.15) 100%);
+      --card-silver-border:rgba(210,210,255,0.65);
+      --card-silver-shad:0 7px 22px rgba(155,155,215,0.32),0 2px 7px rgba(0,0,0,0.55),inset 0 1.5px 0 rgba(242,242,255,0.55),inset 0 -1.5px 0 rgba(0,0,0,0.42);
+      --card-silver-stripe:linear-gradient(180deg,#F2F2FF 0%,#C0C0E0 42%,#7878A8 100%);
+
+      --card-bronze-bg:  linear-gradient(155deg,rgba(225,148,68,0.28) 0%,rgba(205,127,50,0.22) 28%,rgba(145,82,20,0.16) 58%,rgba(198,118,44,0.21) 80%,rgba(112,64,14,0.18) 100%);
+      --card-bronze-border:rgba(215,135,52,0.68);
+      --card-bronze-shad:0 7px 22px rgba(170,105,28,0.40),0 2px 7px rgba(0,0,0,0.55),inset 0 1.5px 0 rgba(255,195,95,0.55),inset 0 -1.5px 0 rgba(0,0,0,0.42);
+      --card-bronze-stripe:linear-gradient(180deg,#FFBE74 0%,#CD7F32 42%,#7A4510 100%);
+
+      --overlay-bg:       rgba(0,0,0,0.88);
+      --timer-overlay-bg: rgba(0,0,0,0.93);
+      --header-border:    rgba(255,255,255,0.05);
+      --nav-border:       rgba(255,255,255,0.07);
+      --subtle-border:    rgba(255,255,255,0.06);
+      --table-h-border:   rgba(255,255,255,0.07);
+      --table-r-border:   rgba(255,255,255,0.03);
+      --input-bg:         rgba(255,255,255,0.06);
+      --input-border:     rgba(255,255,255,0.14);
+      --progress-track:   rgba(255,255,255,0.07);
+      --chip-bg:          rgba(255,255,255,0.05);
+      --chip-border:      rgba(255,255,255,0.14);
+      --tab-bg:           rgba(255,255,255,0.05);
+      --btn-ghost-border: rgba(255,255,255,0.14);
+      --btn-ghost-color:  #7070a0;
+      --dialog-bg:        #16162a;
+      --cancel-color:     rgba(255,255,255,0.28);
+      --cancel-hover:     rgba(255,255,255,0.55);
+      --scrollbar-thumb:  #2a2a40;
+      --all-done-bg:      linear-gradient(135deg,rgba(255,215,0,0.07),rgba(255,149,0,0.04));
+      --all-done-border:  rgba(255,215,0,0.22);
+      --dash-prog-bg:     rgba(0,0,0,0.22);
+      --dash-prog-brd:    rgba(255,255,255,0.04);
+      /* event block on timeline */
+      --evt-text:         #fff;
+      --hour-line:        rgba(255,255,255,0.06);
+      --hour-label-c:     rgba(255,255,255,0.3);
+      --cal-today-bg:     var(--gold);
+      --cal-today-c:      #1a0800;
+      --cal-dot-today:    rgba(255,255,255,0.9);
+      --cal-sel-bg:       rgba(255,215,0,0.18);
+      --cal-sel-border:   var(--gold);
+    }
+
+    /* ═══════════════════════════════════════
+       LIGHT THEMES SHARED
+    ═══════════════════════════════════════ */
+    html[data-theme="white"],html[data-theme="green"],html[data-theme="blue"],
+    html[data-theme="pink"],html[data-theme="cream"],html[data-theme="lavender"] {
+      --gold: #c8900a; --gold-dim:#8B6000; --gold-glow:rgba(200,144,10,0.2);
+      --gold-border:rgba(180,120,0,0.42); --gold-bg:rgba(200,144,10,0.09);
+      --silver:#505060; --silver-dim:#404050; --silver-glow:rgba(80,80,96,0.18);
+      --silver-border:rgba(80,80,96,0.38); --silver-bg:rgba(80,80,96,0.08);
+      --bronze:#8B4513; --bronze-dim:#5C2D0D; --bronze-glow:rgba(139,69,19,0.18);
+      --bronze-border:rgba(139,69,19,0.38); --bronze-bg:rgba(139,69,19,0.08);
+      --success:#1a7a46; --danger:#c0392b;
+      --overlay-bg:rgba(0,0,0,0.5); --timer-overlay-bg:rgba(0,0,0,0.6);
+      --header-border:rgba(0,0,0,0.07); --nav-border:rgba(0,0,0,0.08);
+      --subtle-border:rgba(0,0,0,0.07); --table-h-border:rgba(0,0,0,0.09);
+      --table-r-border:rgba(0,0,0,0.04);
+      --input-bg:rgba(0,0,0,0.04); --input-border:rgba(0,0,0,0.14);
+      --progress-track:rgba(0,0,0,0.08); --chip-bg:rgba(0,0,0,0.04);
+      --chip-border:rgba(0,0,0,0.13); --tab-bg:rgba(0,0,0,0.05);
+      --btn-ghost-border:rgba(0,0,0,0.13); --btn-ghost-color:rgba(0,0,0,0.4);
+      --dialog-bg:var(--bg-secondary);
+      --cancel-color:rgba(0,0,0,0.28); --cancel-hover:rgba(0,0,0,0.55);
+      --scrollbar-thumb:rgba(0,0,0,0.15);
+      --card-gold-bg:    linear-gradient(155deg,rgba(200,155,10,0.18) 0%,rgba(185,130,0,0.13) 35%,rgba(140,90,0,0.10) 65%,rgba(180,125,0,0.14) 100%);
+      --card-gold-border:rgba(180,130,0,0.52);
+      --card-gold-shad:  0 5px 16px rgba(160,110,0,0.22),0 2px 5px rgba(0,0,0,0.12),inset 0 1.5px 0 rgba(230,185,40,0.38),inset 0 -1.5px 0 rgba(0,0,0,0.10);
+      --card-gold-stripe:linear-gradient(180deg,#E8C040 0%,#B87E00 42%,#7A5000 100%);
+
+      --card-silver-bg:  linear-gradient(155deg,rgba(70,70,105,0.14) 0%,rgba(60,60,95,0.10) 35%,rgba(45,45,78,0.08) 65%,rgba(65,65,100,0.12) 100%);
+      --card-silver-border:rgba(80,80,130,0.45);
+      --card-silver-shad:0 5px 16px rgba(80,80,140,0.18),0 2px 5px rgba(0,0,0,0.12),inset 0 1.5px 0 rgba(120,120,180,0.32),inset 0 -1.5px 0 rgba(0,0,0,0.10);
+      --card-silver-stripe:linear-gradient(180deg,#9090C0 0%,#606090 42%,#404068 100%);
+
+      --card-bronze-bg:  linear-gradient(155deg,rgba(140,72,20,0.16) 0%,rgba(120,58,14,0.11) 35%,rgba(90,42,8,0.09) 65%,rgba(130,65,16,0.13) 100%);
+      --card-bronze-border:rgba(150,85,25,0.50);
+      --card-bronze-shad:0 5px 16px rgba(130,78,18,0.20),0 2px 5px rgba(0,0,0,0.12),inset 0 1.5px 0 rgba(190,130,50,0.35),inset 0 -1.5px 0 rgba(0,0,0,0.10);
+      --card-bronze-stripe:linear-gradient(180deg,#C08030 0%,#8B5014 42%,#5C3008 100%);
+
+      --all-done-bg:linear-gradient(135deg,rgba(200,144,10,0.07),rgba(200,100,10,0.04));
+      --all-done-border:rgba(200,144,10,0.22);
+      --dash-prog-bg:rgba(0,0,0,0.04); --dash-prog-brd:rgba(0,0,0,0.06);
+      --evt-text:#fff;
+      --hour-line:rgba(0,0,0,0.06);
+      --hour-label-c:rgba(0,0,0,0.3);
+      --cal-today-bg:var(--gold); --cal-today-c:#fff;
+      --cal-dot-today:rgba(255,255,255,0.95);
+      --cal-sel-bg:rgba(200,144,10,0.12); --cal-sel-border:var(--gold);
+    }
+    html[data-theme="white"]    { --bg-primary:#fff;    --bg-secondary:#f5f5f7; --bg-card:#ebebef; --text-primary:#1a1a2a; --text-secondary:#606080; --mod-w1:#fafafa; --mod-w2:#f0f0f5; --mod-g1:#fffdf5; --mod-g2:#fff8e0; --mod-s1:#f8f8fc; --mod-s2:#f0f0f8; --mod-b1:#fff8f3; --mod-b2:#fff2e8; }
+    html[data-theme="green"]    { --bg-primary:#f0faf4; --bg-secondary:#e3f5eb; --bg-card:#d4eedc; --text-primary:#162a1e; --text-secondary:#4a6a56; --mod-w1:#f5fcf7; --mod-w2:#ebf7ef; --mod-g1:#fefff5; --mod-g2:#fafce8; --mod-s1:#f5fcf8; --mod-s2:#edf8f2; --mod-b1:#fef9f5; --mod-b2:#faf4ee; }
+    html[data-theme="blue"]     { --bg-primary:#f0f5ff; --bg-secondary:#e3ecff; --bg-card:#d6e2ff; --text-primary:#141e40; --text-secondary:#4a5a80; --mod-w1:#f5f8ff; --mod-w2:#edf2ff; --mod-g1:#fffdf5; --mod-g2:#fff9e6; --mod-s1:#f5f8ff; --mod-s2:#edf2ff; --mod-b1:#fff8f3; --mod-b2:#fff2e8; }
+    html[data-theme="pink"]     { --bg-primary:#fff5f7; --bg-secondary:#fce7ef; --bg-card:#f8daec; --text-primary:#28101e; --text-secondary:#8a5068; --mod-w1:#fff8fa; --mod-w2:#fdf0f5; --mod-g1:#fffdf5; --mod-g2:#fff9e6; --mod-s1:#fdf8fa; --mod-s2:#f8f0f5; --mod-b1:#fff8f3; --mod-b2:#fff2e8; }
+    html[data-theme="cream"]    { --bg-primary:#faf7f0; --bg-secondary:#f2ebe0; --bg-card:#e8e0d0; --text-primary:#282010; --text-secondary:#6a6050; --mod-w1:#fdfaf3; --mod-w2:#f8f3e8; --mod-g1:#fffdf5; --mod-g2:#fff9e6; --mod-s1:#fdfaf3; --mod-s2:#f8f3e8; --mod-b1:#fff8f3; --mod-b2:#fff2e8; }
+    html[data-theme="lavender"] { --bg-primary:#f5f3ff; --bg-secondary:#ede8ff; --bg-card:#e0dafe; --text-primary:#1c1830; --text-secondary:#6860a0; --mod-w1:#f8f6ff; --mod-w2:#f0ecff; --mod-g1:#fffdf5; --mod-g2:#fff9e6; --mod-s1:#f8f6ff; --mod-s2:#f0ecff; --mod-b1:#fff8f3; --mod-b2:#fff2e8; }
+
+    /* ═══════════════════════════════════════
+       BASE
+    ═══════════════════════════════════════ */
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{transition:background .25s;touch-action:pan-x pan-y;-ms-touch-action:pan-x pan-y}
+    body{background:var(--bg-primary);color:var(--text-primary);font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-serif;min-height:100vh;overflow-x:hidden;transition:background .25s,color .25s;touch-action:pan-x pan-y;-ms-touch-action:pan-x pan-y}
+    ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--scrollbar-thumb);border-radius:2px}
+    #app-root{max-width:480px;margin:0 auto;min-height:100vh;position:relative}
+
+    /* ─── HEADER ─── */
+    .app-header{padding:15px 16px 10px;background:var(--bg-secondary);border-bottom:1px solid var(--header-border);position:sticky;top:0;z-index:15;display:flex;align-items:flex-start;gap:8px}
+    .header-left{flex:1;min-width:0}
+    .app-header-title{font-size:20px;font-weight:800;letter-spacing:1px;background:linear-gradient(90deg,#FFD700,#FF9500);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:2px}
+    .app-header-meta{display:flex;gap:12px;font-size:11px;color:var(--text-secondary);align-items:center;flex-wrap:wrap}
+    .streak-chip{background:rgba(255,149,0,0.15);color:#FF9500;border-radius:20px;padding:1px 9px;font-weight:700;font-size:11px}
+    .settings-btn{background:none;border:none;font-size:20px;cursor:pointer;padding:4px;border-radius:8px;line-height:1;opacity:0.6;transition:opacity .2s;flex-shrink:0;margin-top:1px}
+    .settings-btn:hover{opacity:1}
+
+    /* ─── BOTTOM NAV ─── */
+    .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--bg-secondary);border-top:1px solid var(--nav-border);display:flex;z-index:25;backdrop-filter:blur(12px)}
+    .nav-btn{flex:1;padding:9px 0 11px;background:none;border:none;color:var(--text-secondary);cursor:pointer;font-size:10px;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:3px;transition:color .2s}
+    .nav-btn.active{color:var(--gold)}
+    .nav-icon{font-size:21px;line-height:1}
+
+    /* ─── OVERLAY / MODAL SHARED ─── */
+    .overlay{position:fixed;inset:0;background:var(--overlay-bg);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px;animation:fadeIn .2s}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes slideUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes popIn{from{opacity:0;transform:scale(0.6)}to{opacity:1;transform:scale(1)}}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.55}}
+
+    .modal-box{width:100%;max-width:420px;border-radius:22px;padding:28px 24px 24px;animation:slideUp .3s cubic-bezier(.2,.8,.4,1)}
+    .modal-welcome{background:linear-gradient(145deg,var(--mod-w1),var(--mod-w2));border:1.5px solid var(--subtle-border);box-shadow:0 20px 60px rgba(0,0,0,0.55)}
+    html[data-theme]:not([data-theme="dark"]) .modal-welcome{box-shadow:0 12px 40px rgba(0,0,0,0.12)}
+    .modal-gold  {background:linear-gradient(145deg,var(--mod-g1),var(--mod-g2));border:1.5px solid var(--gold-border);  box-shadow:0 0 50px var(--gold-glow),  0 20px 60px rgba(0,0,0,0.5)}
+    .modal-silver{background:linear-gradient(145deg,var(--mod-s1),var(--mod-s2));border:1.5px solid var(--silver-border);box-shadow:0 0 50px var(--silver-glow),0 20px 60px rgba(0,0,0,0.5)}
+    .modal-bronze{background:linear-gradient(145deg,var(--mod-b1),var(--mod-b2));border:1.5px solid var(--bronze-border);box-shadow:0 0 50px var(--bronze-glow),0 20px 60px rgba(0,0,0,0.5)}
+    html[data-theme]:not([data-theme="dark"]) .modal-gold,
+    html[data-theme]:not([data-theme="dark"]) .modal-silver,
+    html[data-theme]:not([data-theme="dark"]) .modal-bronze{box-shadow:0 6px 28px rgba(0,0,0,0.1)}
+
+    .step-dots{display:flex;gap:7px;margin-bottom:18px}
+    .step-dot{width:8px;height:8px;border-radius:50%;background:var(--chip-bg);border:1px solid var(--chip-border);transition:background .3s}
+    .step-dot.done  {background:rgba(255,215,0,0.3)}
+    .step-dot.active{background:var(--gold);border-color:var(--gold)}
+
+    .modal-title{font-size:17px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+    .modal-gold   .modal-title{color:var(--gold)}
+    .modal-silver .modal-title{color:var(--silver)}
+    .modal-bronze .modal-title{color:var(--bronze)}
+    .modal-hint{font-size:12px;color:var(--text-secondary);line-height:1.65;margin-bottom:16px}
+
+    .form-group{margin-bottom:14px}
+    .form-label{display:block;font-size:11px;color:var(--text-secondary);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px}
+    .form-input{width:100%;background:var(--input-bg);border:1px solid var(--input-border);border-radius:11px;padding:11px 13px;color:var(--text-primary);font-size:15px;outline:none;transition:border-color .2s,box-shadow .2s;font-family:inherit}
+    .form-input::placeholder{color:var(--text-secondary);opacity:.6}
+    .modal-gold   .form-input:focus{border-color:var(--gold);   box-shadow:0 0 0 3px var(--gold-glow)}
+    .modal-silver .form-input:focus{border-color:var(--silver); box-shadow:0 0 0 3px var(--silver-glow)}
+    .modal-bronze .form-input:focus{border-color:var(--bronze); box-shadow:0 0 0 3px var(--bronze-glow)}
+    .form-input-sm{padding:8px 11px;font-size:13px;border-radius:9px}
+
+    .time-chips{display:flex;flex-wrap:wrap;gap:7px}
+    .time-chip{padding:5px 12px;border-radius:18px;border:1px solid var(--chip-border);background:var(--chip-bg);color:var(--text-secondary);font-size:12px;cursor:pointer;transition:all .15s;font-family:inherit}
+    .time-chip:hover{color:var(--text-primary);border-color:var(--gold)}
+    .chip-gold  {border-color:var(--gold)!important;  background:var(--gold-bg)!important;  color:var(--gold)!important}
+    .chip-silver{border-color:var(--silver)!important;background:var(--silver-bg)!important;color:var(--silver)!important}
+    .chip-bronze{border-color:var(--bronze)!important;background:var(--bronze-bg)!important;color:var(--bronze)!important}
+
+    .btn{width:100%;padding:12px;border-radius:12px;border:none;font-size:15px;font-weight:600;cursor:pointer;transition:transform .15s,box-shadow .15s,opacity .2s;font-family:inherit;letter-spacing:.3px}
+    .btn:disabled{opacity:.35;cursor:not-allowed}
+    .btn:not(:disabled):hover{transform:translateY(-1px)}
+    .btn-gold  {background:linear-gradient(135deg,#FFD700,#FF9500);color:#1a0800}
+    .btn-gold:not(:disabled):hover  {box-shadow:0 6px 20px rgba(255,165,0,0.4)}
+    .btn-silver{background:linear-gradient(135deg,#ddd,#aaa);color:#1a1a2a}
+    .btn-bronze{background:linear-gradient(135deg,#cd7f32,#8B4513);color:#fff}
+    .btn-green {background:linear-gradient(135deg,#3ddc84,#1a8a50);color:#001a0a}
+    .btn-green:not(:disabled):hover {box-shadow:0 6px 20px rgba(61,220,132,0.35)}
+    .btn-ghost{background:transparent;border:1px solid var(--btn-ghost-border);color:var(--btn-ghost-color);margin-top:9px}
+    .btn-ghost:hover{border-color:var(--gold);color:var(--text-primary)}
+    .btn-sm{padding:8px 16px;font-size:13px;border-radius:9px;width:auto}
+
+    /* ─── DASHBOARD ─── */
+    .dash-progress{padding:11px 15px;background:var(--dash-prog-bg);border-bottom:1px solid var(--dash-prog-brd)}
+    .dash-progress-row{display:flex;justify-content:space-between;font-size:11px;color:var(--text-secondary);margin-bottom:5px}
+    .progress-track{height:5px;background:var(--progress-track);border-radius:3px;overflow:hidden}
+    .progress-fill{height:100%;background:linear-gradient(90deg,#FFD700,#FF9500);border-radius:3px;transition:width .6s cubic-bezier(.2,.8,.4,1)}
+
+    /* ─── SECTION ─── */
+    .dash-section{padding:14px 12px 0;margin-bottom:2px}
+    .section-header{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding:8px 12px;border-radius:11px}
+    .section-gold  .section-header{background:linear-gradient(90deg,rgba(255,215,0,0.14),rgba(255,165,0,0.04));border-left:3px solid rgba(255,215,0,0.7)}
+    .section-silver.section-header,.section-silver .section-header{background:linear-gradient(90deg,rgba(200,200,255,0.12),rgba(160,160,220,0.03));border-left:3px solid rgba(200,200,255,0.6)}
+    .section-bronze .section-header{background:linear-gradient(90deg,rgba(205,127,50,0.15),rgba(160,90,20,0.04));border-left:3px solid rgba(205,127,50,0.65)}
+    .section-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.4px}
+    .section-gold   .section-label{color:var(--gold)}
+    .section-silver .section-label{color:var(--silver)}
+    .section-bronze .section-label{color:var(--bronze)}
+    .section-count{margin-left:auto;font-size:12px;font-weight:700;color:var(--text-secondary)}
+    .section-icon{font-size:20px;line-height:1}
+
+    /* ─── TASK CARD ─── */
+    .task-card{border-radius:15px;padding:0;margin-bottom:10px;cursor:pointer;transition:transform .20s,box-shadow .20s,opacity .3s;position:relative;overflow:hidden;user-select:none}
+    /* Left metallic stripe via ::before */
+    .task-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;z-index:2}
+    .task-card-gold  {background:var(--card-gold-bg);  border:1.5px solid var(--card-gold-border);  box-shadow:var(--card-gold-shad)}
+    .task-card-silver{background:var(--card-silver-bg);border:1.5px solid var(--card-silver-border);box-shadow:var(--card-silver-shad)}
+    .task-card-bronze{background:var(--card-bronze-bg);border:1.5px solid var(--card-bronze-border);box-shadow:var(--card-bronze-shad)}
+    .task-card-gold  ::before,.task-card-gold  .card-inner::before,.task-card-gold::before  {background:var(--card-gold-stripe)}
+    .task-card-silver::before{background:var(--card-silver-stripe)}
+    .task-card-bronze::before{background:var(--card-bronze-stripe)}
+    /* Top shine overlay */
+    .task-card::after{content:'';position:absolute;top:0;left:0;right:0;height:42%;background:linear-gradient(180deg,rgba(255,255,255,0.07) 0%,transparent 100%);border-radius:15px 15px 0 0;pointer-events:none;z-index:1}
+    /* Inner padding wrapper (handles the left-stripe offset) */
+    .card-inner{padding:13px 14px 13px 18px;position:relative;z-index:2}
+    .task-card.locked{opacity:.35;cursor:not-allowed;pointer-events:none}
+    .task-card.done-card{opacity:.60;cursor:default}
+    .task-card:not(.locked):active{transform:scale(0.985)}
+    .task-card:not(.locked):hover{transform:translateY(-3px)}
+    .task-card-gold:not(.locked):hover  {box-shadow:0 12px 32px rgba(200,148,0,0.48),0 4px 10px rgba(0,0,0,0.50),inset 0 1.5px 0 rgba(255,248,140,0.60),inset 0 -1.5px 0 rgba(0,0,0,0.42)}
+    .task-card-silver:not(.locked):hover{box-shadow:0 12px 32px rgba(155,155,215,0.42),0 4px 10px rgba(0,0,0,0.50),inset 0 1.5px 0 rgba(242,242,255,0.60),inset 0 -1.5px 0 rgba(0,0,0,0.42)}
+    .task-card-bronze:not(.locked):hover{box-shadow:0 12px 32px rgba(170,105,28,0.50),0 4px 10px rgba(0,0,0,0.50),inset 0 1.5px 0 rgba(255,195,95,0.60),inset 0 -1.5px 0 rgba(0,0,0,0.42)}
+
+    .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+    .card-title{font-size:14px;font-weight:600;line-height:1.4;flex:1;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
+    .card-title.title-expanded{-webkit-line-clamp:unset;display:block}
+    .card-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap;flex-shrink:0;border:1px solid}
+    .badge-gold  {background:rgba(255,215,0,0.15);color:var(--gold);  border-color:rgba(255,215,0,0.40)}
+    .badge-silver{background:rgba(200,200,240,0.15);color:var(--silver);border-color:rgba(200,200,240,0.40)}
+    .badge-bronze{background:rgba(205,127,50,0.15);color:var(--bronze);border-color:rgba(205,127,50,0.40)}
+    .card-meta{margin-top:6px;font-size:11px;color:var(--text-secondary);display:flex;gap:12px;align-items:center}
+    .card-edit-btn{background:none;border:none;cursor:pointer;font-size:15px;opacity:.5;border-radius:8px;line-height:1;transition:opacity .15s;min-width:40px;min-height:40px;display:inline-flex;align-items:center;justify-content:center;padding:0;margin:-8px -2px;-webkit-tap-highlight-color:transparent}
+    .card-btn-group{margin-left:auto;display:flex;gap:0;flex-shrink:0;align-items:center}
+    .card-edit-btn:hover{opacity:1}
+    .add-task-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:11px;border-radius:13px;border:1.5px dashed var(--subtle-border);background:none;color:var(--text-secondary);font-size:13px;font-weight:600;cursor:pointer;margin-top:4px;transition:border-color .2s,color .2s}
+    .add-task-btn:hover{border-color:var(--gold);color:var(--gold)}
+    .tier-btn-row{display:flex;gap:8px;margin-bottom:14px}
+    .tier-btn{flex:1;padding:8px 0;border-radius:10px;border:1.5px solid var(--subtle-border);background:none;color:var(--text-secondary);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s}
+    .tier-btn.active-gold{border-color:var(--gold);background:var(--gold-bg);color:var(--gold)}
+    .tier-btn.active-silver{border-color:var(--silver);background:var(--silver-bg);color:var(--silver)}
+    .tier-btn.active-bronze{border-color:var(--bronze);background:var(--bronze-bg);color:var(--bronze)}
+    .tier-btn.tier-full{opacity:.45;cursor:pointer}
+    .toast-inline{background:rgba(255,160,0,.1);border:1px solid rgba(255,160,0,.3);color:var(--gold);font-size:11px;font-weight:600;padding:8px 12px;border-radius:10px;margin-bottom:12px;line-height:1.5;animation:toastSlide .2s ease}
+    @keyframes toastSlide{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+    .tier-prog-bar{display:flex;align-items:center;gap:12px;padding:10px 15px;background:var(--dash-prog-bg);border-bottom:1px solid var(--dash-prog-brd);flex-wrap:wrap}
+    .tier-prog-group{display:flex;align-items:center;gap:2px}
+    .tier-prog-pip{font-size:13px;color:var(--text-secondary);line-height:1;transition:color .3s,transform .3s}
+    .tier-prog-pip.pip-done{color:var(--gold);transform:scale(1.15)}
+    .tier-prog-badge{font-size:9px;font-weight:700;color:var(--success);background:rgba(76,175,80,.13);padding:2px 6px;border-radius:8px;margin-left:4px}
+    @keyframes goldPop{0%{opacity:0;transform:scale(.65)}65%{transform:scale(1.1)}100%{opacity:1;transform:scale(1)}}
+    .gold-celebrate{animation:goldPop .55s cubic-bezier(.34,1.56,.64,1) both;text-align:center;padding:6px 0}
+    .custom-time-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+    .custom-time-input{width:72px;padding:5px 8px;border-radius:8px;border:1px solid var(--subtle-border);background:var(--bg-card);color:var(--text-primary);font-size:13px;text-align:center}
+    .sound-toggle{position:relative;width:46px;height:26px;border-radius:13px;border:none;cursor:pointer;transition:background .22s;flex-shrink:0;padding:0}
+    .sound-toggle.on {background:var(--success)}
+    .sound-toggle.off{background:var(--text-secondary);opacity:.55}
+    .sound-toggle::after{content:'';position:absolute;width:20px;height:20px;border-radius:10px;background:#fff;top:3px;transition:left .22s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+    .sound-toggle.on::after {left:23px}
+    .sound-toggle.off::after{left:3px}
+    .done-stamp-gold  {color:rgba(255,215,0,0.45);border-color:rgba(255,215,0,0.38)}
+    .done-stamp-silver{color:rgba(180,180,200,0.45);border-color:rgba(180,180,200,0.38)}
+    .done-stamp-bronze{color:rgba(205,127,50,0.45);border-color:rgba(205,127,50,0.38)}
+    html[data-theme]:not([data-theme="dark"]) .done-stamp-gold  {color:rgba(180,120,0,0.45);border-color:rgba(180,120,0,0.38)}
+    html[data-theme]:not([data-theme="dark"]) .done-stamp-silver{color:rgba(60,60,80,0.38);border-color:rgba(60,60,80,0.3)}
+    html[data-theme]:not([data-theme="dark"]) .done-stamp-bronze{color:rgba(139,69,19,0.45);border-color:rgba(139,69,19,0.38)}
+    .done-stamp{position:absolute;top:50%;right:13px;transform:translateY(-50%) rotate(-12deg);font-size:17px;font-weight:900;border:2px solid;padding:1px 6px;border-radius:5px;letter-spacing:2px;pointer-events:none}
+    .card-detail-row{display:flex;gap:16px;margin-top:9px}
+    .card-detail-col label{font-size:10px;color:var(--text-secondary);display:block;margin-bottom:2px}
+    .card-detail-col span{font-size:13px;font-weight:700}
+
+    .all-done-banner{text-align:center;padding:28px 18px;margin:11px;background:var(--all-done-bg);border:1px solid var(--all-done-border);border-radius:18px;animation:popIn .5s cubic-bezier(.34,1.56,.64,1)}
+
+    /* ─── TIMER ─── */
+    .timer-overlay{position:fixed;inset:0;background:var(--timer-overlay-bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:60;padding:20px;animation:fadeIn .25s}
+    .timer-card{width:100%;max-width:400px;border-radius:26px;padding:34px 26px 28px;text-align:center;animation:slideUp .35s cubic-bezier(.2,.8,.4,1)}
+    .timer-gold  {background:linear-gradient(145deg,var(--mod-g1),var(--mod-g2));border:2px solid var(--gold);  box-shadow:0 0 70px var(--gold-glow)}
+    .timer-silver{background:linear-gradient(145deg,var(--mod-s1),var(--mod-s2));border:2px solid var(--silver);box-shadow:0 0 70px var(--silver-glow)}
+    .timer-bronze{background:linear-gradient(145deg,var(--mod-b1),var(--mod-b2));border:2px solid var(--bronze);box-shadow:0 0 70px var(--bronze-glow)}
+    .timer-tier-label{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px}
+    .timer-gold   .timer-tier-label{color:var(--gold-dim)}
+    .timer-silver .timer-tier-label{color:var(--silver-dim)}
+    .timer-bronze .timer-tier-label{color:var(--bronze-dim)}
+    .timer-task-name{font-size:15px;font-weight:600;line-height:1.4}
+    .timer-gold   .timer-task-name{color:var(--gold)}
+    .timer-silver .timer-task-name{color:var(--silver)}
+    .timer-bronze .timer-task-name{color:var(--bronze)}
+    .timer-digits{font-size:70px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:3px;line-height:1;margin:18px 0 4px;font-family:'Courier New',monospace;transition:color .4s}
+    .digits-normal  {color:var(--text-primary)}
+    .digits-overtime{color:var(--danger);animation:pulse .9s infinite}
+    .timer-prog-wrap{width:100%;height:4px;background:var(--progress-track);border-radius:2px;margin:12px 0 8px;overflow:hidden}
+    .timer-prog-bar{height:100%;border-radius:2px;transition:width 1s linear}
+    .timer-gold   .timer-prog-bar{background:var(--gold)}
+    .timer-silver .timer-prog-bar{background:var(--silver)}
+    .timer-bronze .timer-prog-bar{background:var(--bronze)}
+    .timer-status{font-size:12px;color:var(--text-secondary);margin-bottom:20px}
+    .timer-status.overtime{color:var(--danger);font-weight:600}
+
+    /* ─── DIALOG / EVAL ─── */
+    .dialog-box{width:100%;max-width:340px;background:var(--dialog-bg);border-radius:20px;padding:26px 20px;border:1px solid var(--subtle-border);animation:popIn .3s cubic-bezier(.34,1.56,.64,1);text-align:center}
+    .dialog-emoji{font-size:40px;margin-bottom:11px}
+    .dialog-title{font-size:17px;font-weight:700;margin-bottom:5px}
+    .dialog-sub  {font-size:12px;color:var(--text-secondary);margin-bottom:18px;line-height:1.6}
+    .dialog-row  {display:flex;gap:9px}
+    .dialog-btn  {flex:1;padding:11px;border-radius:11px;border:none;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:transform .15s}
+    .dialog-btn:hover{transform:translateY(-1px)}
+    .dialog-yes{background:linear-gradient(135deg,#3ddc84,#1a8a50);color:#001a0a}
+    .dialog-no {background:var(--chip-bg);border:1px solid var(--chip-border);color:var(--text-secondary)}
+    .dialog-cancel{width:100%;margin-top:10px;padding:9px;background:transparent;border:1px solid var(--btn-ghost-border);border-radius:10px;color:var(--cancel-color);font-size:12px;cursor:pointer;font-family:inherit;transition:color .2s}
+    .dialog-cancel:hover{color:var(--cancel-hover)}
+
+    .success-splash{text-align:center;animation:popIn .5s cubic-bezier(.34,1.56,.64,1);padding:18px}
+    .success-emoji{font-size:84px;display:block;margin-bottom:12px}
+    .success-title{font-size:27px;font-weight:800;color:var(--success);margin-bottom:7px}
+    .success-sub  {font-size:13px;color:var(--text-secondary)}
+
+    /* ─── DATA REVIEW ─── */
+    .review-wrap{padding:13px 13px 80px}
+    .review-top{text-align:center;padding:14px 0 12px}
+    .review-top h2{font-size:19px;font-weight:700;margin-bottom:2px}
+    .review-top p{font-size:12px;color:var(--text-secondary)}
+
+    .review-tabs{display:flex;background:var(--tab-bg);border-radius:11px;padding:4px;gap:3px;margin-bottom:13px}
+    .rtab{flex:1;padding:7px 3px;border:none;background:transparent;color:var(--text-secondary);border-radius:8px;font-size:12px;cursor:pointer;transition:all .2s;font-family:inherit;font-weight:500}
+    .rtab.active{background:var(--gold);color:#1a0800;font-weight:700}
+
+    .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:11px}
+    .stat-tile{background:var(--bg-secondary);border-radius:12px;padding:13px 7px;text-align:center;border:1px solid var(--subtle-border)}
+    .stat-val{font-size:25px;font-weight:800;line-height:1.15;display:block}
+    .stat-lbl{font-size:10px;color:var(--text-secondary);margin-top:2px}
+
+    .review-card{background:var(--bg-secondary);border-radius:13px;padding:13px;margin-bottom:11px;border:1px solid var(--subtle-border)}
+    .review-card-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text-secondary);margin-bottom:11px}
+
+    .heatmap{display:flex;flex-wrap:wrap;gap:3px}
+    .hm-cell{width:13px;height:13px;border-radius:3px;background:var(--chip-bg)}
+    .hm-1{background:rgba(200,144,10,0.2)}.hm-2{background:rgba(200,144,10,0.42)}
+    .hm-3{background:rgba(200,144,10,0.65)}.hm-4{background:rgba(200,144,10,0.90)}
+    html[data-theme="dark"] .hm-1{background:rgba(255,215,0,0.18)}
+    html[data-theme="dark"] .hm-2{background:rgba(255,215,0,0.38)}
+    html[data-theme="dark"] .hm-3{background:rgba(255,215,0,0.62)}
+    html[data-theme="dark"] .hm-4{background:rgba(255,215,0,0.90)}
+    .hm-legend{display:flex;gap:5px;align-items:center;margin-top:6px;font-size:10px;color:var(--text-secondary)}
+    .hm-sw{width:11px;height:11px;border-radius:2px}
+
+    .bar-chart-wrap{display:flex;align-items:flex-end;gap:5px;height:78px;padding-bottom:17px;position:relative}
+    .bar-grp{flex:1;display:flex;gap:2px;align-items:flex-end;position:relative}
+    .bar{flex:1;border-radius:3px 3px 0 0;min-height:2px;transition:height .5s}
+    .bar-plan{background:var(--gold-bg);border:1px solid var(--gold-border)}
+    .bar-act {background:var(--gold);opacity:.85}
+    .bar-lbl{position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);font-size:9px;color:var(--text-secondary);white-space:nowrap}
+    .chart-legend{display:flex;gap:13px;margin-top:7px;font-size:10px;color:var(--text-secondary)}
+    .legend-sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:3px;vertical-align:middle}
+
+    .sum-table{width:100%;border-collapse:collapse;font-size:12px}
+    .sum-table th{padding:6px 9px;text-align:left;border-bottom:1px solid var(--table-h-border);font-weight:700;font-size:10px;color:var(--text-secondary);text-transform:uppercase}
+    .sum-table td{padding:8px 9px;border-bottom:1px solid var(--table-r-border)}
+    .sum-table tr:last-child td{border-bottom:none}
+
+    .badge-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
+    .badge-tile{text-align:center}
+    .badge-icon{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:21px;margin:0 auto 4px}
+    .badge-locked  {background:var(--chip-bg);opacity:.3;filter:grayscale(1)}
+    .badge-unlocked{background:linear-gradient(135deg,var(--gold-bg),rgba(255,149,0,0.1));border:1px solid var(--gold-border)}
+    .badge-name{font-size:10px;color:var(--text-secondary);line-height:1.3}
+
+    /* ─── THEME PANEL ─── */
+    .theme-btn-row{display:flex;flex-direction:column;gap:6px}
+    .theme-opt{display:flex;align-items:center;gap:11px;padding:10px 13px;border-radius:11px;border:1.5px solid transparent;background:var(--chip-bg);cursor:pointer;font-family:inherit;text-align:left;transition:all .15s}
+    .theme-opt:hover{background:var(--gold-bg);border-color:var(--gold-border)}
+    .theme-opt.selected{border-color:var(--gold);background:var(--gold-bg);box-shadow:0 0 0 2px var(--gold)}
+    .theme-swatch{width:28px;height:28px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border:1.5px solid rgba(0,0,0,0.1);font-size:13px}
+    .theme-label{font-size:13px;font-weight:500;color:var(--text-primary);flex:1}
+    .theme-check{color:var(--gold);font-size:13px;font-weight:900;width:20px;height:20px;border-radius:50%;border:2px solid var(--gold);display:inline-flex;align-items:center;justify-content:center;background:rgba(255,215,0,.18);flex-shrink:0}
+
+    /* ═══════════════════════════════════════
+       CALENDAR STYLES
+    ═══════════════════════════════════════ */
+    .cal-wrap{padding:0 0 80px}
+
+    /* Month header */
+    .cal-month-header{display:flex;align-items:center;padding:14px 14px 10px;gap:8px;background:var(--bg-secondary);border-bottom:1px solid var(--subtle-border);position:sticky;top:0;z-index:5}
+    .cal-month-title{flex:1;text-align:center;font-size:17px;font-weight:700}
+    .cal-nav-btn{background:none;border:none;font-size:22px;color:var(--text-secondary);cursor:pointer;padding:4px 8px;border-radius:8px;transition:color .2s;line-height:1}
+    .cal-nav-btn:hover{color:var(--text-primary)}
+    .cal-today-btn{background:var(--gold-bg);border:1px solid var(--gold-border);color:var(--gold);border-radius:8px;padding:4px 10px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s}
+    .cal-today-btn:hover{background:var(--gold);color:#1a0800}
+
+    /* Day labels */
+    .cal-days-row{display:grid;grid-template-columns:repeat(7,1fr);padding:0 10px;border-bottom:1px solid var(--subtle-border);background:var(--bg-secondary)}
+    .cal-day-label{text-align:center;padding:7px 0;font-size:11px;font-weight:600;color:var(--text-secondary)}
+    .cal-day-label:nth-child(7){color:var(--danger)}
+
+    /* Month grid */
+    .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:0;padding:6px 10px}
+    .cal-cell{min-height:58px;padding:5px 3px 4px;cursor:pointer;border-radius:10px;transition:background .15s;display:flex;flex-direction:column;align-items:center;gap:3px}
+    .cal-cell:hover{background:var(--chip-bg)}
+    .cal-cell.other-month .cal-date-num{opacity:.3}
+    .cal-date-num{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;transition:all .2s}
+    .cal-cell.today .cal-date-num{background:var(--cal-today-bg);color:var(--cal-today-c);font-weight:700}
+    .cal-cell.selected .cal-date-num{background:var(--cal-sel-bg);border:1.5px solid var(--cal-sel-border);color:var(--text-primary);font-weight:700}
+    .cal-cell.today.selected .cal-date-num{background:var(--cal-today-bg);color:var(--cal-today-c)}
+    .cal-dots{display:flex;gap:3px;justify-content:center;flex-wrap:wrap;max-width:36px}
+    .cal-dot{width:5px;height:5px;border-radius:50%}
+
+    /* Event colors */
+    .ec-gold  {background:#c8900a}.ec-silver{background:#505060}
+    .ec-bronze{background:#8B4513}.ec-blue  {background:#2c6fad}
+    .ec-green {background:#2a7a50}.ec-pink  {background:#c0406a}
+    .ec-purple{background:#6040c0}
+    html[data-theme="dark"] .ec-gold{background:#FFD700}
+
+    /* Day view */
+    .cal-day-header{display:flex;align-items:center;padding:12px 14px;gap:8px;background:var(--bg-secondary);border-bottom:1px solid var(--subtle-border)}
+    .cal-back-btn{background:none;border:none;color:var(--gold);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;padding:4px 8px;border-radius:8px;transition:background .15s}
+    .cal-back-btn:hover{background:var(--gold-bg)}
+    .cal-day-title{flex:1;font-size:15px;font-weight:700;text-align:center}
+    .cal-add-btn{background:var(--gold);color:#1a0800;border:none;border-radius:8px;padding:5px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s}
+    .cal-add-btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(255,165,0,0.35)}
+
+    /* Timeline */
+    .timeline-scroll{overflow-y:auto;position:relative}
+    .timeline-inner{position:relative;padding-left:50px;padding-right:10px}
+    .hour-row{height:56px;border-top:1px solid var(--hour-line);display:flex;align-items:flex-start}
+    .hour-label{position:absolute;left:4px;font-size:10px;color:var(--hour-label-c);width:44px;text-align:right;padding-right:6px;margin-top:-7px;white-space:nowrap}
+    .evt-block{position:absolute;left:54px;right:6px;border-radius:8px;padding:4px 8px;overflow:hidden;cursor:pointer;min-height:22px;transition:opacity .2s}
+    .evt-block:hover{opacity:.85;transform:scaleX(.99)}
+    .evt-title{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--evt-text)}
+    .evt-time {font-size:10px;color:var(--evt-text);opacity:.8}
+
+    /* All-day events strip */
+    .allday-strip{padding:6px 10px 0;display:flex;flex-wrap:wrap;gap:5px;min-height:10px}
+    .allday-chip{padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;color:var(--evt-text);white-space:nowrap}
+
+    /* No events state */
+    .day-empty{text-align:center;padding:40px 20px;color:var(--text-secondary)}
+    .day-empty-icon{font-size:36px;margin-bottom:8px}
+
+    /* Add event modal */
+    .color-picker{display:flex;gap:8px;flex-wrap:wrap}
+    .color-dot{width:28px;height:28px;border-radius:50%;cursor:pointer;transition:transform .15s,box-shadow .15s;border:2.5px solid transparent}
+    .color-dot:hover{transform:scale(1.15)}
+    .color-dot.selected{border-color:var(--text-primary);transform:scale(1.2)}
+    .time-row{display:flex;gap:8px;align-items:center}
+    .time-row span{font-size:12px;color:var(--text-secondary)}
+
+    .empty-state{text-align:center;padding:34px 18px;color:var(--text-secondary)}
+    .empty-icon{font-size:42px;margin-bottom:9px}
+    .empty-title{font-size:14px;font-weight:600;color:var(--text-primary);margin-bottom:5px}
+    .empty-text{font-size:12px;line-height:1.65}
+
+    .content-pad{padding-bottom:74px}
+    input[type="date"]::-webkit-calendar-picker-indicator{opacity:.5;cursor:pointer;filter:var(--cal-icon-filter,none)}
+    html[data-theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1)}
+
+    /* ── GOLD CARD PROMINENCE (1.5-2x visual size) ── */
+    .section-gold .task-card:not(.done-card){min-height:80px}
+    .section-gold .task-card:not(.done-card) .card-inner{padding:18px 16px 16px 22px}
+    .section-gold .task-card:not(.done-card) .card-title{font-size:16px;-webkit-line-clamp:3;letter-spacing:.01em}
+    .section-gold .task-card:not(.done-card) .card-meta{font-size:12px;margin-top:9px}
+    .section-gold .task-card:not(.done-card) .card-badge{font-size:11px;padding:4px 11px}
+    .section-gold .task-card:not(.done-card)::before{width:7px}
+
+    /* ── INLINE EDIT ── */
+    .inline-edit-wrap{flex:1;display:flex}
+    .inline-edit-input{flex:1;border:none;background:rgba(255,215,0,0.12);color:var(--text-primary);font-size:14px;font-weight:600;font-family:inherit;line-height:1.4;outline:2px solid var(--gold);border-radius:7px;padding:3px 8px;width:100%;box-sizing:border-box}
+    .section-gold .inline-edit-input{font-size:16px;outline-color:var(--gold)}
+    .section-silver .inline-edit-input{background:rgba(200,200,220,0.12);outline-color:var(--silver)}
+    .section-bronze .inline-edit-input{background:rgba(205,127,50,0.12);outline-color:var(--bronze)}
+
+    /* ── TOAST ── */
+    #app-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:rgba(18,18,28,0.94);color:#f0f0f8;padding:12px 20px;border-radius:14px;font-size:13px;max-width:300px;width:calc(100% - 40px);text-align:center;z-index:9999;opacity:0;pointer-events:none;transition:opacity .25s;line-height:1.55;box-shadow:0 6px 24px rgba(0,0,0,0.35)}
+    #app-toast.toast-visible{opacity:1}
+
+    /* ── STATUS BANNERS (offline / incognito) ── */
+    .status-banner{display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 16px;font-size:11.5px;font-weight:600;line-height:1.4;text-align:center;animation:bannerIn .3s ease}
+    @keyframes bannerIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+    .banner-offline{background:rgba(255,82,82,0.10);color:var(--danger);border-bottom:1px solid rgba(255,82,82,0.22)}
+    .banner-incognito{background:rgba(255,160,0,0.09);color:var(--gold);border-bottom:1px solid rgba(255,160,0,0.24)}
+  </style>
+  <script>
+    /* ── 防缩放：三重保险 ──────────────────────────────
+       1. viewport meta 已设 maximum-scale=1 user-scalable=no
+       2. CSS touch-action:pan-x pan-y 禁止浏览器缩放手势
+       3. JS 拦截 gesturestart / wheel(ctrlKey) / touchmove 多指
+    ─────────────────────────────────────────────────── */
+    // iOS Safari gesture zoom
+    document.addEventListener('gesturestart', function(e){ e.preventDefault(); }, {passive:false});
+    document.addEventListener('gesturechange', function(e){ e.preventDefault(); }, {passive:false});
+    document.addEventListener('gestureend',   function(e){ e.preventDefault(); }, {passive:false});
+    // Ctrl+滚轮缩放（桌面端）
+    document.addEventListener('wheel', function(e){ if(e.ctrlKey){ e.preventDefault(); } }, {passive:false});
+    // 多指 touchmove → 捏合缩放
+    document.addEventListener('touchmove', function(e){ if(e.touches.length>1){ e.preventDefault(); } }, {passive:false});
+    // 兜底：若 scale 被意外改变则强制重置 viewport
+    (function resetZoomIfNeeded(){
+      var vp=document.querySelector('meta[name=viewport]');
+      function fix(){
+        if(Math.round(window.innerWidth)!==Math.round(screen.width/window.devicePixelRatio) && window.visualViewport){
+          if(window.visualViewport.scale>1.01){
+            vp.setAttribute('content',
+              'width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover');
+          }
+        }
+      }
+      if(window.visualViewport){
+        window.visualViewport.addEventListener('resize', fix);
+      }
+    })();
+  </script>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<script type="text/babel">
+const { useState, useEffect, useCallback, useRef, useMemo } = React;
+
+// ── CONSTANTS ────────────────────────────────────────
+const SK = { FIRST:'135app_first', PLANS:'135app_plans', THEME:'135app_theme', EVENTS:'135app_events', SOUND:'135app_sound', HAPTIC:'135app_haptic', WELCOMED:'135app_welcomed', ACTIVE_DATE:'135app_active_date' };
+const TIME_OPTS = [5,10,15,25,30,45,60,90,120];
+const THEMES = [
+  {id:'white',    label:'☀️ 纯白',   desc:'简洁明亮白色',swatch:'#ffffff', text:'#c8900a'},
+  {id:'dark',     label:'🌑 深色',   desc:'经典深夜模式',swatch:'#090912', text:'#FFD700'},
+  {id:'green',    label:'🌿 浅绿',   desc:'清新薄荷绿',  swatch:'#f0faf4', text:'#1a7a46'},
+  {id:'blue',     label:'🌊 浅蓝',   desc:'宁静天空蓝',  swatch:'#f0f5ff', text:'#1a4090'},
+  {id:'pink',     label:'🌸 浅粉',   desc:'温柔玫瑰粉',  swatch:'#fff5f7', text:'#c03060'},
+  {id:'cream',    label:'☕ 奶油',   desc:'温暖奶油色',  swatch:'#faf7f0', text:'#8B6000'},
+  {id:'lavender', label:'💜 薰衣草', desc:'优雅紫罗兰',  swatch:'#f5f3ff', text:'#5040c0'},
+];
+const BADGES = [
+  {id:'first_gold',  emoji:'🥇',name:'首个金牌', check:s=>s.goldDone>=1},
+  {id:'silver_clean',emoji:'🥈',name:'银牌全清', check:s=>s.silverFull>=1},
+  {id:'perfect_day', emoji:'🏆',name:'完美一天', check:s=>s.perfect>=1},
+  {id:'streak3',     emoji:'🔥',name:'三连打卡', check:s=>s.maxStreak>=3},
+  {id:'streak7',     emoji:'⚡',name:'七天连击', check:s=>s.maxStreak>=7},
+  {id:'streak30',    emoji:'🌟',name:'月度英雄', check:s=>s.maxStreak>=30},
+  {id:'on_time10',   emoji:'⏰',name:'守时达人', check:s=>s.onTime>=10},
+  {id:'early5',      emoji:'🚀',name:'高效飞人', check:s=>s.early>=5},
+  {id:'active7',     emoji:'🗓️',name:'活跃一周', check:s=>s.active>=7},
+  {id:'active30',    emoji:'📅',name:'月度勇士', check:s=>s.active>=20},
+  {id:'gold50',      emoji:'👑',name:'金牌达人', check:s=>s.goldDone>=50},
+  {id:'total100',    emoji:'💎',name:'百任完成', check:s=>s.totalDone>=100},
+];
+const EVENT_COLORS = {
+  gold:  {hex:'#c8900a', dark:'#FFD700'},
+  silver:{hex:'#505060', dark:'#b0b0c8'},
+  bronze:{hex:'#8B4513', dark:'#cd7f32'},
+  blue:  {hex:'#2c6fad', dark:'#4a90e2'},
+  green: {hex:'#2a7a50', dark:'#3ddc84'},
+  pink:  {hex:'#c0406a', dark:'#ff6699'},
+  purple:{hex:'#6040c0', dark:'#9966ff'},
+};
+const COLOR_LABELS = {gold:'🟡 金色',silver:'⬜ 银色',bronze:'🟤 铜色',blue:'🔵 蓝色',green:'🟢 绿色',pink:'🩷 粉色',purple:'🟣 紫色'};
+const TIER_TO_COLOR = {gold:'gold', silver:'silver', bronze:'bronze'};
+
+// ── UTILS ────────────────────────────────────────────
+// Use local date (not UTC) so midnight resets correctly in all timezones
+const todayStr = () => { const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
+const genId    = () => Math.random().toString(36).slice(2,10);
+const fmt      = s => { const a=Math.abs(s); return `${String(Math.floor(a/60)).padStart(2,'0')}:${String(a%60).padStart(2,'0')}`; };
+
+// ── AUDIO / HAPTIC ────────────────────────────────────
+function isSoundOn(){ try{ const v=localStorage.getItem(SK.SOUND); return v===null?true:JSON.parse(v); }catch(e){ return true; } }
+function isHapticOn(){ try{ const v=localStorage.getItem(SK.HAPTIC); return v===null?true:JSON.parse(v); }catch(e){ return true; } }
+let _audioCtx=null;
+let _reverbBuf=null; // 缓存混响冲激响应，只生成一次
+function getAudioCtx(){
+  try{
+    if(!_audioCtx||_audioCtx.state==='closed'){
+      _audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+      _reverbBuf=null; // ctx 重建时清除缓存
+    }
+    if(_audioCtx.state==='suspended') _audioCtx.resume();
+    return _audioCtx;
+  }catch(e){ return null; }
+}
+function _getReverbBuf(ctx){
+  if(_reverbBuf) return _reverbBuf;
+  const sr=ctx.sampleRate;
+  const revLen=Math.floor(sr*0.13);
+  _reverbBuf=ctx.createBuffer(2,revLen,sr);
+  for(let c=0;c<2;c++){
+    const d=_reverbBuf.getChannelData(c);
+    for(let i=0;i<revLen;i++)
+      d[i]=(Math.random()*2-1)*Math.pow(1-i/revLen,2.2)*0.28;
+  }
+  return _reverbBuf;
+}
+// ── 移动端后台恢复：页面重新可见或任意触摸时自动 resume AudioContext ──
+function _tryResumeAudio(){
+  if(_audioCtx && _audioCtx.state==='suspended') _audioCtx.resume().catch(()=>{});
+}
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden) _tryResumeAudio(); });
+['touchstart','pointerdown','click'].forEach(ev=>
+  document.addEventListener(ev, _tryResumeAudio, {passive:true, capture:true})
+);
+function playTone(ctx,freq,start,dur,vol=0.25,type='sine'){
+  const osc=ctx.createOscillator(),g=ctx.createGain();
+  osc.connect(g);g.connect(ctx.destination);
+  osc.type=type;osc.frequency.value=freq;
+  g.gain.setValueAtTime(0,start);
+  g.gain.linearRampToValueAtTime(vol,start+0.04);
+  g.gain.exponentialRampToValueAtTime(0.001,start+dur);
+  osc.start(start);osc.stop(start+dur+0.05);
+}
+function playClick(){  // 老式相机快门咔嚓声 + 桶内空间混响感
+  if(!isSoundOn()) return;
+  const ctx=getAudioCtx(); if(!ctx)return;
+  const t=ctx.currentTime;
+  const sr=ctx.sampleRate;
+  // 复用缓存的混响冲激响应，避免每次点击重新计算
+  const conv=ctx.createConvolver(); conv.buffer=_getReverbBuf(ctx);
+  // Dry/Wet 混合：直达声 60% + 混响 40%
+  const dry=ctx.createGain(); dry.gain.value=0.60;
+  const wet=ctx.createGain(); wet.gain.value=0.40;
+  dry.connect(ctx.destination);
+  conv.connect(wet); wet.connect(ctx.destination);
+  // Helper: 带通滤波噪声爆破，同时送入 dry 和混响
+  function shutterBurst(t0,vol,dur,bpFreq,bpQ){
+    const len=Math.floor(sr*dur);
+    const buf=ctx.createBuffer(1,len,sr);
+    const d=buf.getChannelData(0);
+    for(let i=0;i<len;i++) d[i]=(Math.random()*2-1);
+    const src=ctx.createBufferSource(); src.buffer=buf;
+    const bpf=ctx.createBiquadFilter(); bpf.type='bandpass';
+    bpf.frequency.value=bpFreq; bpf.Q.value=bpQ;
+    const g=ctx.createGain();
+    g.gain.setValueAtTime(vol,t0);
+    g.gain.exponentialRampToValueAtTime(0.001,t0+dur);
+    src.connect(bpf); bpf.connect(g);
+    g.connect(dry); g.connect(conv);
+    src.start(t0);
+  }
+  // "咔"：第一帘撞击 — 频率再压（1800Hz），更闷厚
+  shutterBurst(t,        0.28, 0.022, 1800, 0.8);
+  shutterBurst(t,        0.22, 0.038,  800, 0.5);
+  // "嚓"：第二帘弹开 — 65ms后，略低略轻
+  shutterBurst(t+0.065,  0.20, 0.018, 1600, 0.8);
+  shutterBurst(t+0.065,  0.14, 0.030,  700, 0.5);
+}
+function playBeep(){  // soft single ping when overtime starts
+  if(!isSoundOn()) return;
+  const ctx=getAudioCtx(); if(!ctx)return;
+  playTone(ctx,880,ctx.currentTime,0.4,0.18);
+}
+function playChime(){  // 3-note ascending chime when evaluate shows
+  if(!isSoundOn()) return;
+  const ctx=getAudioCtx(); if(!ctx)return;
+  const t=ctx.currentTime;
+  playTone(ctx,523,t,0.55,0.22);
+  playTone(ctx,659,t+0.18,0.55,0.22);
+  playTone(ctx,784,t+0.36,0.7,0.22);
+}
+function playSuccess(){  // cheerful arpeggio on task complete
+  if(!isSoundOn()) return;
+  const ctx=getAudioCtx(); if(!ctx)return;
+  const t=ctx.currentTime;
+  [523,659,784,1047].forEach((f,i)=>playTone(ctx,f,t+i*0.12,0.45,0.18));
+}
+function haptic(pattern=[100]){ if(!isHapticOn()) return; try{ navigator.vibrate&&navigator.vibrate(pattern); }catch(e){} }
+const fmtDate  = d => { const x=new Date(d+' 12:00'); return `${x.getFullYear()}年${x.getMonth()+1}月${x.getDate()}日`; };
+const fmtDateShort = d => { const x=new Date(d+' 12:00'); return `${x.getMonth()+1}月${x.getDate()}日`; };
+const dayCount = f => {
+  if(!f) return 1;
+  // Parse both dates as local noon to avoid UTC-offset day-boundary errors
+  const start=new Date(f+' 12:00:00'); start.setHours(12,0,0,0);
+  const now=new Date(); now.setHours(12,0,0,0);
+  return Math.max(1,Math.floor((now-start)/864e5)+1);
+};
+const weekOf   = d => { const x=new Date(d+' 12:00'),dy=x.getDay(); x.setDate(x.getDate()-dy+(dy===0?-6:1)); return x.toISOString().split('T')[0]; };
+const planTasks= p => p?[p.goldTask,...(p.silverTasks||[]),...(p.bronzeTasks||[])].filter(Boolean):[];
+
+// ── TOAST ────────────────────────────────────────────
+function showToast(msg, duration=4500){
+  let el=document.getElementById('app-toast');
+  if(!el){ el=document.createElement('div'); el.id='app-toast'; document.body.appendChild(el); }
+  el.textContent=msg;
+  el.className='toast-visible';
+  clearTimeout(window._toastTimer);
+  window._toastTimer=setTimeout(()=>{ el.className=''; },duration);
+}
+// 检测 localStorage 是否可用（无痕模式/禁用状态下会抛出异常）
+function checkStorageAvailable(){
+  try{ localStorage.setItem('__chk__','1'); localStorage.removeItem('__chk__'); return true; }
+  catch{ return false; }
+}
+
+function isDark() { return document.documentElement.getAttribute('data-theme')==='dark'; }
+function getEvtColor(colorKey) {
+  const c = EVENT_COLORS[colorKey] || EVENT_COLORS.blue;
+  return isDark() ? c.dark : c.hex;
+}
+
+function useLS(key,def){
+  const [v,setV]=useState(()=>{ try{const s=localStorage.getItem(key);return s?JSON.parse(s):def;}catch{return def;} });
+  const set=useCallback(u=>setV(prev=>{
+    const nv=typeof u==='function'?u(prev):u;
+    try{
+      localStorage.setItem(key,JSON.stringify(nv));
+    }catch(e){
+      if(e&&(e.name==='QuotaExceededError'||e.name==='NS_ERROR_DOM_QUOTA_REACHED'||e.code===22)){
+        showToast('⚠️ 本地存储空间已满！请先在设置页导出数据备份，再清理浏览器缓存。',6000);
+      }else{
+        showToast('⚠️ 数据保存失败，可能处于无痕模式或浏览器禁用了本地存储。',5000);
+      }
+    }
+    return nv;
+  }),[key]);
+  return [v,set];
+}
+
+const localDateStr=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+function calcStreak(plans){ let c=0,d=new Date(); while(true){ const k=localDateStr(d),p=plans[k]; if(p&&planTasks(p).some(t=>t.status==='completed')){c++;d.setDate(d.getDate()-1);}else break;} return c; }
+function calcMaxStreak(plans){ let mx=0,c=0; Object.keys(plans).sort().forEach(d=>{ const p=plans[d]; if(p&&planTasks(p).some(t=>t.status==='completed')){c++;mx=Math.max(mx,c);}else c=0;}); return mx; }
+
+// Get timeline events for a date (from plans + custom)
+function getTimelineEvents(dateStr, plans, customEvts) {
+  const plan = plans[dateStr];
+  const taskEvts = plan ? planTasks(plan).filter(t=>t.completedAt).map(t=>{
+    const endDt = new Date(t.completedAt);
+    // Derive real working window: end = completedAt, start = end - actualMinutes
+    const actualMs = (t.actualMinutes||t.estimatedMinutes||25)*60000;
+    const startDt = new Date(endDt.getTime() - actualMs);
+    return {
+      id:t.id, title:t.title, colorKey:TIER_TO_COLOR[t.tier]||'gold',
+      startH:startDt.getHours(), startM:startDt.getMinutes(),
+      endH:endDt.getHours(), endM:endDt.getMinutes(),
+      isTask:true, tier:t.tier, allDay:false,
+    };
+  }) : [];
+  const custEvts = Object.values(customEvts||{}).filter(e=>e.date===dateStr).map(e=>{
+    if(e.allDay) return {...e, isTask:false, colorKey:e.color||'blue', allDay:true};
+    const [sh,sm]=(e.startTime||'09:00').split(':').map(Number);
+    const [eh,em]=(e.endTime||e.startTime||'10:00').split(':').map(Number);
+    const safeEh = (eh*60+em) <= (sh*60+sm) ? sh+1 : eh;
+    const safeEm = (eh*60+em) <= (sh*60+sm) ? sm : em;
+    return {...e, isTask:false, colorKey:e.color||'blue', startH:sh, startM:sm, endH:safeEh, endM:safeEm, allDay:false};
+  });
+  return [...taskEvts, ...custEvts];
+}
+
+// Get all dates that have events (for month dots)
+function getDayDots(dateStr, plans, customEvts) {
+  const evts = getTimelineEvents(dateStr, plans, customEvts);
+  const colors = [...new Set(evts.map(e=>e.colorKey))].slice(0,4);
+  return colors;
+}
+
+// ── TIME PICKER ──────────────────────────────────────
+function TimePicker({value,onChange,tier,isCheckIn,onCheckInChange}){
+  const [customMode,setCustomMode]=useState(false);
+  const [customVal,setCustomVal]=useState('');
+  const isCustom=!isCheckIn&&!TIME_OPTS.includes(value)&&value>0;
+
+  const applyCustom=()=>{
+    const v=parseInt(customVal);
+    if(v>0&&v<=600){onChange(v);setCustomMode(false);setCustomVal('');}
+  };
+  const selectCheckIn=()=>{ onCheckInChange&&onCheckInChange(true); onChange(0); setCustomMode(false); };
+  const selectPreset=t=>{ onChange(t); onCheckInChange&&onCheckInChange(false); setCustomMode(false); };
+  const openCustom=()=>{ setCustomMode(true); onCheckInChange&&onCheckInChange(false); setCustomVal(isCustom?String(value):''); };
+
+  return(
+    <div>
+      <div className="time-chips">
+        {onCheckInChange&&(
+          <button className={`time-chip${isCheckIn?` chip-${tier}`:''}`} onClick={selectCheckIn}>✓ 打卡</button>
+        )}
+        {TIME_OPTS.map(t=>(
+          <button key={t} className={`time-chip${!isCheckIn&&value===t&&!customMode?` chip-${tier}`:''}`} onClick={()=>selectPreset(t)}>{t}分钟</button>
+        ))}
+        <button className={`time-chip${(customMode||isCustom)&&!isCheckIn?` chip-${tier}`:''}`} onClick={openCustom}>自定义</button>
+      </div>
+      {customMode&&(
+        <div className="custom-time-row" style={{marginTop:8}}>
+          <input className="custom-time-input" type="number" min="1" max="600" placeholder="分钟"
+            value={customVal} onChange={e=>setCustomVal(e.target.value)}
+            onKeyDown={e=>e.key==='Enter'&&applyCustom()} autoFocus/>
+          <button className={`time-chip chip-${tier}`} onClick={applyCustom}>确认</button>
+          <button className="time-chip" onClick={()=>{setCustomMode(false);setCustomVal('');}}>取消</button>
+        </div>
+      )}
+      {isCustom&&!customMode&&(
+        <div style={{fontSize:11,color:'var(--text-secondary)',marginTop:6}}>自定义：{value} 分钟</div>
+      )}
+    </div>
+  );
+}
+
+// ── WELCOME MODAL ────────────────────────────────────
+function WelcomeModal({onStart}){
+  const [step,setStep]=useState(0);
+  const SLIDES=[
+    {
+      emoji:'🌟',
+      title:'欢迎使用 1·3·5 效率系统',
+      body:(
+        <div style={{fontSize:13,color:'var(--text-secondary)',lineHeight:1.8,marginBottom:24}}>
+          一种简单而强大的时间管理法<br/>
+          每天只需 <span style={{color:'var(--gold)',fontWeight:700}}>5 分钟规划</span>，<br/>
+          聚焦真正重要的事，告别无效忙碌。
+        </div>
+      ),
+      cta:'了解用法 →',
+    },
+    {
+      emoji:'📋',
+      title:'每天三层任务，优先级一目了然',
+      body:(
+        <div style={{display:'flex',flexDirection:'column',gap:9,marginBottom:22,textAlign:'left'}}>
+          {[
+            {emoji:'🥇',title:'1 个金牌任务',desc:'今天最重要的一件事，必须完成。',color:'var(--gold)'},
+            {emoji:'🥈',title:'3 个银牌任务',desc:'次要但重要，完成金牌后逐一攻克。',color:'var(--silver)'},
+            {emoji:'🥉',title:'5 个铜牌任务',desc:'锦上添花，有余力时完成，不强求。',color:'var(--bronze)'},
+          ].map(s=>(
+            <div key={s.emoji} style={{display:'flex',alignItems:'center',gap:11,padding:'9px 12px',borderRadius:11,background:'var(--bg-secondary)',border:'1px solid var(--subtle-border)'}}>
+              <span style={{fontSize:24,lineHeight:1,flexShrink:0}}>{s.emoji}</span>
+              <div>
+                <div style={{fontSize:13,fontWeight:700,color:s.color,marginBottom:1}}>{s.title}</div>
+                <div style={{fontSize:11,color:'var(--text-secondary)',lineHeight:1.4}}>{s.desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ),
+      cta:'明白了，开始吧 🚀',
+    },
+  ];
+  const cur=SLIDES[step];
+  const isLast=step===SLIDES.length-1;
+  return(
+    <div className="overlay">
+      <div className="modal-box modal-welcome" style={{maxWidth:360,textAlign:'center'}} onClick={e=>e.stopPropagation()}>
+        {/* 步骤指示点 */}
+        <div style={{display:'flex',justifyContent:'center',gap:6,marginBottom:20}}>
+          {SLIDES.map((_,i)=>(
+            <div key={i} style={{width:i===step?20:7,height:7,borderRadius:4,background:i===step?'var(--gold)':'var(--chip-bg)',transition:'width .25s,background .25s'}}/>
+          ))}
+        </div>
+        <div style={{fontSize:34,marginBottom:10}}>{cur.emoji}</div>
+        <div style={{fontSize:18,fontWeight:800,color:'var(--text-primary)',marginBottom:14,lineHeight:1.3}}>{cur.title}</div>
+        {cur.body}
+        <button className="btn btn-gold" style={{width:'100%',padding:'13px 0',fontSize:14,fontWeight:700}}
+          onClick={()=>{ if(isLast) onStart(); else setStep(s=>s+1); }}>
+          {cur.cta}
+        </button>
+        {step>0&&(
+          <button className="btn btn-ghost" style={{width:'100%',marginTop:8,padding:'9px 0',fontSize:12}}
+            onClick={()=>setStep(s=>s-1)}>← 上一步</button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── THEME PANEL (仅主题颜色) ─────────────────────────
+function ThemePanel({current,onChange,onClose}){
+  return(
+    <div className="overlay" onClick={onClose}>
+      <div className="modal-box modal-welcome" style={{maxWidth:360}} onClick={e=>e.stopPropagation()}>
+        <div style={{fontSize:16,fontWeight:700,marginBottom:3,color:'var(--text-primary)'}}>🎨 主题颜色</div>
+        <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:14}}>选择主题，立即生效自动保存</div>
+        <div className="theme-btn-row">
+          {THEMES.map(t=>(
+            <button key={t.id} className={`theme-opt${current===t.id?' selected':''}`} onClick={()=>{onChange(t.id);onClose();}}>
+              <div className="theme-swatch" style={{background:t.swatch}}><span style={{color:t.text,fontWeight:800,fontSize:13}}>A</span></div>
+              <div style={{flex:1}}><div className="theme-label">{t.label}</div><div style={{fontSize:11,color:'var(--text-secondary)'}}>{t.desc}</div></div>
+              {current===t.id&&<span className="theme-check">✓</span>}
+            </button>
+          ))}
+        </div>
+        <button className="btn btn-ghost" style={{marginTop:13}} onClick={onClose}>关闭</button>
+      </div>
+    </div>
+  );
+}
+
+// ── SETTINGS PANEL (系统设置) ─────────────────────────
+function SettingsPanel({soundEnabled,onSoundChange,hapticEnabled,onHapticChange}){
+  const canVibrate = typeof navigator!=='undefined' && !!navigator.vibrate;
+  return(
+    <div className="view-scroll" style={{padding:'20px 16px 40px'}}>
+      <div style={{maxWidth:460,margin:'0 auto'}}>
+        <div style={{fontSize:18,fontWeight:700,marginBottom:4,color:'var(--text-primary)'}}>⚙️ 设置</div>
+        <div style={{fontSize:12,color:'var(--text-secondary)',marginBottom:20}}>系统设置与数据管理</div>
+
+        {/* Sound & Haptic group */}
+        <div style={{marginBottom:14,borderRadius:13,background:'var(--bg-secondary)',border:'1px solid var(--subtle-border)',overflow:'hidden'}}>
+          {/* Sound toggle */}
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'12px 14px',borderBottom:'1px solid var(--subtle-border)'}}>
+            <div>
+              <div style={{fontSize:14,fontWeight:600,color:'var(--text-primary)'}}>🔔 系统音效</div>
+              <div style={{fontSize:11,color:'var(--text-secondary)',marginTop:3}}>点击音、计时完成提示音</div>
+            </div>
+            <button className={`sound-toggle ${soundEnabled?'on':'off'}`} onClick={()=>onSoundChange(!soundEnabled)} title={soundEnabled?'点击关闭音效':'点击开启音效'}/>
+          </div>
+          {/* Haptic toggle */}
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'12px 14px',opacity:canVibrate?1:0.4}}>
+            <div>
+              <div style={{fontSize:14,fontWeight:600,color:'var(--text-primary)'}}>📳 触感震动</div>
+              <div style={{fontSize:11,color:'var(--text-secondary)',marginTop:3}}>{canVibrate?'点击轻微震动反馈':'当前设备不支持震动'}</div>
+            </div>
+            <button className={`sound-toggle ${hapticEnabled?'on':'off'}`} onClick={()=>canVibrate&&onHapticChange(!hapticEnabled)} title={hapticEnabled?'点击关闭震动':'点击开启震动'}/>
+          </div>
+        </div>
+
+        {/* New day reset */}
+        <div style={{marginBottom:14,padding:'14px',borderRadius:13,background:'var(--bg-secondary)',border:'1px solid var(--subtle-border)'}}>
+          <div style={{fontSize:11,fontWeight:600,color:'var(--text-secondary)',marginBottom:10,textTransform:'uppercase',letterSpacing:'.5px'}}>新一天</div>
+          <button
+            className="btn btn-gold"
+            style={{width:'100%',padding:'12px 0',fontWeight:700,fontSize:13}}
+            onClick={()=>{
+              if(window.confirm('开始新的一天？\n将重新制定今日计划，所有历史数据完整保留。')){
+                localStorage.removeItem(SK.ACTIVE_DATE);
+                window.location.reload();
+              }
+            }}>
+            🌅 开始新的一天
+          </button>
+          <div style={{fontSize:10,color:'var(--text-secondary)',lineHeight:1.5,marginTop:8}}>
+            历史记录完整保留，仅重新制定今日计划
+          </div>
+        </div>
+
+        {/* 数据存储风险提示 */}
+        <div style={{marginBottom:14,padding:'14px',borderRadius:13,background:'rgba(255,160,0,0.07)',border:'1px solid rgba(255,160,0,0.22)'}}>
+          <div style={{fontSize:11,fontWeight:700,color:'var(--gold)',marginBottom:10,textTransform:'uppercase',letterSpacing:'.5px'}}>⚠️ 数据存储风险提示</div>
+          <div style={{fontSize:12,color:'var(--text-primary)',lineHeight:1.75}}>
+            <div style={{marginBottom:6}}>📌 本工具所有数据存储在浏览器本地（localStorage），以下情况会导致数据丢失：</div>
+            <div style={{fontSize:11,color:'var(--text-secondary)',paddingLeft:12,lineHeight:2}}>
+              · 无痕 / 隐身模式下使用，关闭窗口即丢失<br/>
+              · 手动清除浏览器缓存 / Cookie<br/>
+              · 浏览器自动清理存储（移动端常见）<br/>
+              · localStorage 配额耗尽时，新数据无法保存
+            </div>
+            <div style={{marginTop:8,fontSize:11,color:'var(--gold)',fontWeight:600}}>💡 建议：定期使用下方「保存数据备份」导出 JSON 文件，妥善保管。</div>
+          </div>
+        </div>
+
+        {/* Data backup */}
+        <div style={{marginBottom:14,padding:'14px',borderRadius:13,background:'var(--bg-secondary)',border:'1px solid var(--subtle-border)'}}>
+          <div style={{fontSize:11,fontWeight:600,color:'var(--text-secondary)',marginBottom:10,textTransform:'uppercase',letterSpacing:'.5px'}}>数据备份</div>
+          <button className="btn btn-ghost" style={{width:'100%',fontSize:12,padding:'10px 0',marginBottom:8}}
+            onClick={()=>{
+              const data={version:2,exportedAt:new Date().toISOString(),
+                first:localStorage.getItem('135app_first'),
+                plans:JSON.parse(localStorage.getItem('135app_plans')||'{}'),
+                events:JSON.parse(localStorage.getItem('135app_events')||'{}')};
+              const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+              const url=URL.createObjectURL(blob);
+              const a=document.createElement('a');
+              a.href=url;a.download=`135app-backup-${new Date().toISOString().slice(0,10)}.json`;
+              a.click();URL.revokeObjectURL(url);
+            }}>💾 保存数据备份</button>
+          <label className="btn btn-ghost" style={{width:'100%',fontSize:12,padding:'10px 0',textAlign:'center',cursor:'pointer',display:'block',boxSizing:'border-box'}}>
+            📥 恢复备份（从文件导入）
+            <input type="file" accept=".json" style={{display:'none'}} onChange={e=>{
+              const file=e.target.files[0]; if(!file)return;
+              const reader=new FileReader();
+              reader.onload=ev=>{
+                try{
+                  const d=JSON.parse(ev.target.result);
+                  if(!d.plans) throw new Error('invalid');
+                  if(!window.confirm('恢复备份将覆盖当前所有数据，确定继续吗？')) return;
+                  if(d.first)  localStorage.setItem('135app_first',d.first);
+                  if(d.plans)  localStorage.setItem('135app_plans',JSON.stringify(d.plans));
+                  if(d.events) localStorage.setItem('135app_events',JSON.stringify(d.events));
+                  window.location.reload();
+                }catch(err){ alert('文件格式有误，无法恢复'); }
+              };
+              reader.readAsText(file);
+              e.target.value='';
+            }}/>
+          </label>
+          <div style={{fontSize:10,color:'var(--text-secondary)',lineHeight:1.5,marginTop:8}}>
+            建议定期保存备份，防止浏览器清理缓存时数据丢失
+          </div>
+        </div>
+
+        {/* Reset start date */}
+        <div style={{marginBottom:14,padding:'14px',borderRadius:13,background:'var(--bg-secondary)',border:'1px solid var(--subtle-border)'}}>
+          <div style={{fontSize:11,fontWeight:600,color:'var(--text-secondary)',marginBottom:10,textTransform:'uppercase',letterSpacing:'.5px'}}>使用天数</div>
+          <button className="btn btn-ghost" style={{width:'100%',fontSize:12,padding:'10px 0'}}
+            onClick={()=>{
+              if(window.confirm('将今天设为第1天？\n所有任务记录和数据完整保留，仅重置天数计数。')){
+                const today=new Date();
+                const s=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+                localStorage.setItem('135app_first',JSON.stringify(s));
+                window.location.reload();
+              }
+            }}>📅 将今天重置为第 1 天</button>
+          <div style={{fontSize:10,color:'var(--text-secondary)',lineHeight:1.5,marginTop:8}}>
+            仅修改天数显示，历史任务数据不受影响
+          </div>
+        </div>
+
+        {/* Danger zone */}
+        <div style={{padding:'14px',borderRadius:13,background:'rgba(255,82,82,0.06)',border:'1px solid rgba(255,82,82,0.18)'}}>
+          <div style={{fontSize:11,fontWeight:600,color:'var(--danger)',marginBottom:10,textTransform:'uppercase',letterSpacing:'.5px'}}>危险区域</div>
+          <button
+            className="btn"
+            style={{width:'100%',background:'rgba(255,82,82,0.12)',color:'var(--danger)',border:'1px solid rgba(255,82,82,0.3)',borderRadius:10,padding:'10px 0',fontWeight:700,fontSize:13,cursor:'pointer'}}
+            onClick={()=>{
+              if(window.confirm('确定要清除所有数据吗？\n计划、记录、日历事件都会被删除，且无法恢复。')){
+                Object.values({FIRST:'135app_first',PLANS:'135app_plans',THEME:'135app_theme',EVENTS:'135app_events'})
+                  .forEach(k=>localStorage.removeItem(k));
+                window.location.reload();
+              }
+            }}
+          >🗑️ 清除所有数据，重新开始</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── DAILY PLAN MODAL ─────────────────────────────────
+function DailyPlanModal({onDone,dayN,today}){
+  const [step,setStep]=useState(1);
+  const [goldTitle,setGoldTitle]=useState('');
+  const [goldTime,setGoldTime]=useState(25);
+  const [goldIsCheckIn,setGoldIsCheckIn]=useState(false);
+  const silverRef=useRef([]);
+  const bronzeRef=useRef([]);
+  const [svStep,setSvStep]=useState(0);
+  const [bzStep,setBzStep]=useState(0);
+  const [curIn,setCurIn]=useState('');
+  const [curT,setCurT]=useState(25);
+  const [curIsCheckIn,setCurIsCheckIn]=useState(false);
+  const newTask=(title,time,tier,ici)=>({id:genId(),title,estimatedMinutes:ici?0:time,tier,status:'idle',actualMinutes:null,pauseCount:0,timerStartedAt:null,completedAt:null,remainingSeconds:null,isCheckIn:!!ici});
+  const resetCur=()=>{setCurIn('');setCurT(25);setCurIsCheckIn(false);};
+  const finish=()=>onDone({date:today,goldTask:newTask(goldTitle,goldTime,'gold',goldIsCheckIn),silverTasks:silverRef.current,bronzeTasks:bronzeRef.current});
+  const StepDots=({cur,total})=>(<div className="step-dots">{Array.from({length:total}).map((_,i)=>(<div key={i} className={`step-dot${i<cur?' done':i===cur?' active':''}`}/>))}</div>);
+  function goToBronze(){setStep(4);setSvStep(0);setBzStep(0);resetCur();}
+  function doSilver(skip){
+    if(!skip&&curIn.trim()) silverRef.current=[...silverRef.current,newTask(curIn.trim(),curT,'silver',curIsCheckIn)];
+    // First skip ends the silver section immediately
+    if(skip){goToBronze();return;}
+    const next=svStep+1;
+    if(next>=3){goToBronze();}else{setSvStep(next);resetCur();}
+  }
+  function doBronze(skip){
+    if(!skip&&curIn.trim()) bronzeRef.current=[...bronzeRef.current,newTask(curIn.trim(),curT,'bronze',curIsCheckIn)];
+    // First skip ends bronze and finishes planning
+    if(skip){finish();return;}
+    const next=bzStep+1;
+    if(next>=5) finish(); else{setBzStep(next);resetCur();}
+  }
+  if(step===1) return(<div className="overlay"><div className="modal-box modal-welcome" style={{textAlign:'center'}}>
+    <div style={{fontSize:50,marginBottom:11}}>🌟</div>
+    <div style={{fontSize:12,color:'var(--text-secondary)',marginBottom:5}}>今天是</div>
+    <div style={{fontSize:21,fontWeight:800,marginBottom:6}}>{fmtDate(today)}</div>
+    <div style={{fontSize:14,color:'var(--gold)',marginBottom:20}}>这是您使用本系统的第 <span style={{fontSize:26,fontWeight:800}}>{dayN}</span> 天</div>
+    <div style={{fontSize:12,color:'var(--text-secondary)',lineHeight:1.7,marginBottom:22}}>今天也要全力以赴！<br/>让我们规划今日的 1·3·5 任务吧 →</div>
+    <button className="btn btn-gold" onClick={()=>setStep(2)}>开始规划今日任务 ✨</button>
+  </div></div>);
+  if(step===2) return(<div className="overlay"><div className="modal-box modal-gold">
+    <StepDots cur={1} total={4}/>
+    <div className="modal-title">🥇 今日最重要的一件事</div>
+    <div className="modal-hint">这件事必须完成。如果今天只能做一件事，就是它。</div>
+    <div className="form-group"><label className="form-label">任务名称</label>
+      <input className="form-input" placeholder="今天最重要的事情是…" value={goldTitle} onChange={e=>setGoldTitle(e.target.value)} onKeyDown={e=>e.key==='Enter'&&goldTitle.trim()&&setStep(3)} maxLength={100} autoFocus/></div>
+    <div className="form-group"><label className="form-label">预计用时</label><TimePicker value={goldTime} onChange={setGoldTime} tier="gold" isCheckIn={goldIsCheckIn} onCheckInChange={setGoldIsCheckIn}/></div>
+    <button className="btn btn-gold" disabled={!goldTitle.trim()} onClick={()=>setStep(3)}>确定 →</button>
+  </div></div>);
+  if(step===3) return(<div className="overlay"><div className="modal-box modal-silver">
+    <StepDots cur={2} total={4}/>
+    <div className="modal-title">🥈 重要的事 ({svStep+1}/3)</div>
+    <div className="modal-hint">这些事很重要，今天尽量完成。可以跳过某项。</div>
+    <div className="form-group"><label className="form-label">任务名称（可跳过）</label>
+      <input className="form-input" placeholder={`第 ${svStep+1} 件重要的事…`} value={curIn} onChange={e=>setCurIn(e.target.value)} onKeyDown={e=>e.key==='Enter'&&curIn.trim()&&doSilver(false)} maxLength={100} autoFocus/></div>
+    <div className="form-group"><label className="form-label">预计用时</label><TimePicker value={curT} onChange={setCurT} tier="silver" isCheckIn={curIsCheckIn} onCheckInChange={setCurIsCheckIn}/></div>
+    <button className="btn btn-silver" disabled={!curIn.trim()} onClick={()=>doSilver(false)}>确定 →</button>
+    <button className="btn btn-ghost" onClick={()=>doSilver(true)}>跳过，完成银牌计划</button>
+  </div></div>);
+  if(step===4){const isLast=bzStep===4;return(<div className="overlay"><div className="modal-box modal-bronze">
+    <StepDots cur={3} total={4}/>
+    <div className="modal-title">🥉 还需要做的事 ({bzStep+1}/5)</div>
+    <div className="modal-hint">这些是今日待办，完成更好，完不成也不要紧。</div>
+    <div className="form-group"><label className="form-label">任务名称（可跳过）</label>
+      <input className="form-input" placeholder={`第 ${bzStep+1} 件待办…`} value={curIn} onChange={e=>setCurIn(e.target.value)} onKeyDown={e=>!isLast&&e.key==='Enter'&&curIn.trim()&&doBronze(false)} maxLength={100} autoFocus/></div>
+    <div className="form-group"><label className="form-label">预计用时</label><TimePicker value={curT} onChange={setCurT} tier="bronze" isCheckIn={curIsCheckIn} onCheckInChange={setCurIsCheckIn}/></div>
+    {isLast?<button className="btn btn-bronze" disabled={!curIn.trim()} onClick={()=>doBronze(false)}>完成今日计划 🎯</button>
+           :<button className="btn btn-bronze" disabled={!curIn.trim()} onClick={()=>doBronze(false)}>确定 →</button>}
+    <button className="btn btn-ghost" onClick={()=>doBronze(true)}>跳过，完成铜牌计划 🎯</button>
+  </div></div>);}
+  return null;
+}
+
+// ── POMODORO TIMER ───────────────────────────────────
+function PomodoroTimer({task,onComplete,onPause}){
+  const tier=task.tier;
+  const [phase,setPhase]=useState('running');
+  const [addMin,setAddMin]=useState(15);
+  const [pauses,setPauses]=useState(0);
+  const ivRef=useRef(null);
+  const startWallRef=useRef(task.timerStartedAt||new Date().toISOString());
+
+  // ── Wall-clock epoch ──────────────────────────────
+  // Instead of counting ticks, we record a reference point and compute
+  // elapsed time from Date.now(). This survives mobile background throttling.
+  const initialTotal = task.estimatedMinutes * 60;
+  const priorSecs = task.remainingSeconds != null
+    ? Math.max(0, initialTotal - task.remainingSeconds) : 0;
+  const epochRef = useRef({ startMs: Date.now(), priorSecs, totalSecs: initialTotal });
+
+  const computeDisplay = useCallback(() => {
+    const e = epochRef.current;
+    const elapsed = e.priorSecs + Math.floor((Date.now() - e.startMs) / 1000);
+    const tLeft   = Math.max(0, e.totalSecs - elapsed);
+    const isOv    = elapsed >= e.totalSecs;
+    const ovTime  = isOv ? elapsed - e.totalSecs : 0;
+    return { tLeft, isOv, ovTime, elapsed };
+  }, []);
+
+  const [disp, setDisp] = useState(computeDisplay);
+  const beepedRef = useRef(false); // beep fires once when overtime begins
+
+  const startTicking = useCallback(() => {
+    clearInterval(ivRef.current);
+    ivRef.current = setInterval(() => {
+      const d = computeDisplay();
+      setDisp(d);
+      if(d.isOv && !beepedRef.current){ beepedRef.current=true; playBeep(); haptic([80]); }
+    }, 500);
+  }, [computeDisplay]);
+
+  // Sound & haptic driven purely by phase transitions — single source of truth
+  useEffect(() => {
+    if(phase === 'evaluate') { playChime(); haptic([150,80,150]); }
+    if(phase === 'success')  { playSuccess(); haptic([80,50,80,50,200]); }
+  }, [phase]);
+
+  // Start ticking on mount
+  useEffect(() => { startTicking(); return () => clearInterval(ivRef.current); }, []);
+
+  // Page Visibility API: refresh immediately when user returns to foreground
+  useEffect(() => {
+    const onVisible = () => {
+      if(document.hidden) return;
+      const d = computeDisplay();
+      setDisp(d);
+      if(d.isOv && !beepedRef.current){ beepedRef.current=true; playBeep(); haptic([80]); }
+    };
+    document.addEventListener('visibilitychange', onVisible);
+    return () => document.removeEventListener('visibilitychange', onVisible);
+  }, [computeDisplay]);
+
+  const earlyDone = () => { clearInterval(ivRef.current); setPhase('confirmEarly'); };
+
+  const confirmDone = () => {
+    clearInterval(ivRef.current);
+    const d = computeDisplay();
+    const actual = d.isOv
+      ? Math.ceil(epochRef.current.totalSecs / 60) + Math.ceil(d.ovTime / 60)
+      : Math.max(1, Math.ceil(d.elapsed / 60));
+    setPhase('success');
+    setTimeout(() => onComplete({
+      ...task, actualMinutes: actual, pauseCount: pauses,
+      status: 'completed',
+      timerStartedAt: startWallRef.current,
+      completedAt: new Date().toISOString(),
+    }), 1800);
+  };
+
+  const handleAddTime = () => {
+    const d = computeDisplay();
+    // Extend: anchor a new epoch so elapsed resets relative to now,
+    // but with enough totalSecs to add the chosen minutes on top of elapsed
+    epochRef.current = {
+      startMs:   Date.now(),
+      priorSecs: d.elapsed,
+      totalSecs: d.elapsed + addMin * 60,
+    };
+    setDisp(computeDisplay());
+    setPhase('running');
+    setPauses(p => p + 1);
+    startTicking();
+  };
+
+  const handlePause = () => {
+    clearInterval(ivRef.current);
+    const d = computeDisplay();
+    onPause(task, d.isOv ? 0 : d.tLeft);
+  };
+
+  const { tLeft, isOv, ovTime } = disp;
+  const progress = isOv ? 0 : (tLeft / epochRef.current.totalSecs) * 100;
+
+  if(phase==='success') return(<div className="timer-overlay"><div className="success-splash">
+    <span className="success-emoji">🎉</span>
+    <div className="success-title">任务完成！</div>
+    <div className="success-sub">{tier==='gold'?'🥇 金牌任务拿下！太棒了！':tier==='silver'?'🥈 银牌任务完成！':'🥉 铜牌任务完成！'}</div>
+  </div></div>);
+
+  if(phase==='confirmEarly') return(<div className="timer-overlay"><div className="dialog-box">
+    <div className="dialog-emoji">⚡</div>
+    <div className="dialog-title">确认完成任务？</div>
+    <div className="dialog-sub">{isOv?`已超时 ${Math.floor(ovTime/60)}分${ovTime%60}秒，确认标记为完成？`:`距计划还剩 ${fmt(tLeft)}，确认提前完成？`}</div>
+    <div className="dialog-row">
+      <button className="dialog-btn dialog-yes" onClick={confirmDone}>✅ 确认完成</button>
+      <button className="dialog-btn dialog-no"  onClick={()=>{startTicking();setPhase('running');}}>继续计时</button>
+    </div>
+    {!isOv&&<button className="dialog-cancel" onClick={()=>setPhase('addTime')}>➕ 加时后继续</button>}
+  </div></div>);
+
+  if(phase==='evaluate') return(<div className="timer-overlay"><div className="dialog-box">
+    <div className="dialog-emoji">🤔</div>
+    <div className="dialog-title">任务完成了吗？</div>
+    <div className="dialog-sub">{isOv?`已超时 ${Math.floor(ovTime/60)}分${ovTime%60}秒`:`提前完成，剩余 ${fmt(tLeft)}`}</div>
+    <div className="dialog-row">
+      <button className="dialog-btn dialog-yes" onClick={confirmDone}>✅ 完成了</button>
+      <button className="dialog-btn dialog-no"  onClick={()=>setPhase('addTime')}>➕ 加时</button>
+    </div>
+    <button className="dialog-cancel" onClick={()=>onPause(task,0)}>取消，回到主界面</button>
+  </div></div>);
+
+  if(phase==='addTime') return(<div className="timer-overlay"><div className="dialog-box">
+    <div className="dialog-emoji">⏰</div>
+    <div className="dialog-title">增加时间</div>
+    <div className="dialog-sub">继续为该任务追加计时</div>
+    <div className="time-chips" style={{justifyContent:'center',marginBottom:16}}>
+      {[10,15,25,30,45].map(t=>(<button key={t} className={`time-chip${addMin===t?' chip-gold':''}`} onClick={()=>setAddMin(t)}>+{t}分钟</button>))}
+    </div>
+    <button className="dialog-btn dialog-yes" style={{width:'100%',padding:12,marginBottom:9}} onClick={handleAddTime}>继续计时</button>
+    <button className="dialog-cancel" onClick={()=>onPause(task,0)}>放弃，回到主界面</button>
+  </div></div>);
+
+  return(<div className="timer-overlay"><div className={`timer-card timer-${tier}`}>
+    <div className="timer-tier-label">{tier==='gold'?'🥇 金牌任务':tier==='silver'?'🥈 银牌任务':'🥉 铜牌任务'}</div>
+    <div className="timer-task-name">{task.title}</div>
+    <div className={`timer-digits ${isOv?'digits-overtime':'digits-normal'}`}>{isOv?`+${fmt(ovTime)}`:fmt(tLeft)}</div>
+    {!isOv&&<div className="timer-prog-wrap"><div className="timer-prog-bar" style={{width:`${progress}%`}}/></div>}
+    <div className={`timer-status${isOv?' overtime':''}`}>{isOv?'⚠️ 超时记录中 — 点击标记完成即可结束':`预计 ${task.estimatedMinutes} 分钟 · 专注进行中…`}</div>
+    {pauses>0&&<div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:8}}>已加时 {pauses} 次</div>}
+    <div style={{display:'flex',flexDirection:'column',gap:8}}>
+      <button className="btn btn-green" onClick={earlyDone}>✅ {isOv?'标记完成':'提前完成'}</button>
+      <button className="btn btn-ghost" onClick={handlePause}>← 暂停，回到主界面</button>
+    </div>
+  </div></div>);
+}
+
+// ── ADD TASK MODAL ───────────────────────────────────
+function AddTaskModal({onSave,onClose,plan}){
+  const goldFull  = plan && !!plan.goldTask;
+  const silverFull= plan && (plan.silverTasks||[]).length >= 3;
+  const bronzeFull = plan && (plan.bronzeTasks||[]).length >= 5;
+  const isFull = t=>(t==='gold'&&goldFull)||(t==='silver'&&silverFull)||(t==='bronze'&&bronzeFull);
+  const TIER_LABEL={gold:'金牌',silver:'银牌',bronze:'铜牌'};
+  const TIER_LIMIT={gold:1,silver:3,bronze:5};
+  const defaultTier= goldFull ? (silverFull ? (bronzeFull?'gold':'bronze') : 'silver') : 'gold';
+  const [tier,setTier]=useState(defaultTier);
+  const [title,setTitle]=useState('');
+  const [time,setTime]=useState(25);
+  const [isCI,setIsCI]=useState(false);
+  const [toastMsg,setToastMsg]=useState('');
+  const [showOverride,setShowOverride]=useState(false);
+  const tierFull=isFull(tier);
+  const mkTask=()=>({id:genId(),title:title.trim(),estimatedMinutes:isCI?0:time,tier,status:'idle',actualMinutes:null,pauseCount:0,timerStartedAt:null,completedAt:null,remainingSeconds:null,isCheckIn:isCI});
+  const canSave=!!(title.trim());
+  const handleTierClick=t=>{
+    setTier(t);
+    if(isFull(t)){
+      setToastMsg(`1·3·5 效率法建议${TIER_LABEL[t]}任务仅设置 ${TIER_LIMIT[t]} 个，过多会分散注意力哦`);
+      setTimeout(()=>setToastMsg(''),3000);
+    } else { setToastMsg(''); }
+  };
+  const handleSave=()=>{
+    if(!canSave) return;
+    if(tierFull){ setShowOverride(true); return; }
+    onSave(mkTask());
+  };
+  return(
+    <div className="overlay" onClick={onClose}>
+      <div className="modal-box modal-welcome" style={{maxWidth:360}} onClick={e=>e.stopPropagation()}>
+        <div style={{fontSize:16,fontWeight:700,marginBottom:3,color:'var(--text-primary)'}}>➕ 新增任务</div>
+        <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:14}}>为今日计划补充任务</div>
+        {toastMsg&&<div className="toast-inline">💡 {toastMsg}</div>}
+        <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:6}}>任务类别</label>
+        <div className="tier-btn-row">
+          <button className={`tier-btn${tier==='gold'?' active-gold':''}${goldFull?' tier-full':''}`} onClick={()=>handleTierClick('gold')}>🥇 金牌{goldFull?' ✓':''}</button>
+          <button className={`tier-btn${tier==='silver'?' active-silver':''}${silverFull?' tier-full':''}`} onClick={()=>handleTierClick('silver')}>🥈 银牌{silverFull?' 3/3':''}</button>
+          <button className={`tier-btn${tier==='bronze'?' active-bronze':''}${bronzeFull?' tier-full':''}`} onClick={()=>handleTierClick('bronze')}>🥉 铜牌{bronzeFull?' 5/5':''}</button>
+        </div>
+        <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:6}}>任务名称</label>
+        <input className="plan-input" value={title} onChange={e=>setTitle(e.target.value)}
+          onKeyDown={e=>{if(e.key==='Enter'&&canSave) handleSave();}}
+          placeholder="任务内容…" maxLength={100} autoFocus style={{width:'100%',marginBottom:14,boxSizing:'border-box'}}/>
+        <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:8}}>预计用时</label>
+        <TimePicker value={time} onChange={setTime} tier={tier} isCheckIn={isCI} onCheckInChange={setIsCI}/>
+        <div style={{display:'flex',gap:8,marginTop:16}}>
+          <button className="btn btn-green" style={{flex:1,opacity:tierFull?.6:1,transition:'opacity .2s'}} disabled={!canSave} onClick={handleSave}>
+            {tierFull?'⚠️ 超限添加':'✅ 添加'}
+          </button>
+          <button className="btn btn-ghost" style={{flex:1}} onClick={onClose}>取消</button>
+        </div>
+        {showOverride&&(
+          <div className="overlay" onClick={()=>setShowOverride(false)}>
+            <div className="dialog-box" onClick={e=>e.stopPropagation()}>
+              <div className="dialog-emoji">💡</div>
+              <div className="dialog-title">超出建议数量</div>
+              <div className="dialog-sub">1·3·5 效率法建议{TIER_LABEL[tier]}任务仅设置 {TIER_LIMIT[tier]} 个，过多容易分散注意力。<br/><br/>仍然确认添加吗？</div>
+              <div className="dialog-row">
+                <button className="dialog-btn" style={{background:'rgba(255,160,0,.12)',color:'var(--gold)',border:'1px solid rgba(255,160,0,.3)'}} onClick={()=>{setShowOverride(false);onSave(mkTask());}}>坚持添加</button>
+                <button className="dialog-btn dialog-no" onClick={()=>setShowOverride(false)}>取消</button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── EDIT TASK MODAL ──────────────────────────────────
+function EditTaskModal({task, onSave, onClose}){
+  const [title,setTitle]=useState(task.title);
+  const [time,setTime]=useState(task.isCheckIn?25:task.estimatedMinutes||25);
+  const [isCI,setIsCI]=useState(!!task.isCheckIn);
+  const tier=task.tier;
+  const tierLabel=tier==='gold'?'🥇 金牌任务':tier==='silver'?'🥈 银牌任务':'🥉 铜牌任务';
+  const handleSave=()=>{ if(!title.trim()) return; onSave({...task,title:title.trim(),estimatedMinutes:isCI?0:time,isCheckIn:isCI}); };
+  return(
+    <div className="overlay" onClick={onClose}>
+      <div className="modal-box modal-welcome" style={{maxWidth:360}} onClick={e=>e.stopPropagation()}>
+        <div style={{fontSize:16,fontWeight:700,marginBottom:3,color:'var(--text-primary)'}}>✏️ 编辑任务</div>
+        <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:16}}>{tierLabel}</div>
+        <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:6}}>任务名称</label>
+        <input className="plan-input" value={title} onChange={e=>setTitle(e.target.value)}
+          onKeyDown={e=>{if(e.key==='Enter') handleSave();}} maxLength={100} autoFocus
+          style={{width:'100%',marginBottom:16,boxSizing:'border-box'}}/>
+        <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:8}}>预计用时</label>
+        <TimePicker value={time} onChange={setTime} tier={tier} isCheckIn={isCI} onCheckInChange={setIsCI}/>
+        <div style={{display:'flex',gap:8,marginTop:16}}>
+          <button className="btn btn-green" style={{flex:1}} onClick={handleSave}>✅ 保存</button>
+          <button className="btn btn-ghost" style={{flex:1}} onClick={onClose}>取消</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── TASK CARD ────────────────────────────────────────
+function TaskCard({task,locked,onStart,onEdit,onDelete,onUndoComplete,onQuickSave}){
+  const done=task.status==='completed';
+  const tier=task.tier;
+  const tierEmoji = tier==='gold'?'🥇':tier==='silver'?'🥈':'🥉';
+
+  if(done){
+    const stampClass=`done-stamp done-stamp-${tier}`;
+    return(
+      <div className={`task-card task-card-${tier} done-card`}>
+        <div className="card-inner">
+          <div className="card-top">
+            <div className="card-title" style={{textDecoration:'line-through',opacity:.65}}>
+              <span style={{marginRight:5}}>{tierEmoji}</span>{task.title}
+            </div>
+            <span className={`card-badge badge-${tier}`}>✅</span>
+          </div>
+          <div className="card-meta">
+            {task.actualMinutes>0&&<span>用时 {task.actualMinutes}min</span>}
+            <span className="card-btn-group">
+              {onUndoComplete&&<button className="card-edit-btn" onClick={e=>{e.stopPropagation();onUndoComplete(task);}} title="撤销完成">↩️</button>}
+              {onDelete&&<button className="card-edit-btn" onClick={e=>{e.stopPropagation();onDelete(task);}} title="删除任务" style={{color:'var(--danger)'}}>🗑️</button>}
+            </span>
+          </div>
+          <div className={stampClass}>DONE</div>
+        </div>
+      </div>
+    );
+  }
+
+  const isPaused = task.status==='paused';
+  const isCI = !!task.isCheckIn;
+  const remainMins = isPaused && task.remainingSeconds!=null ? Math.ceil(task.remainingSeconds/60) : null;
+  const [titleExpanded,setTitleExpanded]=useState(false);
+  // ── 内联编辑状态 ──
+  const [isInlineEdit,setIsInlineEdit]=useState(false);
+  const [editVal,setEditVal]=useState('');
+  const inlineRef=useRef(null);
+  const longPressTimer=useRef(null);
+
+  useEffect(()=>{ if(isInlineEdit&&inlineRef.current) inlineRef.current.focus(); },[isInlineEdit]);
+
+  const startInlineEdit=e=>{
+    if(locked||!onQuickSave) return;
+    e.stopPropagation();
+    setEditVal(task.title);
+    setIsInlineEdit(true);
+  };
+  const saveInlineEdit=()=>{
+    const v=editVal.trim();
+    if(v&&v!==task.title&&onQuickSave) onQuickSave({...task,title:v});
+    setIsInlineEdit(false);
+  };
+  const cancelInlineEdit=()=>setIsInlineEdit(false);
+  // 长按 (移动端)
+  const handleTouchStart=()=>{
+    if(locked||!onQuickSave) return;
+    longPressTimer.current=setTimeout(()=>{ setEditVal(task.title); setIsInlineEdit(true); },600);
+  };
+  const handleTouchEnd=()=>clearTimeout(longPressTimer.current);
+
+  const handleClick=()=>{ if(locked||isInlineEdit) return; onStart(task); };
+  return(
+    <div className={`task-card task-card-${tier}${locked?' locked':''}`} onClick={handleClick}
+         onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} onTouchMove={handleTouchEnd}>
+      <div className="card-inner">
+        <div className="card-top">
+          {isInlineEdit?(
+            <div className="inline-edit-wrap">
+              <input ref={inlineRef} className="inline-edit-input" value={editVal} maxLength={100}
+                onChange={e=>setEditVal(e.target.value)}
+                onBlur={saveInlineEdit}
+                onClick={e=>e.stopPropagation()}
+                onKeyDown={e=>{ e.stopPropagation(); if(e.key==='Enter') saveInlineEdit(); if(e.key==='Escape') cancelInlineEdit(); }}/>
+            </div>
+          ):(
+            <div className={`card-title${titleExpanded?' title-expanded':''}`}
+                 onClick={e=>{e.stopPropagation();setTitleExpanded(x=>!x);}}
+                 onDoubleClick={startInlineEdit}
+                 title={'双击编辑标题·单击展开'}>
+              <span style={{marginRight:5}}>{tierEmoji}</span>{task.title}
+            </div>
+          )}
+          <span className={`card-badge badge-${tier}`}>{locked?'🔒':isCI?'✓ 打卡':isPaused?'⏸ 继续':'▶ 开始'}</span>
+        </div>
+        <div className="card-meta">
+          {isCI
+            ? <span>点击即完成，无需计时</span>
+            : isPaused && remainMins!=null
+              ? <span>⏸ 剩余约 {remainMins} 分钟</span>
+              : <span>⏱ {task.estimatedMinutes}分钟</span>
+          }
+          {!locked&&(onEdit||onDelete)&&(
+            <span className="card-btn-group">
+              {onEdit&&<button className="card-edit-btn" onClick={e=>{e.stopPropagation();onEdit(task);}} title="编辑任务">✏️</button>}
+              {onDelete&&<button className="card-edit-btn" onClick={e=>{e.stopPropagation();onDelete(task);}} title="删除任务" style={{color:'var(--danger)'}}>🗑️</button>}
+            </span>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── GOLD COMPLETE MODAL ───────────────────────────────
+function GoldCompleteModal({onClose}){
+  useEffect(()=>{ const t=setTimeout(onClose,3500); return ()=>clearTimeout(t); },[]);
+  return(
+    <div className="overlay" onClick={onClose}>
+      <div className="modal-box modal-welcome" style={{maxWidth:300,textAlign:'center'}} onClick={e=>e.stopPropagation()}>
+        <div className="gold-celebrate">
+          <div style={{fontSize:56,marginBottom:8}}>🏆</div>
+          <div style={{fontSize:19,fontWeight:800,color:'var(--gold)',marginBottom:8}}>太棒了！</div>
+          <div style={{fontSize:14,color:'var(--text-primary)',lineHeight:1.7}}>今天最重要的事<br/>已经完成 🎉</div>
+          <div style={{fontSize:11,color:'var(--text-secondary)',marginTop:10}}>专注在最重要的事上<br/>这就是高效的秘诀</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── DASHBOARD ────────────────────────────────────────
+function Dashboard({plan,onUpdate,onAddTask,onDeleteTask}){
+  const [activeId,setActiveId]=useState(null);
+  const [editTask,setEditTask]=useState(null);
+  const [showAddTask,setShowAddTask]=useState(false);
+  const [deleteConfirm,setDeleteConfirm]=useState(null);
+  const [showGoldComplete,setShowGoldComplete]=useState(false);
+  const all=planTasks(plan);
+  const activeTask=activeId?all.find(t=>t.id===activeId):null;
+  const done=all.filter(t=>t.status==='completed').length;
+
+  const start=t=>{
+    if(t.status==='completed') return;
+    // Check-in task: complete immediately, no timer
+    if(t.isCheckIn){
+      onUpdate({...t,status:'completed',actualMinutes:0,completedAt:new Date().toISOString()});
+      if(t.tier==='gold') setShowGoldComplete(true);
+      return;
+    }
+    if(t.status==='idle'){
+      // First ever start: record wall-clock start time
+      const updated={...t, timerStartedAt:new Date().toISOString()};
+      onUpdate(updated);
+    }
+    // If paused: just reopen timer — keep original timerStartedAt
+    setActiveId(t.id);
+  };
+  const complete=t=>{ onUpdate(t); setActiveId(null); if(t.tier==='gold') setShowGoldComplete(true); };
+  const pause=(t, remaining)=>{
+    // Save remaining seconds so the timer can resume from where it left off
+    onUpdate({...t, status:'paused', remainingSeconds: remaining});
+    setActiveId(null);
+  };
+  const handleSaveEdit=t=>{ onUpdate(t); setEditTask(null); };
+  const handleAddTask=t=>{ onAddTask(t); setShowAddTask(false); };
+  const handleDeleteReq=t=>setDeleteConfirm(t);
+  const confirmDelete=()=>{ if(deleteConfirm){ onDeleteTask(deleteConfirm); setDeleteConfirm(null); } };
+  // 撤销完成：恢复为 idle，清除完成数据
+  const undoComplete=t=>onUpdate({...t,status:'idle',completedAt:null,actualMinutes:null,remainingSeconds:null});
+
+  const Sec=({tier,items})=>{
+    const dc=items.filter(t=>t.status==='completed').length;
+    const label=tier==='gold'?'今日必做':tier==='silver'?'重要任务':'待办事项';
+    const icon=tier==='gold'?'🥇':tier==='silver'?'🥈':'🥉';
+    // 未完成任务在前，已完成任务沉底
+    const sorted=[...items].sort((a,b)=>(a.status==='completed'?1:0)-(b.status==='completed'?1:0));
+    return(
+      <div className={`dash-section section-${tier}`}>
+        <div className="section-header">
+          <span style={{fontSize:18}}>{icon}</span>
+          <span className="section-label">{label}</span>
+          <span className="section-count">{dc}/{items.length}</span>
+        </div>
+        {sorted.map(t=>(<TaskCard key={t.id} task={t} locked={!!activeId&&activeId!==t.id} onStart={start} onEdit={setEditTask} onDelete={handleDeleteReq} onUndoComplete={undoComplete} onQuickSave={onUpdate}/>))}
+      </div>
+    );
+  };
+
+  return(
+    <div className="content-pad">
+      {/* 1·3·5 权重进度条 */}
+      <div className="tier-prog-bar">
+        {plan.goldTask&&(
+          <div className="tier-prog-group">
+            <span style={{fontSize:16,marginRight:2}}>🥇</span>
+            <span className={`tier-prog-pip${plan.goldTask.status==='completed'?' pip-done':''}`}>
+              {plan.goldTask.status==='completed'?'✔':'○'}
+            </span>
+            {plan.goldTask.status==='completed'&&<span className="tier-prog-badge">已获得</span>}
+          </div>
+        )}
+        {plan.silverTasks.length>0&&(
+          <div className="tier-prog-group">
+            <span style={{fontSize:16,marginRight:2}}>🥈</span>
+            {plan.silverTasks.map((t,i)=>(
+              <span key={i} className={`tier-prog-pip${t.status==='completed'?' pip-done':''}`}>{t.status==='completed'?'✔':'○'}</span>
+            ))}
+            {plan.silverTasks.length>0&&plan.silverTasks.every(t=>t.status==='completed')&&<span className="tier-prog-badge">已获得</span>}
+          </div>
+        )}
+        {plan.bronzeTasks.length>0&&(
+          <div className="tier-prog-group">
+            <span style={{fontSize:16,marginRight:2}}>🥉</span>
+            {plan.bronzeTasks.map((t,i)=>(
+              <span key={i} className={`tier-prog-pip${t.status==='completed'?' pip-done':''}`}>{t.status==='completed'?'✔':'○'}</span>
+            ))}
+            {plan.bronzeTasks.length>0&&plan.bronzeTasks.every(t=>t.status==='completed')&&<span className="tier-prog-badge">已获得</span>}
+          </div>
+        )}
+        <div style={{marginLeft:'auto',fontSize:11,color:'var(--text-secondary)',fontWeight:600}}>{done}/{all.length}</div>
+      </div>
+      {plan.goldTask&&<Sec tier="gold"   items={[plan.goldTask]}/>}
+      {plan.silverTasks.length>0&&<Sec tier="silver" items={plan.silverTasks}/>}
+      {plan.bronzeTasks.length>0&&<Sec tier="bronze" items={plan.bronzeTasks}/>}
+      {done===all.length&&all.length>0&&(
+        <div className="all-done-banner">
+          <div style={{fontSize:44,marginBottom:8}}>🏆</div>
+          <div style={{fontSize:19,fontWeight:800,color:'var(--gold)',marginBottom:5}}>今日任务全部完成！</div>
+          <div style={{fontSize:12,color:'var(--text-secondary)'}}>太棒了，明天继续保持！</div>
+        </div>
+      )}
+      <button className="add-task-btn" onClick={()=>setShowAddTask(true)}>➕ 新增任务</button>
+      {showGoldComplete&&<GoldCompleteModal onClose={()=>setShowGoldComplete(false)}/>}
+      {activeTask&&<PomodoroTimer task={activeTask} onComplete={complete} onPause={pause}/>}
+      {editTask&&<EditTaskModal task={editTask} onSave={handleSaveEdit} onClose={()=>setEditTask(null)}/>}
+      {showAddTask&&<AddTaskModal onSave={handleAddTask} onClose={()=>setShowAddTask(false)} plan={plan}/>}
+      {deleteConfirm&&(
+        <div className="overlay" onClick={()=>setDeleteConfirm(null)}>
+          <div className="dialog-box" onClick={e=>e.stopPropagation()}>
+            <div className="dialog-emoji">🗑️</div>
+            <div className="dialog-title">删除任务</div>
+            <div className="dialog-sub">确定删除「{deleteConfirm.title}」？<br/>此操作无法撤销。</div>
+            <div className="dialog-row">
+              <button className="dialog-btn" style={{background:'rgba(255,82,82,0.15)',color:'var(--danger)',border:'1px solid rgba(255,82,82,0.3)'}} onClick={confirmDelete}>🗑️ 删除</button>
+              <button className="dialog-btn dialog-no" onClick={()=>setDeleteConfirm(null)}>取消</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── DATA REVIEW ──────────────────────────────────────
+function DataReview({plans}){
+  const [tab,setTab]=useState('overview');
+  const days=useMemo(()=>Object.keys(plans).sort(),[plans]);
+  const allT=useMemo(()=>days.flatMap(d=>planTasks(plans[d])),[days,plans]);
+  const doneT=useMemo(()=>allT.filter(t=>t.status==='completed'),[allT]);
+  const streak=useMemo(()=>calcStreak(plans),[plans]);
+  const mxStrk=useMemo(()=>calcMaxStreak(plans),[plans]);
+  const stats=useMemo(()=>({
+    active:days.length, totalDone:doneT.length,
+    goldDone:doneT.filter(t=>t.tier==='gold').length,
+    silverFull:days.filter(d=>{ const p=plans[d]; return p&&p.silverTasks.length>0&&p.silverTasks.every(t=>t.status==='completed'); }).length,
+    perfect:days.filter(d=>{ const p=plans[d]; if(!p) return false; const a=planTasks(p); return a.length>0&&a.every(t=>t.status==='completed'); }).length,
+    maxStreak:mxStrk,
+    onTime:doneT.filter(t=>t.actualMinutes&&t.actualMinutes<=t.estimatedMinutes).length,
+    early: doneT.filter(t=>t.actualMinutes&&t.actualMinutes<t.estimatedMinutes*0.9).length,
+  }),[days,plans,doneT,mxStrk]);
+
+  const HeatMap=()=>{
+    const cells=[]; const now=new Date();
+    for(let i=69;i>=0;i--){const d=new Date(now);d.setDate(d.getDate()-i);const k=d.toISOString().split('T')[0],p=plans[k];const n=p?planTasks(p).filter(t=>t.status==='completed').length:0;const lvl=n>=9?4:n>=6?3:n>=3?2:n>=1?1:0;cells.push({k,lvl});}
+    return(<div className="review-card"><div className="review-card-title">📅 活跃热力图（近70天）</div>
+      <div className="heatmap">{cells.map((c,i)=><div key={i} className={`hm-cell${c.lvl>0?` hm-${c.lvl}`:''}`} title={c.k}/>)}</div>
+      <div className="hm-legend"><span>少</span>{[0,1,2,3,4].map(l=><div key={l} className="hm-sw" style={{background:l===0?'var(--chip-bg)':`rgba(200,144,10,${l*.2+.1})`}}/>)}<span>多</span></div>
+    </div>);
+  };
+
+  const BarChart=()=>{
+    const rows=[]; const now=new Date();
+    for(let i=6;i>=0;i--){const d=new Date(now);d.setDate(d.getDate()-i);const k=d.toISOString().split('T')[0],p=plans[k],ts=p?planTasks(p):[];
+      const pl=ts.reduce((s,t)=>s+(t.estimatedMinutes||0),0),ac=ts.filter(t=>t.status==='completed').reduce((s,t)=>s+(t.actualMinutes||0),0);
+      rows.push({lbl:`周${'日一二三四五六'[d.getDay()]}`,plan:pl,act:ac});}
+    const mx=Math.max(...rows.flatMap(r=>[r.plan,r.act]),60);
+    return(<div className="review-card"><div className="review-card-title">📊 近7天时间对比（分钟）</div>
+      <div className="bar-chart-wrap">{rows.map((r,i)=>(<div key={i} className="bar-grp"><div className="bar bar-plan" style={{height:`${(r.plan/mx)*70}px`}}/><div className="bar bar-act" style={{height:`${(r.act/mx)*70}px`}}/><span className="bar-lbl">{r.lbl}</span></div>))}</div>
+      <div className="chart-legend"><span><span className="legend-sw" style={{background:'var(--gold-bg)',border:'1px solid var(--gold-border)'}}/>计划</span><span><span className="legend-sw" style={{background:'var(--gold)',opacity:.85}}/>实际</span></div>
+    </div>);
+  };
+
+  const WeeklySummary=()=>{
+    const wks={}; days.forEach(d=>{ const w=weekOf(d); if(!wks[w])wks[w]=[]; wks[w].push(d); });
+    const list=Object.entries(wks).sort((a,b)=>b[0].localeCompare(a[0])).slice(0,10);
+    if(!list.length) return(<div className="empty-state"><div className="empty-icon">📊</div><div className="empty-title">暂无数据</div><div className="empty-text">完成一周记录后，这里将显示每周总结</div></div>);
+    return(<div className="review-card"><div className="review-card-title">📅 每周总结</div>
+      <table className="sum-table"><thead><tr><th>周起始</th><th>活跃</th><th>完成</th><th>完成率</th></tr></thead>
+      <tbody>{list.map(([w,ds])=>{const ts=ds.flatMap(d=>planTasks(plans[d]));const dn=ts.filter(t=>t.status==='completed').length;const rate=ts.length?Math.round(dn/ts.length*100):0;const x=new Date(w+' 12:00');return(<tr key={w}><td style={{color:'var(--gold)'}}>{x.getMonth()+1}/{x.getDate()}</td><td>{ds.length}天</td><td>{dn}/{ts.length}</td><td><span style={{color:rate>=80?'var(--success)':rate>=50?'var(--gold)':'var(--danger)'}}>{rate}%</span></td></tr>);})}</tbody>
+      </table></div>);
+  };
+
+  const MonthlySummary=()=>{
+    const mths={}; days.forEach(d=>{ const m=d.slice(0,7); if(!mths[m])mths[m]=[]; mths[m].push(d); });
+    const list=Object.entries(mths).sort((a,b)=>b[0].localeCompare(a[0])).slice(0,12);
+    if(!list.length) return(<div className="empty-state"><div className="empty-icon">📅</div><div className="empty-title">暂无数据</div><div className="empty-text">使用满一个月后，这里将显示月度总结</div></div>);
+    return(<div className="review-card"><div className="review-card-title">🗓️ 月度总结</div>
+      <table className="sum-table"><thead><tr><th>月份</th><th>活跃</th><th>完成</th><th>金牌率</th><th>准时率</th></tr></thead>
+      <tbody>{list.map(([m,ds])=>{const ts=ds.flatMap(d=>planTasks(plans[d]));const dn=ts.filter(t=>t.status==='completed');const gl=ts.filter(t=>t.tier==='gold').length;const gr=gl?Math.round(dn.filter(t=>t.tier==='gold').length/gl*100):0;const otr=dn.length?Math.round(dn.filter(t=>t.actualMinutes&&t.actualMinutes<=t.estimatedMinutes).length/dn.length*100):0;const[y,mo]=m.split('-');return(<tr key={m}><td style={{color:'var(--gold)'}}>{y}年{parseInt(mo)}月</td><td>{ds.length}天</td><td>{dn.length}</td><td><span style={{color:gr>=80?'var(--success)':'var(--gold)'}}>{gr}%</span></td><td><span style={{color:otr>=70?'var(--success)':'var(--danger)'}}>{otr}%</span></td></tr>);})}</tbody>
+      </table></div>);
+  };
+
+  const Badges=()=>(<div className="review-card"><div className="review-card-title">🏅 成就勋章墙</div>
+    <div className="badge-grid">{BADGES.map(b=>{const on=b.check(stats);return(<div key={b.id} className="badge-tile"><div className={`badge-icon ${on?'badge-unlocked':'badge-locked'}`}>{b.emoji}</div><div className="badge-name">{b.name}</div></div>);})}</div>
+  </div>);
+
+  return(<div className="review-wrap">
+    <div className="review-top"><h2>📊 数据复盘</h2><p>了解你的时间都去哪了</p></div>
+    <div className="review-tabs">{[{id:'overview',l:'概览'},{id:'weekly',l:'每周'},{id:'monthly',l:'每月'},{id:'badges',l:'勋章'}].map(t=>(<button key={t.id} className={`rtab${tab===t.id?' active':''}`} onClick={()=>setTab(t.id)}>{t.l}</button>))}</div>
+    {tab==='overview'&&(<><div className="stats-grid">
+      <div className="stat-tile"><span className="stat-val" style={{color:'#FF9500'}}>{streak}</span><div className="stat-lbl">🔥 连续打卡</div></div>
+      <div className="stat-tile"><span className="stat-val" style={{color:'var(--gold)'}}>{stats.totalDone}</span><div className="stat-lbl">✅ 累计完成</div></div>
+      <div className="stat-tile"><span className="stat-val" style={{color:'var(--success)'}}>{stats.perfect}</span><div className="stat-lbl">🌟 完美天数</div></div>
+    </div><div className="stats-grid">
+      <div className="stat-tile"><span className="stat-val" style={{color:'var(--gold)'}}>{stats.goldDone}</span><div className="stat-lbl">🥇 金牌完成</div></div>
+      <div className="stat-tile"><span className="stat-val" style={{color:'var(--silver)'}}>{stats.onTime}</span><div className="stat-lbl">⏰ 准时完成</div></div>
+      <div className="stat-tile"><span className="stat-val" style={{color:'var(--success)'}}>{stats.early}</span><div className="stat-lbl">🚀 提前完成</div></div>
+    </div><HeatMap/><BarChart/></>)}
+    {tab==='weekly' &&<WeeklySummary/>}{tab==='monthly'&&<MonthlySummary/>}{tab==='badges'&&<Badges/>}
+  </div>);
+}
+
+// ── ADD EVENT MODAL ──────────────────────────────────
+function AddEventModal({initialDate, onSave, onClose}){
+  const [title,setTitle]=useState('');
+  const [date,setDate]=useState(initialDate||todayStr());
+  const [allDay,setAllDay]=useState(false);
+  const [startT,setStartT]=useState('09:00');
+  const [endT,setEndT]=useState('10:00');
+  const [color,setColor]=useState('blue');
+  const [notes,setNotes]=useState('');
+
+  const save=()=>{
+    if(!title.trim()) return;
+    onSave({id:genId(),title:title.trim(),date,allDay,startTime:allDay?null:startT,endTime:allDay?null:endT,color,notes:notes.trim()||null});
+    onClose();
+  };
+
+  return(<div className="overlay" onClick={onClose}>
+    <div className="modal-box modal-welcome" style={{maxWidth:400}} onClick={e=>e.stopPropagation()}>
+      <div style={{fontSize:16,fontWeight:700,marginBottom:3,color:'var(--text-primary)'}}>📅 添加日历事件</div>
+      <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:15}}>记录计划、提醒或任何事项</div>
+
+      <div className="form-group"><label className="form-label">标题</label>
+        <input className="form-input" placeholder="事件名称…" value={title} onChange={e=>setTitle(e.target.value)} onKeyDown={e=>e.key==='Enter'&&save()} autoFocus/>
+      </div>
+      <div className="form-group"><label className="form-label">日期</label>
+        <input className="form-input form-input-sm" type="date" value={date} onChange={e=>setDate(e.target.value)}/>
+      </div>
+
+      <div className="form-group" style={{display:'flex',alignItems:'center',gap:10}}>
+        <label style={{fontSize:13,color:'var(--text-primary)',cursor:'pointer',display:'flex',alignItems:'center',gap:6,userSelect:'none'}}>
+          <input type="checkbox" checked={allDay} onChange={e=>setAllDay(e.target.checked)} style={{width:15,height:15,accentColor:'var(--gold)'}}/>
+          全天事件
+        </label>
+      </div>
+
+      {!allDay&&(<div className="form-group"><label className="form-label">时间段</label>
+        <div className="time-row">
+          <input className="form-input form-input-sm" type="time" value={startT} onChange={e=>setStartT(e.target.value)} style={{flex:1}}/>
+          <span>至</span>
+          <input className="form-input form-input-sm" type="time" value={endT} onChange={e=>setEndT(e.target.value)} style={{flex:1}}/>
+        </div>
+      </div>)}
+
+      <div className="form-group"><label className="form-label">颜色</label>
+        <div className="color-picker">
+          {Object.entries(EVENT_COLORS).map(([k,c])=>(
+            <div key={k} className={`color-dot${color===k?' selected':''}`}
+              style={{background:c.hex}} title={COLOR_LABELS[k]}
+              onClick={()=>setColor(k)}/>
+          ))}
+        </div>
+      </div>
+      <div className="form-group"><label className="form-label">备注（可选）</label>
+        <input className="form-input form-input-sm" placeholder="备注…" value={notes} onChange={e=>setNotes(e.target.value)}/>
+      </div>
+
+      <button className="btn btn-gold" disabled={!title.trim()} onClick={save}>保存事件</button>
+      <button className="btn btn-ghost" onClick={onClose}>取消</button>
+    </div>
+  </div>);
+}
+
+// ── CALENDAR VIEW ────────────────────────────────────
+function CalendarView({plans, events, onAddEvent, onDeleteEvent}){
+  const [view,setView]=useState('month');
+  const [curYear,setCurYear]=useState(new Date().getFullYear());
+  const [curMonth,setCurMonth]=useState(new Date().getMonth());
+  const [selDate,setSelDate]=useState(todayStr());
+  const [showAdd,setShowAdd]=useState(false);
+
+  const today=todayStr();
+
+  // Navigate months
+  const prevMonth=()=>{ if(curMonth===0){setCurYear(y=>y-1);setCurMonth(11);}else setCurMonth(m=>m-1); };
+  const nextMonth=()=>{ if(curMonth===11){setCurYear(y=>y+1);setCurMonth(0);}else setCurMonth(m=>m+1); };
+  const goToday=()=>{ const n=new Date(); setCurYear(n.getFullYear()); setCurMonth(n.getMonth()); setSelDate(todayStr()); };
+
+  // Navigate days (in day view)
+  const shiftDay=(delta)=>{
+    const d=new Date(selDate+'T12:00:00');
+    d.setDate(d.getDate()+delta);
+    setSelDate(d.toISOString().split('T')[0]);
+  };
+
+  // Build month grid
+  const monthGrid=useMemo(()=>{
+    const firstDay=new Date(curYear,curMonth,1).getDay();
+    const daysInMonth=new Date(curYear,curMonth+1,0).getDate();
+    const startOffset=firstDay===0?6:firstDay-1; // Monday start
+    const cells=[];
+    // Previous month days
+    const prevDays=new Date(curYear,curMonth,0).getDate();
+    for(let i=startOffset-1;i>=0;i--){
+      const d=new Date(curYear,curMonth-1,prevDays-i);
+      cells.push({date:d.toISOString().split('T')[0],inMonth:false});
+    }
+    // Current month
+    for(let d=1;d<=daysInMonth;d++){
+      const dt=new Date(curYear,curMonth,d);
+      cells.push({date:dt.toISOString().split('T')[0],inMonth:true});
+    }
+    // Next month fill
+    while(cells.length%7!==0){
+      const d=new Date(curYear,curMonth+1,cells.length-daysInMonth-startOffset+1);
+      cells.push({date:d.toISOString().split('T')[0],inMonth:false});
+    }
+    return cells;
+  },[curYear,curMonth]);
+
+  const MONTH_NAMES=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  const DAY_LABELS=['一','二','三','四','五','六','日'];
+
+  // Timeline for selected date
+  const timelineEvts=useMemo(()=>getTimelineEvents(selDate,plans,events),[selDate,plans,events]);
+  const alldayEvts=timelineEvts.filter(e=>e.allDay);
+  const timedEvts=timelineEvts.filter(e=>!e.allDay);
+
+  // Compute event positions (simple, no overlap detection)
+  const HOUR_H=56;
+  const evtBlocks=timedEvts.map(e=>{
+    const startMin=e.startH*60+e.startM;
+    const endMin=e.endH*60+e.endM;
+    const dur=Math.max(endMin-startMin,20);
+    return {...e, top:startMin*(HOUR_H/60), height:Math.max(dur*(HOUR_H/60),24)};
+  });
+
+  const MonthView=()=>(
+    <div>
+      <div className="cal-month-header">
+        <button className="cal-nav-btn" onClick={prevMonth}>‹</button>
+        <div className="cal-month-title">{curYear}年 {MONTH_NAMES[curMonth]}</div>
+        <button className="cal-today-btn" onClick={goToday}>今天</button>
+        <button className="cal-nav-btn" onClick={nextMonth}>›</button>
+      </div>
+      <div className="cal-days-row">
+        {DAY_LABELS.map(d=>(<div key={d} className="cal-day-label">{d}</div>))}
+      </div>
+      <div className="cal-grid">
+        {monthGrid.map(cell=>{
+          const dots=getDayDots(cell.date,plans,events);
+          const isToday=cell.date===today;
+          const isSel=cell.date===selDate;
+          return(
+            <div key={cell.date} className={`cal-cell${!cell.inMonth?' other-month':''}${isToday?' today':''}${isSel?' selected':''}`}
+              onClick={()=>{setSelDate(cell.date);setView('day');}}>
+              <div className="cal-date-num">
+                {parseInt(cell.date.split('-')[2])}
+              </div>
+              {dots.length>0&&(
+                <div className="cal-dots">
+                  {dots.map((c,i)=>(<div key={i} className={`cal-dot ec-${c}`}/>))}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  const DayView=()=>{
+    const fmtHour=h=>h===0?'0:00':h<10?`${h}:00`:`${h}:00`;
+    // Scroll to first event or 8am
+    const scrollRef=useRef(null);
+    useEffect(()=>{
+      if(scrollRef.current){
+        const firstEvt=timedEvts.length>0?Math.min(...timedEvts.map(e=>e.startH)):8;
+        const scrollTo=Math.max(0,(firstEvt-1)*HOUR_H);
+        scrollRef.current.scrollTop=scrollTo;
+      }
+    },[selDate]);
+
+    return(
+      <div>
+        <div className="cal-day-header">
+          <button className="cal-back-btn" onClick={()=>setView('month')}>‹ 月历</button>
+          <div style={{display:'flex',alignItems:'center',gap:4,flex:1,justifyContent:'center'}}>
+            <button className="cal-nav-btn" style={{fontSize:18}} onClick={()=>shiftDay(-1)}>‹</button>
+            <div className="cal-day-title" style={{minWidth:100,textAlign:'center'}}>{fmtDateShort(selDate)}{selDate===today?' · 今天':''}</div>
+            <button className="cal-nav-btn" style={{fontSize:18}} onClick={()=>shiftDay(1)}>›</button>
+          </div>
+          <button className="cal-add-btn" onClick={()=>setShowAdd(true)}>+ 添加</button>
+        </div>
+
+        {/* All-day events */}
+        {alldayEvts.length>0&&(
+          <div className="allday-strip">
+            {alldayEvts.map(e=>(
+              <div key={e.id} className="allday-chip" style={{background:getEvtColor(e.colorKey)}}
+                onClick={()=>{if(!e.isTask&&confirm(`删除"${e.title}"?`)) onDeleteEvent(e.id);}}>
+                {e.title}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Timeline */}
+        <div className="timeline-scroll" ref={scrollRef} style={{height:'calc(100vh - 240px)',overflowY:'auto'}}>
+          <div className="timeline-inner" style={{height:`${24*HOUR_H}px`}}>
+            {Array.from({length:24}).map((_,h)=>(
+              <div key={h} className="hour-row" style={{height:`${HOUR_H}px`,top:`${h*HOUR_H}px`,position:'absolute',width:'100%',left:0}}>
+                <span className="hour-label">{fmtHour(h)}</span>
+                <div style={{position:'absolute',left:50,right:0,top:0,height:'1px',background:'var(--hour-line)'}}/>
+              </div>
+            ))}
+            {evtBlocks.map(e=>(
+              <div key={e.id} className="evt-block"
+                style={{top:e.top,height:e.height,background:getEvtColor(e.colorKey),left:54,right:6}}
+                onClick={()=>{if(!e.isTask&&confirm(`删除"${e.title}"?`)) onDeleteEvent(e.id);}}>
+                <div className="evt-title">{e.isTask?{gold:'🥇',silver:'🥈',bronze:'🥉'}[e.tier]:''} {e.title}</div>
+                {e.height>36&&<div className="evt-time">{String(e.startH).padStart(2,'0')}:{String(e.startM).padStart(2,'0')} – {String(e.endH).padStart(2,'0')}:{String(e.endM).padStart(2,'0')}</div>}
+              </div>
+            ))}
+            {timelineEvts.length===0&&(
+              <div className="day-empty" style={{position:'absolute',top:'30%',left:0,right:0}}>
+                <div className="day-empty-icon">📭</div>
+                <div style={{fontSize:13,color:'var(--text-secondary)'}}>今天还没有任何记录<br/>点击右上角"+ 添加"可添加事件</div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  return(
+    <div className="cal-wrap">
+      {view==='month'?<MonthView/>:<DayView/>}
+      {showAdd&&<AddEventModal initialDate={selDate} onSave={onAddEvent} onClose={()=>setShowAdd(false)}/>}
+    </div>
+  );
+}
+
+// ── ROOT APP ─────────────────────────────────────────
+function App(){
+  const [first,    setFirst]    = useLS(SK.FIRST, null);
+  const [plans,    setPlans]    = useLS(SK.PLANS, {});
+  const [theme,    setTheme]    = useLS(SK.THEME, 'white');
+  const [events,   setEvents]   = useLS(SK.EVENTS, {});
+  const [soundEnabled, setSoundEnabled] = useLS(SK.SOUND, true);
+  const [hapticEnabled, setHapticEnabled] = useLS(SK.HAPTIC, true);
+  const [welcomed,   setWelcomed]   = useLS(SK.WELCOMED, false);
+  // activeDate tracks the last day the user officially set up a plan.
+  // When activeDate !== today, the planning modal shows — NO data is ever deleted.
+  const [activeDate, setActiveDate] = useLS(SK.ACTIVE_DATE, null);
+  const [view,         setView]         = useState('dash');
+  const [showTheme,    setShowTheme]    = useState(false);
+  // Compute today fresh every render — never stale, immune to state init bugs
+  const today = todayStr();
+  // Force re-render every 30s and on visibilitychange so midnight is caught immediately
+  const [, _tick] = useState(0);
+  useEffect(()=>{
+    const bump=()=>_tick(n=>n+1);
+    const iv=setInterval(bump,30000);
+    const onVis=()=>{ if(!document.hidden) bump(); };
+    document.addEventListener('visibilitychange',onVis);
+    return ()=>{ clearInterval(iv); document.removeEventListener('visibilitychange',onVis); };
+  },[]);
+  // Auto day-reset: set a precise timeout to fire exactly at midnight
+  // When it fires, the re-render recalculates today → plan becomes null → DailyPlanModal shows
+  useEffect(()=>{
+    const now=new Date();
+    const nextMidnight=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1);
+    const msUntilMidnight=nextMidnight.getTime()-now.getTime();
+    const t=setTimeout(()=>_tick(n=>n+1), msUntilMidnight+500);
+    return ()=>clearTimeout(t);
+  },[today]);
+
+  useEffect(()=>{ if(!first) setFirst(today); },[]);
+
+  // Global click sound + haptic — fires on every non-disabled interactive element
+  useEffect(()=>{
+    const handler=e=>{
+      const btn=e.target.closest('button');
+      if(btn&&!btn.disabled){
+        playClick();
+        haptic([15]);
+        return;
+      }
+      // Non-button interactive elements
+      if(e.target.closest('.task-card:not(.locked),.cal-day-cell,.theme-opt,.cal-month-header')){
+        playClick();
+        haptic([15]);
+      }
+    };
+    document.addEventListener('click',handler,true);
+    return ()=>document.removeEventListener('click',handler,true);
+  },[]);
+  useEffect(()=>{
+    document.documentElement.setAttribute('data-theme',theme);
+    // Keep PWA theme-color in sync with current theme
+    const themeColors={white:'#ffffff',cream:'#faf8f3',lavender:'#f3f0fa',green:'#f0f7f0',blue:'#f0f5ff',pink:'#fff0f5',dark:'#090912'};
+    const meta=document.getElementById('theme-color-meta');
+    if(meta) meta.content=themeColors[theme]||'#ffffff';
+  },[theme]);
+
+  // ── 网络状态 + 存储可用性检测 ────────────────────────
+  const [isOnline,    setIsOnline]    = useState(typeof navigator!=='undefined'?navigator.onLine:true);
+  const [storageOk,   setStorageOk]   = useState(true);
+  useEffect(()=>{
+    // 检测 localStorage 可用性（无痕模式/禁用时为 false）
+    setStorageOk(checkStorageAvailable());
+    // 监听网络变化
+    const onOnline  = ()=>setIsOnline(true);
+    const onOffline = ()=>{ setIsOnline(false); showToast('📡 当前无网络，数据已保存在本地，联网后恢复正常',4000); };
+    window.addEventListener('online',  onOnline);
+    window.addEventListener('offline', onOffline);
+    return ()=>{ window.removeEventListener('online',onOnline); window.removeEventListener('offline',onOffline); };
+  },[]);
+
+  const dc    = React.useMemo(()=>{
+    const keys=Object.keys(plans).sort();
+    return dayCount(keys.length>0 ? keys[0] : (first||today));
+  },[plans,first,today]);
+  // Plan is valid only when user has officially activated today via the planning modal.
+  // Historical plans are NEVER deleted — they stay in `plans` for calendar & review.
+  const plan  = activeDate === today ? (plans[today] || null) : null;
+  const streak= useMemo(()=>calcStreak(plans),[plans]);
+
+  const savePlan=p=>{ setPlans(prev=>({...prev,[today]:p})); setActiveDate(today); };
+  const updateTask=t=>setPlans(prev=>{
+    const p={...prev[today]};
+    if(t.tier==='gold') p.goldTask=t;
+    else if(t.tier==='silver') p.silverTasks=p.silverTasks.map(x=>x.id===t.id?t:x);
+    else p.bronzeTasks=p.bronzeTasks.map(x=>x.id===t.id?t:x);
+    return {...prev,[today]:p};
+  });
+  const addEvent=e=>setEvents(prev=>({...prev,[e.id]:e}));
+  const delEvent=id=>setEvents(prev=>{ const n={...prev}; delete n[id]; return n; });
+  const addTask=t=>setPlans(prev=>{
+    const p={...(prev[today]||{})};
+    if(t.tier==='gold') p.goldTask=t;
+    else if(t.tier==='silver') p.silverTasks=[...(p.silverTasks||[]),t];
+    else p.bronzeTasks=[...(p.bronzeTasks||[]),t];
+    return {...prev,[today]:p};
+  });
+  const deleteTask=t=>setPlans(prev=>{
+    const p={...(prev[today]||{})};
+    if(t.tier==='gold') p.goldTask=null;
+    else if(t.tier==='silver') p.silverTasks=(p.silverTasks||[]).filter(x=>x.id!==t.id);
+    else p.bronzeTasks=(p.bronzeTasks||[]).filter(x=>x.id!==t.id);
+    return {...prev,[today]:p};
+  });
+
+  return(
+    <div id="app-root">
+      {/* 无痕模式 / 存储不可用提示 */}
+      {!storageOk&&<div className="status-banner banner-incognito">⚠️ 无痕模式或存储被禁用，关闭页面后数据将丢失，建议切换为普通模式使用</div>}
+      {/* 离线提示 */}
+      {!isOnline&&<div className="status-banner banner-offline">📡 当前无网络，数据已保存在本地，联网后即可正常访问</div>}
+      <div className="app-header">
+        <div className="header-left">
+          <div className="app-header-title">1·3·5 效率系统</div>
+          <div className="app-header-meta">
+            <span>{fmtDate(today)}</span>
+            <span>第 {dc} 天</span>
+            {streak>0&&<span className="streak-chip">🔥 {streak}天连击</span>}
+          </div>
+        </div>
+        <button className="settings-btn" onClick={()=>setShowTheme(true)} title="选择主题">🎨</button>
+      </div>
+
+      {view==='dash'     &&plan &&<Dashboard plan={plan} onUpdate={updateTask} onAddTask={addTask} onDeleteTask={deleteTask}/>}
+      {view==='cal'            &&<CalendarView plans={plans} events={events} onAddEvent={addEvent} onDeleteEvent={delEvent}/>}
+      {view==='review'         &&<DataReview plans={plans}/>}
+      {view==='settings'       &&<SettingsPanel soundEnabled={soundEnabled} onSoundChange={setSoundEnabled} hapticEnabled={hapticEnabled} onHapticChange={setHapticEnabled}/>}
+      {!welcomed&&<WelcomeModal onStart={()=>setWelcomed(true)}/>}
+      {welcomed&&!plan&&<DailyPlanModal onDone={savePlan} dayN={dc} today={today}/>}
+      {showTheme&&<ThemePanel current={theme} onChange={setTheme} onClose={()=>setShowTheme(false)}/>}
+
+      <div className="bottom-nav">
+        <button className={`nav-btn${view==='dash'?' active':''}`} onClick={()=>setView('dash')}>
+          <span className="nav-icon">📋</span>今日任务
+        </button>
+        <button className={`nav-btn${view==='cal'?' active':''}`} onClick={()=>setView('cal')}>
+          <span className="nav-icon">📅</span>日历
+        </button>
+        <button className={`nav-btn${view==='review'?' active':''}`} onClick={()=>setView('review')}>
+          <span className="nav-icon">📊</span>数据复盘
+        </button>
+        <button className={`nav-btn${view==='settings'?' active':''}`} onClick={()=>setView('settings')}>
+          <span className="nav-icon">⚙️</span>设置
+        </button>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+
+<script>
+// 注册 Service Worker（支持离线使用和"添加到主屏幕"）
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .catch(err => console.log('SW registration failed:', err));
+  });
+}
+</script>
+</body>
+</html>
