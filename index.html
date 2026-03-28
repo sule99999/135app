@@ -48,20 +48,23 @@
       --mod-s1:#141422; --mod-s2:#0a0a16;
       --mod-b1:#130d06; --mod-b2:#090600;
 
-      --card-gold-bg:    linear-gradient(155deg,rgba(255,245,130,0.26) 0%,rgba(255,215,0,0.20) 28%,rgba(190,135,0,0.15) 58%,rgba(240,185,0,0.19) 80%,rgba(145,95,0,0.18) 100%);
-      --card-gold-border:rgba(255,215,0,0.68);
-      --card-gold-shad:  0 7px 22px rgba(200,148,0,0.38),0 2px 7px rgba(0,0,0,0.55),inset 0 1.5px 0 rgba(255,248,140,0.55),inset 0 -1.5px 0 rgba(0,0,0,0.42);
-      --card-gold-stripe:linear-gradient(180deg,#FFF398 0%,#FFD700 42%,#B87E00 100%);
+      /* AMEX Gold — deep champagne gold */
+      --card-gold-bg:    linear-gradient(155deg,rgba(232,195,68,0.32) 0%,rgba(200,155,18,0.26) 25%,rgba(152,108,0,0.20) 52%,rgba(196,148,8,0.24) 76%,rgba(128,88,0,0.28) 100%);
+      --card-gold-border:rgba(205,162,28,0.75);
+      --card-gold-shad:  0 7px 22px rgba(175,128,0,0.45),0 2px 7px rgba(0,0,0,0.55),inset 0 1.5px 0 rgba(248,218,88,0.62),inset 0 -1.5px 0 rgba(0,0,0,0.45);
+      --card-gold-stripe:linear-gradient(180deg,#F0D060 0%,#C89018 42%,#8B6200 100%);
 
-      --card-silver-bg:  linear-gradient(155deg,rgba(242,242,255,0.22) 0%,rgba(205,205,248,0.16) 28%,rgba(148,148,200,0.13) 58%,rgba(215,215,252,0.17) 80%,rgba(120,120,172,0.15) 100%);
-      --card-silver-border:rgba(210,210,255,0.65);
-      --card-silver-shad:0 7px 22px rgba(155,155,215,0.32),0 2px 7px rgba(0,0,0,0.55),inset 0 1.5px 0 rgba(242,242,255,0.55),inset 0 -1.5px 0 rgba(0,0,0,0.42);
-      --card-silver-stripe:linear-gradient(180deg,#F2F2FF 0%,#C0C0E0 42%,#7878A8 100%);
+      /* AMEX Platinum — cool brushed steel */
+      --card-silver-bg:  linear-gradient(155deg,rgba(215,215,232,0.28) 0%,rgba(178,178,210,0.22) 28%,rgba(125,125,168,0.17) 55%,rgba(195,195,225,0.22) 78%,rgba(98,98,148,0.20) 100%);
+      --card-silver-border:rgba(192,192,228,0.70);
+      --card-silver-shad:0 7px 22px rgba(130,130,195,0.38),0 2px 7px rgba(0,0,0,0.55),inset 0 1.5px 0 rgba(232,232,252,0.62),inset 0 -1.5px 0 rgba(0,0,0,0.42);
+      --card-silver-stripe:linear-gradient(180deg,#E8E8F8 0%,#A8A8CC 42%,#686888 100%);
 
-      --card-bronze-bg:  linear-gradient(155deg,rgba(225,148,68,0.28) 0%,rgba(205,127,50,0.22) 28%,rgba(145,82,20,0.16) 58%,rgba(198,118,44,0.21) 80%,rgba(112,64,14,0.18) 100%);
-      --card-bronze-border:rgba(215,135,52,0.68);
-      --card-bronze-shad:0 7px 22px rgba(170,105,28,0.40),0 2px 7px rgba(0,0,0,0.55),inset 0 1.5px 0 rgba(255,195,95,0.55),inset 0 -1.5px 0 rgba(0,0,0,0.42);
-      --card-bronze-stripe:linear-gradient(180deg,#FFBE74 0%,#CD7F32 42%,#7A4510 100%);
+      /* AMEX Rose Gold — warm copper-rose */
+      --card-bronze-bg:  linear-gradient(155deg,rgba(215,142,98,0.34) 0%,rgba(188,112,65,0.28) 25%,rgba(142,75,35,0.22) 52%,rgba(182,105,55,0.26) 76%,rgba(115,62,22,0.28) 100%);
+      --card-bronze-border:rgba(205,132,72,0.72);
+      --card-bronze-shad:0 7px 22px rgba(178,108,42,0.44),0 2px 7px rgba(0,0,0,0.55),inset 0 1.5px 0 rgba(242,182,122,0.62),inset 0 -1.5px 0 rgba(0,0,0,0.42);
+      --card-bronze-stripe:linear-gradient(180deg,#EDB882 0%,#C8784A 42%,#8C4820 100%);
 
       --overlay-bg:       rgba(0,0,0,0.88);
       --timer-overlay-bg: rgba(0,0,0,0.93);
@@ -102,12 +105,12 @@
     ═══════════════════════════════════════ */
     html[data-theme="white"],html[data-theme="green"],html[data-theme="blue"],
     html[data-theme="pink"],html[data-theme="cream"],html[data-theme="lavender"] {
-      --gold: #c8900a; --gold-dim:#8B6000; --gold-glow:rgba(200,144,10,0.2);
-      --gold-border:rgba(180,120,0,0.42); --gold-bg:rgba(200,144,10,0.09);
-      --silver:#505060; --silver-dim:#404050; --silver-glow:rgba(80,80,96,0.18);
-      --silver-border:rgba(80,80,96,0.38); --silver-bg:rgba(80,80,96,0.08);
-      --bronze:#8B4513; --bronze-dim:#5C2D0D; --bronze-glow:rgba(139,69,19,0.18);
-      --bronze-border:rgba(139,69,19,0.38); --bronze-bg:rgba(139,69,19,0.08);
+      --gold: #A87800; --gold-dim:#7A5600; --gold-glow:rgba(168,120,0,0.22);
+      --gold-border:rgba(168,120,0,0.45); --gold-bg:rgba(168,120,0,0.10);
+      --silver:#5858A0; --silver-dim:#404080; --silver-glow:rgba(88,88,160,0.20);
+      --silver-border:rgba(88,88,160,0.40); --silver-bg:rgba(88,88,160,0.09);
+      --bronze:#A05828; --bronze-dim:#7A3E10; --bronze-glow:rgba(160,88,40,0.20);
+      --bronze-border:rgba(160,88,40,0.42); --bronze-bg:rgba(160,88,40,0.09);
       --success:#1a7a46; --danger:#c0392b;
       --overlay-bg:rgba(0,0,0,0.5); --timer-overlay-bg:rgba(0,0,0,0.6);
       --header-border:rgba(0,0,0,0.07); --nav-border:rgba(0,0,0,0.08);
@@ -120,20 +123,23 @@
       --dialog-bg:var(--bg-secondary);
       --cancel-color:rgba(0,0,0,0.28); --cancel-hover:rgba(0,0,0,0.55);
       --scrollbar-thumb:rgba(0,0,0,0.15);
-      --card-gold-bg:    linear-gradient(155deg,rgba(200,155,10,0.18) 0%,rgba(185,130,0,0.13) 35%,rgba(140,90,0,0.10) 65%,rgba(180,125,0,0.14) 100%);
-      --card-gold-border:rgba(180,130,0,0.52);
-      --card-gold-shad:  0 5px 16px rgba(160,110,0,0.22),0 2px 5px rgba(0,0,0,0.12),inset 0 1.5px 0 rgba(230,185,40,0.38),inset 0 -1.5px 0 rgba(0,0,0,0.10);
-      --card-gold-stripe:linear-gradient(180deg,#E8C040 0%,#B87E00 42%,#7A5000 100%);
+      /* AMEX Gold light — 香槟金，高饱和度才显色 */
+      --card-gold-bg:    linear-gradient(155deg,rgba(198,152,18,0.62) 0%,rgba(172,122,0,0.52) 30%,rgba(138,92,0,0.42) 58%,rgba(165,118,0,0.50) 80%,rgba(118,80,0,0.55) 100%);
+      --card-gold-border:rgba(175,128,0,0.80);
+      --card-gold-shad:  0 5px 18px rgba(160,112,0,0.32),0 2px 6px rgba(0,0,0,0.14),inset 0 1.5px 0 rgba(235,192,50,0.55),inset 0 -1.5px 0 rgba(0,0,0,0.12);
+      --card-gold-stripe:linear-gradient(180deg,#E8B828 0%,#B07800 42%,#784E00 100%);
 
-      --card-silver-bg:  linear-gradient(155deg,rgba(70,70,105,0.14) 0%,rgba(60,60,95,0.10) 35%,rgba(45,45,78,0.08) 65%,rgba(65,65,100,0.12) 100%);
-      --card-silver-border:rgba(80,80,130,0.45);
-      --card-silver-shad:0 5px 16px rgba(80,80,140,0.18),0 2px 5px rgba(0,0,0,0.12),inset 0 1.5px 0 rgba(120,120,180,0.32),inset 0 -1.5px 0 rgba(0,0,0,0.10);
-      --card-silver-stripe:linear-gradient(180deg,#9090C0 0%,#606090 42%,#404068 100%);
+      /* AMEX Platinum light — 冷调钢铁银 */
+      --card-silver-bg:  linear-gradient(155deg,rgba(148,148,188,0.55) 0%,rgba(118,118,165,0.46) 30%,rgba(88,88,138,0.37) 58%,rgba(132,132,178,0.46) 80%,rgba(78,78,128,0.48) 100%);
+      --card-silver-border:rgba(108,108,172,0.78);
+      --card-silver-shad:0 5px 18px rgba(98,98,168,0.28),0 2px 6px rgba(0,0,0,0.14),inset 0 1.5px 0 rgba(195,195,238,0.55),inset 0 -1.5px 0 rgba(0,0,0,0.12);
+      --card-silver-stripe:linear-gradient(180deg,#B8B8E0 0%,#7878B0 42%,#505080 100%);
 
-      --card-bronze-bg:  linear-gradient(155deg,rgba(140,72,20,0.16) 0%,rgba(120,58,14,0.11) 35%,rgba(90,42,8,0.09) 65%,rgba(130,65,16,0.13) 100%);
-      --card-bronze-border:rgba(150,85,25,0.50);
-      --card-bronze-shad:0 5px 16px rgba(130,78,18,0.20),0 2px 5px rgba(0,0,0,0.12),inset 0 1.5px 0 rgba(190,130,50,0.35),inset 0 -1.5px 0 rgba(0,0,0,0.10);
-      --card-bronze-stripe:linear-gradient(180deg,#C08030 0%,#8B5014 42%,#5C3008 100%);
+      /* AMEX Rose Gold light — 玫瑰铜 */
+      --card-bronze-bg:  linear-gradient(155deg,rgba(195,128,82,0.60) 0%,rgba(168,98,52,0.50) 30%,rgba(132,68,25,0.40) 58%,rgba(178,108,58,0.50) 80%,rgba(122,68,22,0.52) 100%);
+      --card-bronze-border:rgba(188,112,48,0.80);
+      --card-bronze-shad:0 5px 18px rgba(172,98,30,0.30),0 2px 6px rgba(0,0,0,0.14),inset 0 1.5px 0 rgba(235,178,118,0.55),inset 0 -1.5px 0 rgba(0,0,0,0.12);
+      --card-bronze-stripe:linear-gradient(180deg,#D89858 0%,#A06228 42%,#6C3E10 100%);
 
       --all-done-bg:linear-gradient(135deg,rgba(200,144,10,0.07),rgba(200,100,10,0.04));
       --all-done-border:rgba(200,144,10,0.22);
@@ -529,6 +535,262 @@
     @keyframes bannerIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
     .banner-offline{background:rgba(255,82,82,0.10);color:var(--danger);border-bottom:1px solid rgba(255,82,82,0.22)}
     .banner-incognito{background:rgba(255,160,0,0.09);color:var(--gold);border-bottom:1px solid rgba(255,160,0,0.24)}
+
+    /* ══════════════════════════════════════════════
+       VISUAL POLISH — v1.4 aesthetic upgrade
+    ══════════════════════════════════════════════ */
+
+    /* ── 1. HEADER: richer gradient + subtle glow ── */
+    .app-header{background:var(--bg-secondary);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+    .app-header-title{
+      font-size:22px;letter-spacing:1.5px;
+      background:linear-gradient(100deg,#FFE566 0%,#FFD700 30%,#FF9500 65%,#FF6B00 100%);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      filter:drop-shadow(0 0 8px rgba(255,185,0,0.35));
+    }
+
+    /* ── 2. BOTTOM NAV: glassmorphism + active dot ── */
+    .bottom-nav{
+      background:rgba(var(--nav-rgb,16,16,26),0.82);
+      backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+      border-top:1px solid var(--nav-border);
+    }
+    html[data-theme="white"]    { --nav-rgb:245,245,247 }
+    html[data-theme="green"]    { --nav-rgb:227,245,235 }
+    html[data-theme="blue"]     { --nav-rgb:227,236,255 }
+    html[data-theme="pink"]     { --nav-rgb:252,231,239 }
+    html[data-theme="cream"]    { --nav-rgb:242,235,224 }
+    html[data-theme="lavender"] { --nav-rgb:237,232,255 }
+    .nav-btn{position:relative;transition:color .22s,transform .15s}
+    .nav-btn.active::after{
+      content:'';position:absolute;bottom:4px;left:50%;transform:translateX(-50%);
+      width:18px;height:3px;border-radius:2px;background:var(--gold);
+      animation:navDotIn .25s cubic-bezier(.34,1.56,.64,1);
+    }
+    @keyframes navDotIn{from{width:0;opacity:0}to{width:18px;opacity:1}}
+    .nav-btn:not(.active):active{transform:scale(0.88)}
+
+    /* ── 3. PROGRESS BAR: shimmer animation ── */
+    .progress-fill{
+      position:relative;overflow:hidden;
+      background:linear-gradient(90deg,#FFB800,#FFD700,#FF9500);
+    }
+    .progress-fill::after{
+      content:'';position:absolute;inset:0;
+      background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.38) 50%,transparent 100%);
+      animation:shimmer 2.2s cubic-bezier(.4,0,.6,1) infinite;
+      transform:translateX(-100%);
+    }
+    @keyframes shimmer{0%{transform:translateX(-100%)}60%,100%{transform:translateX(200%)}}
+
+    /* ── 4. CARDS: AMEX brushed-metal texture ── */
+
+    /* Layer 1 — fine brushed grain (AMEX satin finish, color-matched per tier) */
+    .task-card-gold:not(.done-card){
+      background:
+        repeating-linear-gradient(97deg,
+          transparent 0, transparent 1.8px,
+          rgba(230,185,40,0.048) 1.8px, rgba(230,185,40,0.048) 3.6px),
+        var(--card-gold-bg);
+    }
+    .task-card-silver:not(.done-card){
+      background:
+        repeating-linear-gradient(97deg,
+          transparent 0, transparent 1.8px,
+          rgba(195,195,235,0.048) 1.8px, rgba(195,195,235,0.048) 3.6px),
+        var(--card-silver-bg);
+    }
+    .task-card-bronze:not(.done-card){
+      background:
+        repeating-linear-gradient(97deg,
+          transparent 0, transparent 1.8px,
+          rgba(212,135,72,0.048) 1.8px, rgba(212,135,72,0.048) 3.6px),
+        var(--card-bronze-bg);
+    }
+
+    /* Layer 2 — diagonal specular sweep (replaces flat top-shine) */
+    .task-card:not(.done-card)::after{
+      height:100%;
+      background:linear-gradient(
+        118deg,
+        rgba(255,255,255,0.20) 0%,
+        rgba(255,255,255,0.32) 22%,
+        rgba(255,255,255,0.10) 40%,
+        transparent 56%
+      );
+      border-radius:15px;
+      transition:background .35s ease;
+    }
+
+    /* Layer 3 — hover: light shifts right (tilting a real metal card) */
+    .task-card-gold:not(.locked):hover::after{
+      background:linear-gradient(
+        128deg,
+        transparent 15%,
+        rgba(255,248,140,0.28) 38%,
+        rgba(255,255,200,0.42) 50%,
+        rgba(255,248,140,0.18) 62%,
+        transparent 75%
+      );
+    }
+    .task-card-silver:not(.locked):hover::after{
+      background:linear-gradient(
+        128deg,
+        transparent 15%,
+        rgba(220,220,255,0.26) 38%,
+        rgba(240,240,255,0.40) 50%,
+        rgba(220,220,255,0.16) 62%,
+        transparent 75%
+      );
+    }
+    .task-card-bronze:not(.locked):hover::after{
+      background:linear-gradient(
+        128deg,
+        transparent 15%,
+        rgba(255,195,95,0.26) 38%,
+        rgba(255,210,120,0.40) 50%,
+        rgba(255,195,95,0.16) 62%,
+        transparent 75%
+      );
+    }
+
+    /* Keep existing hover float + press */
+    .task-card:not(.locked):hover{transform:translateY(-4px) scale(1.012)}
+    .task-card:not(.locked):active{transform:translateY(0) scale(0.982);transition:transform .08s}
+
+    /* ── 5. MODAL OVERLAY: frosted glass ── */
+    .overlay{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+    .modal-box{
+      border-radius:26px;
+      box-shadow:0 24px 64px rgba(0,0,0,0.6),0 2px 8px rgba(0,0,0,0.3);
+    }
+    html[data-theme]:not([data-theme="dark"]) .modal-box{
+      box-shadow:0 16px 48px rgba(0,0,0,0.14),0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    /* ── 6. BUTTONS: satisfying press feedback ── */
+    .btn:not(:disabled):active{transform:scale(0.96) translateY(1px);transition:transform .08s}
+    .btn-gold{
+      background:linear-gradient(135deg,#FFE566 0%,#FFD700 40%,#FF9500 100%);
+      box-shadow:0 4px 14px rgba(255,165,0,0.30);
+    }
+    .btn-gold:not(:disabled):hover{box-shadow:0 8px 24px rgba(255,165,0,0.45);transform:translateY(-2px)}
+
+    /* ── 7. SECTION HEADERS: tighter, more refined ── */
+    .section-label{font-size:10.5px;letter-spacing:1.8px}
+    .section-header{border-radius:12px;padding:7px 12px}
+    .section-gold  .section-header{background:linear-gradient(90deg,rgba(255,215,0,0.16),rgba(255,165,0,0.05))}
+    .section-silver .section-header{background:linear-gradient(90deg,rgba(200,200,255,0.14),rgba(160,160,220,0.04))}
+    .section-bronze .section-header{background:linear-gradient(90deg,rgba(205,127,50,0.18),rgba(160,90,20,0.05))}
+
+    /* ── 8. TYPOGRAPHY: refined spacing ── */
+    .card-title{line-height:1.45;letter-spacing:.005em}
+    .card-meta{margin-top:7px;gap:10px}
+    .timer-digits{letter-spacing:4px;font-feature-settings:'tnum' 1}
+    .modal-title{font-size:18px;letter-spacing:.01em}
+    .modal-hint{font-size:12.5px;line-height:1.7}
+
+    /* ── 9. ADD-TASK BUTTON: more inviting ── */
+    .add-task-btn{
+      border-radius:14px;padding:12px;
+      transition:border-color .2s,color .2s,background .2s,transform .15s;
+    }
+    .add-task-btn:hover{
+      background:rgba(255,215,0,0.05);transform:translateY(-1px);
+    }
+    .add-task-btn:active{transform:scale(0.97)}
+
+    /* ── 10. STREAK CHIP: glow ── */
+    .streak-chip{
+      background:rgba(255,149,0,0.18);
+      box-shadow:0 0 10px rgba(255,149,0,0.25);
+      letter-spacing:.3px;
+    }
+
+    /* ══════════════════════════════════════════════
+       PREMIUM HEADER & NAV — v1.4
+    ══════════════════════════════════════════════ */
+
+    /* ── HEADER ── */
+    .app-header{
+      padding:20px 18px 15px;
+      gap:10px;
+      align-items:center;
+    }
+    .header-brand{
+      display:flex;align-items:baseline;gap:7px;margin-bottom:5px;
+    }
+    .app-header-title{
+      font-size:28px;font-weight:900;letter-spacing:2px;
+      background:linear-gradient(100deg,#FFE566 0%,#FFD700 30%,#FF9500 65%,#FF6B00 100%);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      filter:drop-shadow(0 0 10px rgba(255,185,0,0.32));
+      line-height:1;margin-bottom:0;
+    }
+    html[data-theme]:not([data-theme="dark"]) .app-header-title{
+      filter:drop-shadow(0 0 6px rgba(168,120,0,0.22));
+    }
+    .header-subtitle{
+      font-size:11px;font-weight:500;letter-spacing:1.5px;
+      color:var(--text-secondary);text-transform:uppercase;
+    }
+    .app-header-meta{
+      display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+      font-size:11.5px;
+    }
+    .header-date{
+      font-weight:600;color:var(--text-primary);font-size:12px;
+    }
+    .header-day{
+      color:var(--text-secondary);font-size:11px;
+      padding:1px 8px;border-radius:20px;
+      background:var(--chip-bg);border:1px solid var(--chip-border);
+    }
+    .streak-chip{font-size:11px}
+    .settings-btn{
+      background:var(--chip-bg);border:1px solid var(--chip-border);
+      border-radius:12px;padding:8px;font-size:0;line-height:1;
+      opacity:1;transition:background .2s,border-color .2s,transform .15s;
+      width:38px;height:38px;display:flex;align-items:center;justify-content:center;
+    }
+    .settings-btn:hover{background:var(--gold-bg);border-color:var(--gold);transform:rotate(15deg)}
+    .settings-btn svg{width:18px;height:18px;stroke:var(--text-secondary);fill:none;
+      stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke .2s}
+    .settings-btn:hover svg{stroke:var(--gold)}
+
+    /* ── BOTTOM NAV ── */
+    .bottom-nav{
+      height:62px;
+      padding-bottom:env(safe-area-inset-bottom,0px);
+    }
+    .nav-btn{
+      padding:6px 0 8px;gap:2px;
+      transition:color .22s,transform .15s;
+    }
+    /* Remove old gold underline dot */
+    .nav-btn.active::after{display:none}
+    /* Icon wrapper — pill bg on active */
+    .nav-icon-wrap{
+      width:46px;height:28px;
+      display:flex;align-items:center;justify-content:center;
+      border-radius:14px;transition:background .22s;
+    }
+    .nav-btn.active .nav-icon-wrap{
+      background:rgba(255,185,0,0.14);
+    }
+    html[data-theme]:not([data-theme="dark"]) .nav-btn.active .nav-icon-wrap{
+      background:rgba(168,120,0,0.12);
+    }
+    /* SVG icon styling */
+    .nav-svg{
+      width:20px;height:20px;
+      fill:none;stroke:currentColor;
+      stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;
+      display:block;
+    }
+    .nav-btn{color:var(--text-secondary);font-size:10px;font-weight:500;letter-spacing:0.2px}
+    .nav-btn.active{color:var(--gold)}
+    .nav-btn:not(.active):active{transform:scale(0.88)}
   </style>
   <script>
     /* ── 防缩放：三重保险 ──────────────────────────────
@@ -659,40 +921,38 @@ function playTone(ctx,freq,start,dur,vol=0.25,type='sine'){
   g.gain.exponentialRampToValueAtTime(0.001,start+dur);
   osc.start(start);osc.stop(start+dur+0.05);
 }
-function playClick(){  // 老式相机快门咔嚓声 + 桶内空间混响感
+function playClick(){  // 翻书页声：扫频纸张滑动感（fwip）
   if(!isSoundOn()) return;
   const ctx=getAudioCtx(); if(!ctx)return;
   const t=ctx.currentTime;
   const sr=ctx.sampleRate;
-  // 复用缓存的混响冲激响应，避免每次点击重新计算
-  const conv=ctx.createConvolver(); conv.buffer=_getReverbBuf(ctx);
-  // Dry/Wet 混合：直达声 60% + 混响 40%
-  const dry=ctx.createGain(); dry.gain.value=0.60;
-  const wet=ctx.createGain(); wet.gain.value=0.40;
-  dry.connect(ctx.destination);
-  conv.connect(wet); wet.connect(ctx.destination);
-  // Helper: 带通滤波噪声爆破，同时送入 dry 和混响
-  function shutterBurst(t0,vol,dur,bpFreq,bpQ){
+  const master=ctx.createGain(); master.gain.value=0.9;
+  master.connect(ctx.destination);
+  // 扫频翻页：从高频到低频线性扫，形成纸张划过的"fwip"感
+  function pageSwipe(t0,vol,dur,freqStart,freqEnd,Q){
     const len=Math.floor(sr*dur);
     const buf=ctx.createBuffer(1,len,sr);
     const d=buf.getChannelData(0);
     for(let i=0;i<len;i++) d[i]=(Math.random()*2-1);
     const src=ctx.createBufferSource(); src.buffer=buf;
-    const bpf=ctx.createBiquadFilter(); bpf.type='bandpass';
-    bpf.frequency.value=bpFreq; bpf.Q.value=bpQ;
+    const flt=ctx.createBiquadFilter();
+    flt.type='bandpass';
+    flt.frequency.setValueAtTime(freqStart,t0);
+    flt.frequency.linearRampToValueAtTime(freqEnd,t0+dur*0.75);
+    flt.Q.value=Q;
     const g=ctx.createGain();
-    g.gain.setValueAtTime(vol,t0);
+    g.gain.setValueAtTime(0,t0);
+    g.gain.linearRampToValueAtTime(vol,t0+0.014);   // 柔和起音，避免咔嚓感
     g.gain.exponentialRampToValueAtTime(0.001,t0+dur);
-    src.connect(bpf); bpf.connect(g);
-    g.connect(dry); g.connect(conv);
+    src.connect(flt); flt.connect(g); g.connect(master);
     src.start(t0);
   }
-  // "咔"：第一帘撞击 — 频率再压（1800Hz），更闷厚
-  shutterBurst(t,        0.28, 0.022, 1800, 0.8);
-  shutterBurst(t,        0.22, 0.038,  800, 0.5);
-  // "嚓"：第二帘弹开 — 65ms后，略低略轻
-  shutterBurst(t+0.065,  0.20, 0.018, 1600, 0.8);
-  shutterBurst(t+0.065,  0.14, 0.030,  700, 0.5);
+  // 层1：纸张主体翻过，2000→850 Hz（最响，"fwip"主体）
+  pageSwipe(t,        0.30, 0.13, 2000,  850, 2.5);
+  // 层2：纸张摩擦质感，1100→580 Hz（稍轻，叠加纸声）
+  pageSwipe(t+0.020,  0.16, 0.10, 1100,  580, 3.5);
+  // 层3：页面轻落，450→260 Hz（最轻，收尾落定感）
+  pageSwipe(t+0.078,  0.09, 0.06,  450,  260, 2.0);
 }
 function playBeep(){  // soft single ping when overtime starts
   if(!isSoundOn()) return;
@@ -2072,14 +2332,19 @@ function App(){
       {!isOnline&&<div className="status-banner banner-offline">📡 当前无网络，数据已保存在本地，联网后即可正常访问</div>}
       <div className="app-header">
         <div className="header-left">
-          <div className="app-header-title">1·3·5 效率系统</div>
+          <div className="header-brand">
+            <div className="app-header-title">1·3·5</div>
+            <span className="header-subtitle">效率系统</span>
+          </div>
           <div className="app-header-meta">
-            <span>{fmtDate(today)}</span>
-            <span>第 {dc} 天</span>
+            <span className="header-date">{fmtDate(today)}</span>
+            <span className="header-day">第 {dc} 天</span>
             {streak>0&&<span className="streak-chip">🔥 {streak}天连击</span>}
           </div>
         </div>
-        <button className="settings-btn" onClick={()=>setShowTheme(true)} title="选择主题">🎨</button>
+        <button className="settings-btn" onClick={()=>setShowTheme(true)} title="选择主题">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
+        </button>
       </div>
 
       {view==='dash'     &&plan &&<Dashboard plan={plan} onUpdate={updateTask} onAddTask={addTask} onDeleteTask={deleteTask}/>}
@@ -2092,16 +2357,24 @@ function App(){
 
       <div className="bottom-nav">
         <button className={`nav-btn${view==='dash'?' active':''}`} onClick={()=>setView('dash')}>
-          <span className="nav-icon">📋</span>今日任务
+          <span className="nav-icon-wrap">
+            <svg className="nav-svg" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>
+          </span>今日任务
         </button>
         <button className={`nav-btn${view==='cal'?' active':''}`} onClick={()=>setView('cal')}>
-          <span className="nav-icon">📅</span>日历
+          <span className="nav-icon-wrap">
+            <svg className="nav-svg" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+          </span>日历
         </button>
         <button className={`nav-btn${view==='review'?' active':''}`} onClick={()=>setView('review')}>
-          <span className="nav-icon">📊</span>数据复盘
+          <span className="nav-icon-wrap">
+            <svg className="nav-svg" viewBox="0 0 24 24"><path d="M3 20h18"/><rect x="5" y="13" width="3" height="7" rx="0.5"/><rect x="10.5" y="8" width="3" height="12" rx="0.5"/><rect x="16" y="4" width="3" height="16" rx="0.5"/></svg>
+          </span>数据复盘
         </button>
         <button className={`nav-btn${view==='settings'?' active':''}`} onClick={()=>setView('settings')}>
-          <span className="nav-icon">⚙️</span>设置
+          <span className="nav-icon-wrap">
+            <svg className="nav-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </span>设置
         </button>
       </div>
     </div>
