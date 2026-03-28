@@ -921,38 +921,33 @@ function playTone(ctx,freq,start,dur,vol=0.25,type='sine'){
   g.gain.exponentialRampToValueAtTime(0.001,start+dur);
   osc.start(start);osc.stop(start+dur+0.05);
 }
-function playClick(){  // 翻书页声：扫频纸张滑动感（fwip）
+function playClick(){  // 泡泡声：do/mi/so 随机音调，柔和下滑
   if(!isSoundOn()) return;
   const ctx=getAudioCtx(); if(!ctx)return;
   const t=ctx.currentTime;
-  const sr=ctx.sampleRate;
-  const master=ctx.createGain(); master.gain.value=0.9;
+  const master=ctx.createGain(); master.gain.value=0.72;
   master.connect(ctx.destination);
-  // 扫频翻页：从高频到低频线性扫，形成纸张划过的"fwip"感
-  function pageSwipe(t0,vol,dur,freqStart,freqEnd,Q){
-    const len=Math.floor(sr*dur);
-    const buf=ctx.createBuffer(1,len,sr);
-    const d=buf.getChannelData(0);
-    for(let i=0;i<len;i++) d[i]=(Math.random()*2-1);
-    const src=ctx.createBufferSource(); src.buffer=buf;
-    const flt=ctx.createBiquadFilter();
-    flt.type='bandpass';
-    flt.frequency.setValueAtTime(freqStart,t0);
-    flt.frequency.linearRampToValueAtTime(freqEnd,t0+dur*0.75);
-    flt.Q.value=Q;
+  // do/mi/so 三个基频，避免连续重复
+  const roots=[520,660,780];
+  const last=playClick._last||0;
+  const pool=roots.filter(n=>n!==last);
+  const base=pool[Math.floor(Math.random()*pool.length)];
+  playClick._last=base;
+  // 泡泡戳破：正弦波从基频快速下滑到低频（泡泡膜破裂时气压骤降）
+  function bubble(freqStart,freqEnd,vol,dur){
+    const osc=ctx.createOscillator();
     const g=ctx.createGain();
-    g.gain.setValueAtTime(0,t0);
-    g.gain.linearRampToValueAtTime(vol,t0+0.014);   // 柔和起音，避免咔嚓感
-    g.gain.exponentialRampToValueAtTime(0.001,t0+dur);
-    src.connect(flt); flt.connect(g); g.connect(master);
-    src.start(t0);
+    osc.type='sine';
+    osc.frequency.setValueAtTime(freqStart,t);
+    osc.frequency.exponentialRampToValueAtTime(freqEnd,t+dur*0.6);
+    g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(vol,t+0.006);    // 极短起音（泡泡戳的瞬间）
+    g.gain.exponentialRampToValueAtTime(0.001,t+dur);
+    osc.connect(g); g.connect(master);
+    osc.start(t); osc.stop(t+dur+0.01);
   }
-  // 层1：纸张主体翻过，2000→850 Hz（最响，"fwip"主体）
-  pageSwipe(t,        0.30, 0.13, 2000,  850, 2.5);
-  // 层2：纸张摩擦质感，1100→580 Hz（稍轻，叠加纸声）
-  pageSwipe(t+0.020,  0.16, 0.10, 1100,  580, 3.5);
-  // 层3：页面轻落，450→260 Hz（最轻，收尾落定感）
-  pageSwipe(t+0.078,  0.09, 0.06,  450,  260, 2.0);
+  bubble(base,      base*0.18, 0.55, 0.10);   // 主泡：基频下滑到极低（"bloop"感）
+  bubble(base*1.52, base*0.30, 0.18, 0.07);   // 泛音层：稍高的小泡同时破裂
 }
 function playBeep(){  // soft single ping when overtime starts
   if(!isSoundOn()) return;
@@ -1690,7 +1685,6 @@ function TaskCard({task,locked,onStart,onEdit,onDelete,onUndoComplete,onQuickSav
   const isPaused = task.status==='paused';
   const isCI = !!task.isCheckIn;
   const remainMins = isPaused && task.remainingSeconds!=null ? Math.ceil(task.remainingSeconds/60) : null;
-  const [titleExpanded,setTitleExpanded]=useState(false);
   // ── 内联编辑状态 ──
   const [isInlineEdit,setIsInlineEdit]=useState(false);
   const [editVal,setEditVal]=useState('');
@@ -1733,10 +1727,9 @@ function TaskCard({task,locked,onStart,onEdit,onDelete,onUndoComplete,onQuickSav
                 onKeyDown={e=>{ e.stopPropagation(); if(e.key==='Enter') saveInlineEdit(); if(e.key==='Escape') cancelInlineEdit(); }}/>
             </div>
           ):(
-            <div className={`card-title${titleExpanded?' title-expanded':''}`}
-                 onClick={e=>{e.stopPropagation();setTitleExpanded(x=>!x);}}
+            <div className={`card-title title-expanded`}
                  onDoubleClick={startInlineEdit}
-                 title={'双击编辑标题·单击展开'}>
+                 title={'双击编辑标题·长按编辑'}>
               <span style={{marginRight:5}}>{tierEmoji}</span>{task.title}
             </div>
           )}
