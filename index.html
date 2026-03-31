@@ -757,6 +757,16 @@
     .settings-btn svg{width:18px;height:18px;stroke:var(--text-secondary);fill:none;
       stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke .2s}
     .settings-btn:hover svg{stroke:var(--gold)}
+    .habit-btn{
+      background:var(--chip-bg);border:1px solid var(--chip-border);
+      border-radius:12px;padding:8px;font-size:0;line-height:1;cursor:pointer;
+      opacity:1;transition:background .2s,border-color .2s,transform .15s;
+      width:38px;height:38px;display:flex;align-items:center;justify-content:center;
+    }
+    .habit-btn:hover{background:var(--gold-bg);border-color:var(--gold);transform:scale(1.08)}
+    .habit-btn svg{width:18px;height:18px;stroke:var(--text-secondary);fill:none;
+      stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke .2s}
+    .habit-btn:hover svg{stroke:var(--gold)}
 
     /* ── BOTTOM NAV ── */
     .bottom-nav{
@@ -791,6 +801,46 @@
     .nav-btn{color:var(--text-secondary);font-size:10px;font-weight:500;letter-spacing:0.2px}
     .nav-btn.active{color:var(--gold)}
     .nav-btn:not(.active):active{transform:scale(0.88)}
+
+    /* ── 习惯快选芯片 ────────────────────────────── */
+    .habit-quick{margin-bottom:12px}
+    .habit-quick-label{font-size:10px;color:var(--text-secondary);letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+    .habit-chip-row{display:flex;flex-wrap:wrap;gap:6px}
+    .habit-chip{background:var(--chip-bg);border:1px solid var(--chip-border);border-radius:20px;padding:5px 11px;font-size:12px;color:var(--text-primary);cursor:pointer;transition:all .18s;white-space:nowrap}
+    .habit-chip:active{transform:scale(0.94)}
+    .habit-chip.auto{border-color:var(--gold);color:var(--gold);background:rgba(255,185,0,0.08)}
+    /* ── 习惯管理面板 ───────────────────────────── */
+    .habit-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--chip-bg);border:1px solid var(--chip-border);border-radius:12px;margin-bottom:8px}
+    .habit-item-info{flex:1;min-width:0}
+    .habit-item-title{font-size:13px;font-weight:600;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .habit-item-meta{font-size:11px;color:var(--text-secondary);margin-top:2px}
+    .habit-auto-tag{font-size:10px;padding:2px 7px;border-radius:10px;background:rgba(255,185,0,0.15);color:var(--gold);border:1px solid rgba(255,185,0,0.3);margin-left:6px;font-weight:600}
+    .habit-add-btn{width:100%;padding:11px;background:rgba(255,185,0,0.08);border:1.5px dashed rgba(255,185,0,0.4);border-radius:12px;color:var(--gold);font-size:13px;font-weight:600;cursor:pointer;margin-top:4px;transition:all .18s}
+    .habit-add-btn:active{transform:scale(0.97)}
+    .habit-tier-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+    .habit-tier-dot.gold{background:var(--gold)}
+    .habit-tier-dot.silver{background:var(--silver)}
+    .habit-tier-dot.bronze{background:var(--bronze)}
+    /* ── 推荐好习惯 ── */
+    .habit-rec-btn{width:100%;padding:11px;background:rgba(32,196,178,0.07);border:1.5px solid rgba(32,196,178,0.32);border-radius:12px;color:#20C4B2;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;transition:all .18s}
+    .habit-rec-btn:active{transform:scale(0.97)}
+    .rec-panel{margin-top:10px;padding:12px;background:var(--bg-primary);border:1px solid var(--subtle-border);border-radius:14px}
+    .rec-cat-label{font-size:10px;font-weight:700;color:var(--text-secondary);letter-spacing:.6px;text-transform:uppercase;margin:10px 0 5px}
+    .rec-cat-label:first-child{margin-top:0}
+    .rec-chips{display:flex;flex-wrap:wrap;gap:6px}
+    .rec-chip{padding:5px 11px;background:var(--chip-bg);border:1px solid var(--chip-border);border-radius:20px;font-size:12px;color:var(--text-secondary);cursor:pointer;transition:all .15s;white-space:nowrap}
+    .rec-chip:hover{border-color:rgba(32,196,178,0.5);color:#20C4B2;background:rgba(32,196,178,0.07)}
+    .rec-chip.active{border-color:#20C4B2;color:#20C4B2;background:rgba(32,196,178,0.12);font-weight:600}
+    .rec-confirm{margin-top:10px;padding:9px 11px;background:rgba(32,196,178,0.05);border:1px solid rgba(32,196,178,0.22);border-radius:10px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+    .rec-confirm-title{font-size:12px;font-weight:600;color:var(--text-primary);flex:1;min-width:60px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .rec-tier-btns{display:flex;gap:3px}
+    .rec-tier-btn{padding:3px 7px;border-radius:7px;border:1px solid var(--chip-border);background:var(--chip-bg);font-size:12px;cursor:pointer;transition:all .14s;color:var(--text-secondary)}
+    .rec-tier-btn.sel-gold{border-color:var(--gold);background:var(--gold-bg);color:var(--gold)}
+    .rec-tier-btn.sel-silver{border-color:var(--silver-dim);background:var(--silver-bg);color:var(--silver)}
+    .rec-tier-btn.sel-bronze{border-color:var(--bronze);background:var(--bronze-bg);color:var(--bronze)}
+    .rec-min-input{width:40px;padding:3px 5px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:7px;color:var(--text-primary);font-size:12px;text-align:center}
+    .rec-add-btn{padding:5px 12px;background:rgba(32,196,178,0.14);border:1px solid rgba(32,196,178,0.45);border-radius:8px;color:#20C4B2;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .15s}
+    .rec-add-btn:hover{background:rgba(32,196,178,0.24)}
   </style>
   <script>
     /* ── 防缩放：三重保险 ──────────────────────────────
@@ -834,7 +884,7 @@
 const { useState, useEffect, useCallback, useRef, useMemo } = React;
 
 // ── CONSTANTS ────────────────────────────────────────
-const SK = { FIRST:'135app_first', PLANS:'135app_plans', THEME:'135app_theme', EVENTS:'135app_events', SOUND:'135app_sound', HAPTIC:'135app_haptic', WELCOMED:'135app_welcomed', ACTIVE_DATE:'135app_active_date' };
+const SK = { FIRST:'135app_first', PLANS:'135app_plans', THEME:'135app_theme', EVENTS:'135app_events', SOUND:'135app_sound', HAPTIC:'135app_haptic', WELCOMED:'135app_welcomed', ACTIVE_DATE:'135app_active_date', HABITS:'135app_habits' };
 const TIME_OPTS = [5,10,15,25,30,45,60,90,120];
 const THEMES = [
   {id:'white',    label:'☀️ 纯白',   desc:'简洁明亮白色',swatch:'#ffffff', text:'#c8900a'},
@@ -921,33 +971,17 @@ function playTone(ctx,freq,start,dur,vol=0.25,type='sine'){
   g.gain.exponentialRampToValueAtTime(0.001,start+dur);
   osc.start(start);osc.stop(start+dur+0.05);
 }
-function playClick(){  // 泡泡声：do/mi/so 随机音调，柔和下滑
+// 按键音 MP3（base64 内嵌，1.5KB）
+const _CLICK_MP3='data:audio/mpeg;base64,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';
+let _clickAudio=null;
+function playClick(){
   if(!isSoundOn()) return;
-  const ctx=getAudioCtx(); if(!ctx)return;
-  const t=ctx.currentTime;
-  const master=ctx.createGain(); master.gain.value=0.72;
-  master.connect(ctx.destination);
-  // do/mi/so 三个基频，避免连续重复
-  const roots=[520,660,780];
-  const last=playClick._last||0;
-  const pool=roots.filter(n=>n!==last);
-  const base=pool[Math.floor(Math.random()*pool.length)];
-  playClick._last=base;
-  // 泡泡戳破：正弦波从基频快速下滑到低频（泡泡膜破裂时气压骤降）
-  function bubble(freqStart,freqEnd,vol,dur){
-    const osc=ctx.createOscillator();
-    const g=ctx.createGain();
-    osc.type='sine';
-    osc.frequency.setValueAtTime(freqStart,t);
-    osc.frequency.exponentialRampToValueAtTime(freqEnd,t+dur*0.6);
-    g.gain.setValueAtTime(0,t);
-    g.gain.linearRampToValueAtTime(vol,t+0.006);    // 极短起音（泡泡戳的瞬间）
-    g.gain.exponentialRampToValueAtTime(0.001,t+dur);
-    osc.connect(g); g.connect(master);
-    osc.start(t); osc.stop(t+dur+0.01);
-  }
-  bubble(base,      base*0.18, 0.55, 0.10);   // 主泡：基频下滑到极低（"bloop"感）
-  bubble(base*1.52, base*0.30, 0.18, 0.07);   // 泛音层：稍高的小泡同时破裂
+  try{
+    if(!_clickAudio){ _clickAudio=new Audio(_CLICK_MP3); _clickAudio.volume=0.6; }
+    const a=_clickAudio.cloneNode();
+    a.volume=0.6;
+    a.play().catch(()=>{});
+  } catch(e){}
 }
 function playBeep(){  // soft single ping when overtime starts
   if(!isSoundOn()) return;
@@ -1186,6 +1220,175 @@ function ThemePanel({current,onChange,onClose}){
   );
 }
 
+// ── HABITS MANAGER ────────────────────────────────────
+function HabitForm({habit, onSave, onClose}){
+  const [title,setTitle]=useState(habit?.title||'');
+  const [tier,setTier]=useState(habit?.tier||'silver');
+  const [mins,setMins]=useState(habit?.estimatedMinutes||30);
+  const [isCI,setIsCI]=useState(habit?.isCheckIn||false);
+  const [autoAdd,setAutoAdd]=useState(habit?.autoAdd??true);
+  const inputRef=useRef(null);
+  useEffect(()=>{const t=setTimeout(()=>inputRef.current?.focus(),80);return()=>clearTimeout(t);},[]);
+  const tierColor={gold:'var(--gold)',silver:'var(--silver)',bronze:'var(--bronze)'};
+  const canSave=title.trim().length>0;
+  const handleSave=()=>{
+    if(!canSave) return;
+    onSave({id:habit?.id||genId(),title:title.trim(),tier,estimatedMinutes:isCI?0:mins,isCheckIn:isCI,autoAdd});
+  };
+  return(
+    <div className="overlay" onClick={onClose}>
+      <div className="modal-box modal-welcome" style={{maxWidth:360}} onClick={e=>e.stopPropagation()}>
+        <div style={{fontSize:16,fontWeight:700,marginBottom:3,color:'var(--text-primary)'}}>{habit?'✏️ 编辑习惯':'➕ 添加习惯'}</div>
+        <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:16}}>设置好后每天规划时一键加入</div>
+        <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:6}}>习惯名称</label>
+        <input ref={inputRef} className="plan-input" value={title} onChange={e=>setTitle(e.target.value)}
+          onKeyDown={e=>{if(e.key==='Enter'&&canSave)handleSave();}} maxLength={50}
+          placeholder="例：运动、阅读、冥想…" style={{width:'100%',marginBottom:14,boxSizing:'border-box'}}/>
+        <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:6}}>所属类别</label>
+        <div className="tier-btn-row" style={{marginBottom:14}}>
+          {['gold','silver','bronze'].map(t=>(
+            <button key={t} className={`tier-btn${tier===t?' active-'+t:''}`} onClick={()=>setTier(t)}
+              style={tier===t?{borderColor:tierColor[t],color:tierColor[t]}:{}}>
+              {t==='gold'?'🥇 金牌':t==='silver'?'🥈 银牌':'🥉 铜牌'}
+            </button>
+          ))}
+        </div>
+        <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:6}}>预计用时</label>
+        <TimePicker value={mins} onChange={setMins} tier={tier} isCheckIn={isCI} onCheckInChange={setIsCI}/>
+        <div style={{display:'flex',alignItems:'center',gap:10,marginTop:14,padding:'10px 12px',background:'rgba(255,185,0,0.06)',borderRadius:10,border:'1px solid rgba(255,185,0,0.18)'}}>
+          <div style={{flex:1}}>
+            <div style={{fontSize:13,fontWeight:600,color:'var(--text-primary)'}}>每日自动出现</div>
+            <div style={{fontSize:11,color:'var(--text-secondary)',marginTop:2}}>开启后规划时自动出现，无需手动选择</div>
+          </div>
+          <button className={`sound-toggle ${autoAdd?'on':'off'}`} onClick={()=>setAutoAdd(v=>!v)}/>
+        </div>
+        <div style={{display:'flex',gap:8,marginTop:14}}>
+          <button className="btn btn-gold" style={{flex:1}} disabled={!canSave} onClick={handleSave}>保存</button>
+          <button className="btn btn-ghost" style={{flex:1}} onClick={onClose}>取消</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+const HABIT_PRESETS=[
+  {cat:'💡 智力资产',items:[
+    {title:'深度阅读',minutes:20},{title:'外语听力',minutes:15},{title:'复盘思考',minutes:10},
+    {title:'网课学习',minutes:45},{title:'编程练习',minutes:60},
+  ]},
+  {cat:'🏃 健康资产',items:[
+    {title:'冥想呼吸',minutes:5},{title:'瑜伽伸展',minutes:20},{title:'居家健身',minutes:30},
+    {title:'护眼远眺',minutes:5},{title:'户外散步',minutes:15},
+  ]},
+  {cat:'🏠 生活资产',items:[
+    {title:'极简整理',minutes:10},{title:'每日饮水',minutes:1,isCheckIn:true},
+    {title:'记账总结',minutes:5},{title:'烹饪备餐',minutes:30},
+  ]},
+  {cat:'💬 情绪社交',items:[
+    {title:'感恩日记',minutes:5},{title:'家人通话',minutes:15},{title:'发呆放空',minutes:10},
+  ]},
+  {cat:'⚡ 快充微习惯',items:[
+    {title:'核心卷腹',minutes:5},{title:'单词背诵',minutes:10},{title:'站立办公',minutes:20},
+  ]},
+];
+function HabitsManager({habits,onSave,onClose}){
+  const [editing,setEditing]=useState(null);
+  const [showRec,setShowRec]=useState(false);
+  const [selP,setSelP]=useState(null);
+  const [selTier,setSelTier]=useState('bronze');
+  const [selMin,setSelMin]=useState(15);
+  const tierLabel={gold:'🥇',silver:'🥈',bronze:'🥉'};
+  const handleSaveHabit=h=>{
+    const exists=habits.find(x=>x.id===h.id);
+    const next=exists?habits.map(x=>x.id===h.id?h:x):[...habits,h];
+    onSave(next); setEditing(null);
+  };
+  const handleDelete=id=>{ if(window.confirm('删除这个习惯？'))onSave(habits.filter(h=>h.id!==id)); };
+  const handleSelectPreset=item=>{
+    if(selP&&selP.title===item.title){setSelP(null);return;}
+    setSelP(item); setSelMin(item.minutes); setSelTier('bronze');
+  };
+  const handleAddPreset=()=>{
+    if(!selP)return;
+    const h={id:Date.now()+Math.random(),title:selP.title,tier:selTier,
+      estimatedMinutes:Number(selMin)||5,isCheckIn:selP.isCheckIn||false,autoAdd:false};
+    onSave([...habits,h]);
+    setSelP(null);
+  };
+  if(editing!==null) return <HabitForm habit={editing==='new'?null:editing} onSave={handleSaveHabit} onClose={()=>setEditing(null)}/>;
+  return(
+    <div className="overlay" onClick={onClose}>
+      <div className="modal-box modal-welcome" style={{maxWidth:360,maxHeight:'85vh',overflowY:'auto'}} onClick={e=>e.stopPropagation()}>
+        <div style={{fontSize:16,fontWeight:700,marginBottom:3,color:'var(--text-primary)'}}>🔄 习惯与模板</div>
+        <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:16}}>预设后每天规划时一键加入，无需重复输入</div>
+        {habits.length===0&&!showRec&&(
+          <div style={{textAlign:'center',padding:'20px 0',color:'var(--text-secondary)',fontSize:13}}>
+            还没有习惯，点下方添加吧
+          </div>
+        )}
+        {habits.map(h=>(
+          <div key={h.id} className="habit-item">
+            <div className={`habit-tier-dot ${h.tier}`}/>
+            <div className="habit-item-info">
+              <div className="habit-item-title">
+                {tierLabel[h.tier]} {h.title}
+                {h.autoAdd&&<span className="habit-auto-tag">每日</span>}
+              </div>
+              <div className="habit-item-meta">{h.isCheckIn?'打卡任务':`${h.estimatedMinutes} 分钟`}</div>
+            </div>
+            <button className="card-edit-btn" onClick={()=>setEditing(h)} title="编辑">✏️</button>
+            <button className="card-edit-btn" style={{color:'var(--danger)'}} onClick={()=>handleDelete(h.id)} title="删除">🗑️</button>
+          </div>
+        ))}
+        <button className="habit-add-btn" onClick={()=>setEditing('new')}>＋ 添加习惯或模板</button>
+        <button className="habit-rec-btn" onClick={()=>{setShowRec(v=>!v);setSelP(null);}}>
+          {showRec?'▲ 收起推荐':'✨ 推荐养成好习惯'}
+        </button>
+        {showRec&&(
+          <div className="rec-panel">
+            {HABIT_PRESETS.map(cat=>(
+              <div key={cat.cat}>
+                <div className="rec-cat-label">{cat.cat}</div>
+                <div className="rec-chips">
+                  {cat.items.map(item=>{
+                    const isAdded=habits.some(h=>h.title===item.title);
+                    const isActive=selP&&selP.title===item.title;
+                    return(
+                      <button key={item.title}
+                        className={`rec-chip${isActive?' active':''}`}
+                        onClick={()=>!isAdded&&handleSelectPreset(item)}
+                        style={isAdded?{opacity:0.38,cursor:'default'}:{}}>
+                        {item.title}{isAdded?' ✓':''}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+            {selP&&(
+              <div className="rec-confirm">
+                <span className="rec-confirm-title">「{selP.title}」</span>
+                <div className="rec-tier-btns">
+                  {['gold','silver','bronze'].map(t=>(
+                    <button key={t} className={`rec-tier-btn${selTier===t?' sel-'+t:''}`}
+                      onClick={()=>setSelTier(t)}>
+                      {tierLabel[t]}
+                    </button>
+                  ))}
+                </div>
+                <input type="number" className="rec-min-input" value={selMin} min={1} max={180}
+                  onChange={e=>setSelMin(e.target.value)}/>
+                <span style={{fontSize:11,color:'var(--text-secondary)'}}>min</span>
+                <button className="rec-add-btn" onClick={handleAddPreset}>＋ 加入</button>
+              </div>
+            )}
+          </div>
+        )}
+        <button className="btn btn-ghost" style={{width:'100%',marginTop:10}} onClick={onClose}>完成</button>
+      </div>
+    </div>
+  );
+}
+
 // ── SETTINGS PANEL (系统设置) ─────────────────────────
 function SettingsPanel({soundEnabled,onSoundChange,hapticEnabled,onHapticChange}){
   const canVibrate = typeof navigator!=='undefined' && !!navigator.vibrate;
@@ -1327,11 +1530,19 @@ function SettingsPanel({soundEnabled,onSoundChange,hapticEnabled,onHapticChange}
 }
 
 // ── DAILY PLAN MODAL ─────────────────────────────────
-function DailyPlanModal({onDone,dayN,today}){
+function DailyPlanModal({onDone,dayN,today,habits=[]}){
+  const autoHabits=habits.filter(h=>h.autoAdd);
+  const libraryHabits=habits.filter(h=>!h.autoAdd);
+  const hasAuto=autoHabits.length>0;
+  // step: 1=欢迎  2=习惯确认(仅有autoHabits时)  3=金牌  4=银牌  5=铜牌
   const [step,setStep]=useState(1);
+  // 习惯确认：默认全选
+  const [checkedIds,setCheckedIds]=useState(()=>autoHabits.map(h=>h.id));
+  const toggleHabit=id=>setCheckedIds(ids=>ids.includes(id)?ids.filter(x=>x!==id):[...ids,id]);
   const [goldTitle,setGoldTitle]=useState('');
   const [goldTime,setGoldTime]=useState(25);
   const [goldIsCheckIn,setGoldIsCheckIn]=useState(false);
+  const planInputRef=useRef(null);
   const silverRef=useRef([]);
   const bronzeRef=useRef([]);
   const [svStep,setSvStep]=useState(0);
@@ -1343,54 +1554,122 @@ function DailyPlanModal({onDone,dayN,today}){
   const resetCur=()=>{setCurIn('');setCurT(25);setCurIsCheckIn(false);};
   const finish=()=>onDone({date:today,goldTask:newTask(goldTitle,goldTime,'gold',goldIsCheckIn),silverTasks:silverRef.current,bronzeTasks:bronzeRef.current});
   const StepDots=({cur,total})=>(<div className="step-dots">{Array.from({length:total}).map((_,i)=>(<div key={i} className={`step-dot${i<cur?' done':i===cur?' active':''}`}/>))}</div>);
-  function goToBronze(){setStep(4);setSvStep(0);setBzStep(0);resetCur();}
+  // 自动聚焦
+  useEffect(()=>{
+    if(step<3) return;
+    const t=setTimeout(()=>planInputRef.current?.focus(),80);
+    return ()=>clearTimeout(t);
+  },[step,svStep,bzStep]);
+  // 确认习惯后，将选中项写入refs，并预填金牌
+  const confirmHabits=()=>{
+    const confirmed=autoHabits.filter(h=>checkedIds.includes(h.id));
+    const goldH=confirmed.find(h=>h.tier==='gold');
+    silverRef.current=confirmed.filter(h=>h.tier==='silver').map(h=>newTask(h.title,h.estimatedMinutes,'silver',h.isCheckIn));
+    bronzeRef.current=confirmed.filter(h=>h.tier==='bronze').map(h=>newTask(h.title,h.estimatedMinutes,'bronze',h.isCheckIn));
+    if(goldH){setGoldTitle(goldH.title);setGoldTime(goldH.estimatedMinutes);setGoldIsCheckIn(!!goldH.isCheckIn);}
+    setStep(3);
+  };
+  // 灵感库芯片（非每日习惯，仅显示在输入步骤中供参考）
+  const LibChips=({tier,onPick})=>{
+    const chips=libraryHabits.filter(h=>h.tier===tier);
+    if(!chips.length) return null;
+    return(
+      <div className="habit-quick">
+        <div className="habit-quick-label">💡 灵感库，点击填入</div>
+        <div className="habit-chip-row">
+          {chips.map(h=>(
+            <button key={h.id} className="habit-chip" onClick={()=>onPick(h)}>
+              {h.title}{h.isCheckIn?'':` · ${h.estimatedMinutes}min`}
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  };
+  function goToBronze(){setStep(5);setSvStep(0);setBzStep(bronzeRef.current.length>=5?4:bronzeRef.current.length);resetCur();}
   function doSilver(skip){
     if(!skip&&curIn.trim()) silverRef.current=[...silverRef.current,newTask(curIn.trim(),curT,'silver',curIsCheckIn)];
-    // First skip ends the silver section immediately
     if(skip){goToBronze();return;}
     const next=svStep+1;
     if(next>=3){goToBronze();}else{setSvStep(next);resetCur();}
   }
   function doBronze(skip){
     if(!skip&&curIn.trim()) bronzeRef.current=[...bronzeRef.current,newTask(curIn.trim(),curT,'bronze',curIsCheckIn)];
-    // First skip ends bronze and finishes planning
     if(skip){finish();return;}
     const next=bzStep+1;
     if(next>=5) finish(); else{setBzStep(next);resetCur();}
   }
+  const tierLabel={gold:'🥇',silver:'🥈',bronze:'🥉'};
+  const tierName={gold:'金牌',silver:'银牌',bronze:'铜牌'};
+  // ── step 1: 欢迎
   if(step===1) return(<div className="overlay"><div className="modal-box modal-welcome" style={{textAlign:'center'}}>
     <div style={{fontSize:50,marginBottom:11}}>🌟</div>
     <div style={{fontSize:12,color:'var(--text-secondary)',marginBottom:5}}>今天是</div>
     <div style={{fontSize:21,fontWeight:800,marginBottom:6}}>{fmtDate(today)}</div>
     <div style={{fontSize:14,color:'var(--gold)',marginBottom:20}}>这是您使用本系统的第 <span style={{fontSize:26,fontWeight:800}}>{dayN}</span> 天</div>
     <div style={{fontSize:12,color:'var(--text-secondary)',lineHeight:1.7,marginBottom:22}}>今天也要全力以赴！<br/>让我们规划今日的 1·3·5 任务吧 →</div>
-    <button className="btn btn-gold" onClick={()=>setStep(2)}>开始规划今日任务 ✨</button>
+    <button className="btn btn-gold" onClick={()=>hasAuto?setStep(2):setStep(3)}>开始规划今日任务 ✨</button>
   </div></div>);
-  if(step===2) return(<div className="overlay"><div className="modal-box modal-gold">
+  // ── step 2: 习惯确认（仅当有每日习惯时出现）
+  if(step===2) return(<div className="overlay"><div className="modal-box modal-welcome">
+    <div style={{fontSize:16,fontWeight:800,color:'var(--gold)',marginBottom:4}}>🔄 今日习惯确认</div>
+    <div style={{fontSize:12,color:'var(--text-secondary)',marginBottom:16}}>以下是你的每日习惯，今天要做的打勾即可</div>
+    {autoHabits.map(h=>{
+      const checked=checkedIds.includes(h.id);
+      return(
+        <div key={h.id} onClick={()=>toggleHabit(h.id)}
+          style={{display:'flex',alignItems:'center',gap:12,padding:'11px 13px',marginBottom:8,borderRadius:12,
+            background:checked?'rgba(255,185,0,0.08)':'var(--chip-bg)',
+            border:`1.5px solid ${checked?'rgba(255,185,0,0.5)':'var(--chip-border)'}`,cursor:'pointer',transition:'all .18s'}}>
+          <div style={{width:20,height:20,borderRadius:6,border:`2px solid ${checked?'var(--gold)':'var(--chip-border)'}`,
+            background:checked?'var(--gold)':'transparent',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,transition:'all .18s'}}>
+            {checked&&<span style={{color:'#000',fontSize:13,fontWeight:800}}>✓</span>}
+          </div>
+          <div style={{flex:1}}>
+            <div style={{fontSize:13,fontWeight:600,color:'var(--text-primary)'}}>{tierLabel[h.tier]} {h.title}</div>
+            <div style={{fontSize:11,color:'var(--text-secondary)',marginTop:2}}>{tierName[h.tier]} · {h.isCheckIn?'打卡任务':`${h.estimatedMinutes}分钟`}</div>
+          </div>
+        </div>
+      );
+    })}
+    <button className="btn btn-gold" style={{width:'100%',marginTop:8}} onClick={confirmHabits}>
+      确认，开始规划今日新任务 →
+    </button>
+    <button className="btn btn-ghost" style={{width:'100%',marginTop:8}} onClick={()=>{silverRef.current=[];bronzeRef.current=[];setStep(3);}}>
+      跳过习惯，全部手动规划
+    </button>
+  </div></div>);
+  // ── step 3: 金牌
+  if(step===3) return(<div className="overlay"><div className="modal-box modal-gold">
     <StepDots cur={1} total={4}/>
     <div className="modal-title">🥇 今日最重要的一件事</div>
     <div className="modal-hint">这件事必须完成。如果今天只能做一件事，就是它。</div>
+    <LibChips tier="gold" onPick={h=>{setGoldTitle(h.title);setGoldTime(h.estimatedMinutes);setGoldIsCheckIn(!!h.isCheckIn);setTimeout(()=>planInputRef.current?.focus(),50);}}/>
     <div className="form-group"><label className="form-label">任务名称</label>
-      <input className="form-input" placeholder="今天最重要的事情是…" value={goldTitle} onChange={e=>setGoldTitle(e.target.value)} onKeyDown={e=>e.key==='Enter'&&goldTitle.trim()&&setStep(3)} maxLength={100} autoFocus/></div>
+      <input ref={planInputRef} className="form-input" placeholder="今天最重要的事情是…" value={goldTitle} onChange={e=>setGoldTitle(e.target.value)} onKeyDown={e=>e.key==='Enter'&&goldTitle.trim()&&setStep(4)} maxLength={100}/></div>
     <div className="form-group"><label className="form-label">预计用时</label><TimePicker value={goldTime} onChange={setGoldTime} tier="gold" isCheckIn={goldIsCheckIn} onCheckInChange={setGoldIsCheckIn}/></div>
-    <button className="btn btn-gold" disabled={!goldTitle.trim()} onClick={()=>setStep(3)}>确定 →</button>
+    <button className="btn btn-gold" disabled={!goldTitle.trim()} onClick={()=>setStep(4)}>确定 →</button>
   </div></div>);
-  if(step===3) return(<div className="overlay"><div className="modal-box modal-silver">
+  // ── step 4: 银牌
+  if(step===4) return(<div className="overlay"><div className="modal-box modal-silver">
     <StepDots cur={2} total={4}/>
     <div className="modal-title">🥈 重要的事 ({svStep+1}/3)</div>
     <div className="modal-hint">这些事很重要，今天尽量完成。可以跳过某项。</div>
+    <LibChips tier="silver" onPick={h=>{setCurIn(h.title);setCurT(h.estimatedMinutes);setCurIsCheckIn(!!h.isCheckIn);setTimeout(()=>planInputRef.current?.focus(),50);}}/>
     <div className="form-group"><label className="form-label">任务名称（可跳过）</label>
-      <input className="form-input" placeholder={`第 ${svStep+1} 件重要的事…`} value={curIn} onChange={e=>setCurIn(e.target.value)} onKeyDown={e=>e.key==='Enter'&&curIn.trim()&&doSilver(false)} maxLength={100} autoFocus/></div>
+      <input ref={planInputRef} className="form-input" placeholder={`第 ${svStep+1} 件重要的事…`} value={curIn} onChange={e=>setCurIn(e.target.value)} onKeyDown={e=>e.key==='Enter'&&curIn.trim()&&doSilver(false)} maxLength={100}/></div>
     <div className="form-group"><label className="form-label">预计用时</label><TimePicker value={curT} onChange={setCurT} tier="silver" isCheckIn={curIsCheckIn} onCheckInChange={setCurIsCheckIn}/></div>
     <button className="btn btn-silver" disabled={!curIn.trim()} onClick={()=>doSilver(false)}>确定 →</button>
     <button className="btn btn-ghost" onClick={()=>doSilver(true)}>跳过，完成银牌计划</button>
   </div></div>);
-  if(step===4){const isLast=bzStep===4;return(<div className="overlay"><div className="modal-box modal-bronze">
+  // ── step 5: 铜牌
+  if(step===5){const isLast=bzStep===4;return(<div className="overlay"><div className="modal-box modal-bronze">
     <StepDots cur={3} total={4}/>
     <div className="modal-title">🥉 还需要做的事 ({bzStep+1}/5)</div>
     <div className="modal-hint">这些是今日待办，完成更好，完不成也不要紧。</div>
+    <LibChips tier="bronze" onPick={h=>{setCurIn(h.title);setCurT(h.estimatedMinutes);setCurIsCheckIn(!!h.isCheckIn);setTimeout(()=>planInputRef.current?.focus(),50);}}/>
     <div className="form-group"><label className="form-label">任务名称（可跳过）</label>
-      <input className="form-input" placeholder={`第 ${bzStep+1} 件待办…`} value={curIn} onChange={e=>setCurIn(e.target.value)} onKeyDown={e=>!isLast&&e.key==='Enter'&&curIn.trim()&&doBronze(false)} maxLength={100} autoFocus/></div>
+      <input ref={planInputRef} className="form-input" placeholder={`第 ${bzStep+1} 件待办…`} value={curIn} onChange={e=>setCurIn(e.target.value)} onKeyDown={e=>!isLast&&e.key==='Enter'&&curIn.trim()&&doBronze(false)} maxLength={100}/></div>
     <div className="form-group"><label className="form-label">预计用时</label><TimePicker value={curT} onChange={setCurT} tier="bronze" isCheckIn={curIsCheckIn} onCheckInChange={setCurIsCheckIn}/></div>
     {isLast?<button className="btn btn-bronze" disabled={!curIn.trim()} onClick={()=>doBronze(false)}>完成今日计划 🎯</button>
            :<button className="btn btn-bronze" disabled={!curIn.trim()} onClick={()=>doBronze(false)}>确定 →</button>}
@@ -1554,6 +1833,8 @@ function PomodoroTimer({task,onComplete,onPause}){
 
 // ── ADD TASK MODAL ───────────────────────────────────
 function AddTaskModal({onSave,onClose,plan}){
+  const addInputRef=useRef(null);
+  useEffect(()=>{ const t=setTimeout(()=>addInputRef.current?.focus(),80); return ()=>clearTimeout(t); },[]);
   const goldFull  = plan && !!plan.goldTask;
   const silverFull= plan && (plan.silverTasks||[]).length >= 3;
   const bronzeFull = plan && (plan.bronzeTasks||[]).length >= 5;
@@ -1595,9 +1876,9 @@ function AddTaskModal({onSave,onClose,plan}){
           <button className={`tier-btn${tier==='bronze'?' active-bronze':''}${bronzeFull?' tier-full':''}`} onClick={()=>handleTierClick('bronze')}>🥉 铜牌{bronzeFull?' 5/5':''}</button>
         </div>
         <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:6}}>任务名称</label>
-        <input className="plan-input" value={title} onChange={e=>setTitle(e.target.value)}
+        <input ref={addInputRef} className="plan-input" value={title} onChange={e=>setTitle(e.target.value)}
           onKeyDown={e=>{if(e.key==='Enter'&&canSave) handleSave();}}
-          placeholder="任务内容…" maxLength={100} autoFocus style={{width:'100%',marginBottom:14,boxSizing:'border-box'}}/>
+          placeholder="任务内容…" maxLength={100} style={{width:'100%',marginBottom:14,boxSizing:'border-box'}}/>
         <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:8}}>预计用时</label>
         <TimePicker value={time} onChange={setTime} tier={tier} isCheckIn={isCI} onCheckInChange={setIsCI}/>
         <div style={{display:'flex',gap:8,marginTop:16}}>
@@ -1631,6 +1912,8 @@ function EditTaskModal({task, onSave, onClose}){
   const [isCI,setIsCI]=useState(!!task.isCheckIn);
   const tier=task.tier;
   const tierLabel=tier==='gold'?'🥇 金牌任务':tier==='silver'?'🥈 银牌任务':'🥉 铜牌任务';
+  const editInputRef=useRef(null);
+  useEffect(()=>{ const t=setTimeout(()=>{ if(editInputRef.current){ editInputRef.current.focus(); editInputRef.current.select(); } },80); return ()=>clearTimeout(t); },[]);
   const handleSave=()=>{ if(!title.trim()) return; onSave({...task,title:title.trim(),estimatedMinutes:isCI?0:time,isCheckIn:isCI}); };
   return(
     <div className="overlay" onClick={onClose}>
@@ -1638,8 +1921,8 @@ function EditTaskModal({task, onSave, onClose}){
         <div style={{fontSize:16,fontWeight:700,marginBottom:3,color:'var(--text-primary)'}}>✏️ 编辑任务</div>
         <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:16}}>{tierLabel}</div>
         <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:6}}>任务名称</label>
-        <input className="plan-input" value={title} onChange={e=>setTitle(e.target.value)}
-          onKeyDown={e=>{if(e.key==='Enter') handleSave();}} maxLength={100} autoFocus
+        <input ref={editInputRef} className="plan-input" value={title} onChange={e=>setTitle(e.target.value)}
+          onKeyDown={e=>{if(e.key==='Enter') handleSave();}} maxLength={100}
           style={{width:'100%',marginBottom:16,boxSizing:'border-box'}}/>
         <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:8}}>预计用时</label>
         <TimePicker value={time} onChange={setTime} tier={tier} isCheckIn={isCI} onCheckInChange={setIsCI}/>
@@ -2215,11 +2498,13 @@ function App(){
   const [soundEnabled, setSoundEnabled] = useLS(SK.SOUND, true);
   const [hapticEnabled, setHapticEnabled] = useLS(SK.HAPTIC, true);
   const [welcomed,   setWelcomed]   = useLS(SK.WELCOMED, false);
+  const [habits,     setHabits]     = useLS(SK.HABITS, []);
   // activeDate tracks the last day the user officially set up a plan.
   // When activeDate !== today, the planning modal shows — NO data is ever deleted.
   const [activeDate, setActiveDate] = useLS(SK.ACTIVE_DATE, null);
   const [view,         setView]         = useState('dash');
   const [showTheme,    setShowTheme]    = useState(false);
+  const [showHabits,   setShowHabits]   = useState(false);
   // Compute today fresh every render — never stale, immune to state init bugs
   const today = todayStr();
   // Force re-render every 30s and on visibilitychange so midnight is caught immediately
@@ -2325,16 +2610,15 @@ function App(){
       {!isOnline&&<div className="status-banner banner-offline">📡 当前无网络，数据已保存在本地，联网后即可正常访问</div>}
       <div className="app-header">
         <div className="header-left">
-          <div className="header-brand">
-            <div className="app-header-title">1·3·5</div>
-            <span className="header-subtitle">效率系统</span>
-          </div>
           <div className="app-header-meta">
             <span className="header-date">{fmtDate(today)}</span>
             <span className="header-day">第 {dc} 天</span>
             {streak>0&&<span className="streak-chip">🔥 {streak}天连击</span>}
           </div>
         </div>
+        <button className="habit-btn" onClick={()=>setShowHabits(true)} title="习惯管理">
+          <svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+        </button>
         <button className="settings-btn" onClick={()=>setShowTheme(true)} title="选择主题">
           <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
         </button>
@@ -2345,8 +2629,9 @@ function App(){
       {view==='review'         &&<DataReview plans={plans}/>}
       {view==='settings'       &&<SettingsPanel soundEnabled={soundEnabled} onSoundChange={setSoundEnabled} hapticEnabled={hapticEnabled} onHapticChange={setHapticEnabled}/>}
       {!welcomed&&<WelcomeModal onStart={()=>setWelcomed(true)}/>}
-      {welcomed&&!plan&&<DailyPlanModal onDone={savePlan} dayN={dc} today={today}/>}
+      {welcomed&&!plan&&<DailyPlanModal onDone={savePlan} dayN={dc} today={today} habits={habits}/>}
       {showTheme&&<ThemePanel current={theme} onChange={setTheme} onClose={()=>setShowTheme(false)}/>}
+      {showHabits&&<HabitsManager habits={habits} onSave={setHabits} onClose={()=>setShowHabits(false)}/>}
 
       <div className="bottom-nav">
         <button className={`nav-btn${view==='dash'?' active':''}`} onClick={()=>setView('dash')}>
