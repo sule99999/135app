@@ -852,7 +852,7 @@
     .rec-chip{padding:5px 11px;background:var(--chip-bg);border:1px solid var(--chip-border);border-radius:20px;font-size:12px;color:var(--text-secondary);cursor:pointer;transition:all .15s;white-space:nowrap}
     .rec-chip:hover{border-color:rgba(32,196,178,0.5);color:#20C4B2;background:rgba(32,196,178,0.07)}
     .rec-chip.active{border-color:#20C4B2;color:#20C4B2;background:rgba(32,196,178,0.12);font-weight:600}
-    .rec-confirm{margin-top:10px;padding:9px 11px;background:rgba(32,196,178,0.05);border:1px solid rgba(32,196,178,0.22);border-radius:10px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+    .rec-confirm{margin-top:10px;padding:10px 12px;background:rgba(32,196,178,0.05);border:1px solid rgba(32,196,178,0.22);border-radius:12px;display:flex;flex-direction:column;gap:9px}
     .rec-confirm-title{font-size:12px;font-weight:600;color:var(--text-primary);flex:1;min-width:60px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .rec-tier-btns{display:flex;gap:3px}
     .rec-tier-btn{padding:3px 7px;border-radius:7px;border:1px solid var(--chip-border);background:var(--chip-bg);font-size:12px;cursor:pointer;transition:all .14s;color:var(--text-secondary)}
@@ -862,6 +862,8 @@
     .rec-min-input{width:40px;padding:3px 5px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:7px;color:var(--text-primary);font-size:12px;text-align:center}
     .rec-add-btn{padding:5px 12px;background:rgba(32,196,178,0.14);border:1px solid rgba(32,196,178,0.45);border-radius:8px;color:#20C4B2;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .15s}
     .rec-add-btn:hover{background:rgba(32,196,178,0.24)}
+    .rec-add-btn-full{width:100%;padding:10px;background:rgba(32,196,178,0.15);border:1.5px solid rgba(32,196,178,0.5);border-radius:10px;color:#20C4B2;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;letter-spacing:.3px}
+    .rec-add-btn-full:hover{background:rgba(32,196,178,0.26);border-color:rgba(32,196,178,0.75)}
   </style>
   <script>
     /* ── 防缩放：三重保险 ──────────────────────────────
@@ -1004,21 +1006,12 @@ function playClick(){
     a.play().catch(()=>{});
   } catch(e){}
 }
-function playDoorbell(){ // 多次打卡音：叮咚两声
+function playDoorbell(){ // 多次打卡音：自定义音效
   if(!isSoundOn()) return;
   try{
-    const ctx=getAudioCtx(); if(!ctx)return;
-    const t=ctx.currentTime;
-    [880,660].forEach((freq,i)=>{
-      const osc=ctx.createOscillator(), gain=ctx.createGain();
-      osc.connect(gain); gain.connect(ctx.destination);
-      osc.type='sine'; osc.frequency.value=freq;
-      const s=t+i*0.22;
-      gain.gain.setValueAtTime(0,s);
-      gain.gain.linearRampToValueAtTime(0.38,s+0.025);
-      gain.gain.exponentialRampToValueAtTime(0.001,s+0.55);
-      osc.start(s); osc.stop(s+0.58);
-    });
+    const audio=new Audio('data:audio/mp3;base64,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A0An3KAG1wmTBiUHxYJ1owDeCiMg2zpEBVbaGQIAEPvuvgw80PQUokhC2C8R6MusNujhTltOIfhgBCRqVvXHFTLrWMJVHoY3o1H/H3/vdrb+ehieZVGp2pw/zbOt//6/tut1Qn5FpUK9hclRT3rnWcesPeY+vTE170gQWdnYMuLnAfOotPXUfO5Y25v/+3LE84ATldUYzkR6CmAwY0q40AF31XNPunt7Y3T4Z5YTJEf2jvIcVzZIT3WMbktNqHPXUe0OtsW////9n89omcXfRN3+ZsX3X////v4bzUzfAjPGfMZ5AljTvMtxSFU1kzhOMz0CFNB1nFzTAEvjBzhNep3ZNEIIgiGTKwBgBEqwqJmrQikUtRZypS3/3GMaWRRpEilsUKEKgqoGg4IlhrLA0VDYlBVQNDAagqdK2cNKPFgaWCo8FYiPf52Sg04GolO//grBWWPf/iKIpU6tTEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/7cMTrgB82Lx05x4ABzI/ig7CQAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVU=');
+    audio.volume=0.7;
+    audio.play().catch(()=>{});
   }catch(e){}
 }
 function playBeep(){  // soft single ping when overtime starts
@@ -1343,6 +1336,8 @@ function HabitsManager({habits,onSave,onClose,onAddToday,plan}){
   const [selP,setSelP]=useState(null);
   const [selTier,setSelTier]=useState('bronze');
   const [selMin,setSelMin]=useState(15);
+  const [selIsCI,setSelIsCI]=useState(false);
+  const [selCiTarget,setSelCiTarget]=useState(1);
   const [justAdded,setJustAdded]=useState([]);
   const tierLabel={gold:'🥇',silver:'🥈',bronze:'🥉'};
   const handleSaveHabit=h=>{
@@ -1353,13 +1348,14 @@ function HabitsManager({habits,onSave,onClose,onAddToday,plan}){
   const handleDelete=id=>{ if(window.confirm('删除这个习惯？'))onSave(habits.filter(h=>h.id!==id)); };
   const handleSelectPreset=item=>{
     if(selP&&selP.title===item.title){setSelP(null);return;}
-    setSelP(item); setSelMin(item.minutes); setSelTier('bronze');
+    setSelP(item); setSelMin(item.minutes||0); setSelTier('bronze');
+    setSelIsCI(!!item.isCheckIn); setSelCiTarget(item.checkInTarget||1);
   };
   const handleAddPreset=()=>{
     if(!selP)return;
     const h={id:Date.now()+Math.random(),title:selP.title,tier:selTier,
-      estimatedMinutes:selP.isCheckIn?0:Number(selMin)||5,isCheckIn:selP.isCheckIn||false,
-      checkInTarget:selP.isCheckIn?(selP.checkInTarget||1):1,autoAdd:false};
+      estimatedMinutes:selIsCI?0:Number(selMin)||5,isCheckIn:selIsCI,
+      checkInTarget:selIsCI?(selCiTarget||1):1,autoAdd:false};
     onSave([...habits,h]);
     setSelP(null);
   };
@@ -1440,19 +1436,40 @@ function HabitsManager({habits,onSave,onClose,onAddToday,plan}){
             ))}
             {selP&&(
               <div className="rec-confirm">
-                <span className="rec-confirm-title">「{selP.title}」</span>
-                <div className="rec-tier-btns">
-                  {['gold','silver','bronze'].map(t=>(
-                    <button key={t} className={`rec-tier-btn${selTier===t?' sel-'+t:''}`}
-                      onClick={()=>setSelTier(t)}>
-                      {tierLabel[t]}
-                    </button>
-                  ))}
+                {/* 行1：任务名 + 层级选择 */}
+                <div style={{display:'flex',alignItems:'center',gap:7}}>
+                  <span className="rec-confirm-title">「{selP.title}」</span>
+                  <div className="rec-tier-btns">
+                    {['gold','silver','bronze'].map(t=>(
+                      <button key={t} className={`rec-tier-btn${selTier===t?' sel-'+t:''}`}
+                        onClick={()=>setSelTier(t)}>{tierLabel[t]}</button>
+                    ))}
+                  </div>
                 </div>
-                <input type="number" className="rec-min-input" value={selMin} min={1} max={180}
-                  onChange={e=>setSelMin(e.target.value)}/>
-                <span style={{fontSize:11,color:'var(--text-secondary)'}}>min</span>
-                <button className="rec-add-btn" onClick={handleAddPreset}>＋ 加入</button>
+                {/* 行2：打卡切换 + 时间/次数 */}
+                <div style={{display:'flex',alignItems:'center',gap:7,flexWrap:'wrap'}}>
+                  <button className={`time-chip${selIsCI?` chip-${selTier}`:''}`}
+                    onClick={()=>{const v=!selIsCI;setSelIsCI(v);if(!v)setSelCiTarget(1);}}>
+                    ✓ 打卡
+                  </button>
+                  {selIsCI?(
+                    <>
+                      <input type="number" className="rec-min-input" value={selCiTarget} min={1} max={99}
+                        onChange={e=>setSelCiTarget(Math.max(1,Math.min(99,+e.target.value||1)))}
+                        style={{width:44}}/>
+                      <span style={{fontSize:11,color:'var(--text-secondary)'}}>次</span>
+                      {selCiTarget>1&&<span style={{fontSize:11,color:'var(--bronze)'}}>满{selCiTarget}次完成</span>}
+                    </>
+                  ):(
+                    <>
+                      <input type="number" className="rec-min-input" value={selMin} min={1} max={180}
+                        onChange={e=>setSelMin(e.target.value)}/>
+                      <span style={{fontSize:11,color:'var(--text-secondary)'}}>min</span>
+                    </>
+                  )}
+                </div>
+                {/* 行3：醒目加入按钮 */}
+                <button className="rec-add-btn-full" onClick={handleAddPreset}>＋ 加入习惯模板</button>
               </div>
             )}
           </div>
@@ -1626,19 +1643,21 @@ function DailyPlanModal({onDone,dayN,today,habits=[]}){
   const [curIn,setCurIn]=useState('');
   const [curT,setCurT]=useState(25);
   const [curIsCheckIn,setCurIsCheckIn]=useState(false);
+  const [curCiTarget,setCurCiTarget]=useState(1);
+  const [goldCiTarget,setGoldCiTarget]=useState(1);
   const newTask=(title,time,tier,ici,ciTarget=1)=>({id:genId(),title,estimatedMinutes:ici?0:time,tier,status:'idle',actualMinutes:null,pauseCount:0,timerStartedAt:null,completedAt:null,remainingSeconds:null,isCheckIn:!!ici,checkInTarget:ici?(ciTarget||1):1,checkInCount:0});
-  const resetCur=()=>{setCurIn('');setCurT(25);setCurIsCheckIn(false);};
-  const finish=()=>onDone({date:today,goldTask:newTask(goldTitle,goldTime,'gold',goldIsCheckIn),silverTasks:silverRef.current,bronzeTasks:bronzeRef.current});
+  const resetCur=()=>{setCurIn('');setCurT(25);setCurIsCheckIn(false);setCurCiTarget(1);};
+  const finish=()=>onDone({date:today,goldTask:newTask(goldTitle,goldTime,'gold',goldIsCheckIn,goldCiTarget),silverTasks:silverRef.current,bronzeTasks:bronzeRef.current});
   const StepDots=({cur,total})=>(<div className="step-dots">{Array.from({length:total}).map((_,i)=>(<div key={i} className={`step-dot${i<cur?' done':i===cur?' active':''}`}/>))}</div>);
   // 自动聚焦 + 习惯槽位预填
   useEffect(()=>{
     if(step<3) return;
     if(step===4&&svStep<habitSvCount.current){
       const h=silverRef.current[svStep];
-      setCurIn(h.title);setCurT(h.estimatedMinutes);setCurIsCheckIn(!!h.isCheckIn);
+      setCurIn(h.title);setCurT(h.estimatedMinutes);setCurIsCheckIn(!!h.isCheckIn);setCurCiTarget(h.checkInTarget||1);
     } else if(step===5&&bzStep<habitBzCount.current){
       const h=bronzeRef.current[bzStep];
-      setCurIn(h.title);setCurT(h.estimatedMinutes);setCurIsCheckIn(!!h.isCheckIn);
+      setCurIn(h.title);setCurT(h.estimatedMinutes);setCurIsCheckIn(!!h.isCheckIn);setCurCiTarget(h.checkInTarget||1);
     }
     const t=setTimeout(()=>planInputRef.current?.focus(),80);
     return ()=>clearTimeout(t);
@@ -1649,26 +1668,36 @@ function DailyPlanModal({onDone,dayN,today,habits=[]}){
     const goldH=confirmed.find(h=>h.tier==='gold');
     const sv=confirmed.filter(h=>h.tier==='silver');
     const bz=confirmed.filter(h=>h.tier==='bronze');
-    silverRef.current=sv.map(h=>newTask(h.title,h.estimatedMinutes,'silver',h.isCheckIn));
-    bronzeRef.current=bz.map(h=>newTask(h.title,h.estimatedMinutes,'bronze',h.isCheckIn));
+    silverRef.current=sv.map(h=>newTask(h.title,h.estimatedMinutes,'silver',h.isCheckIn,h.checkInTarget||1));
+    bronzeRef.current=bz.map(h=>newTask(h.title,h.estimatedMinutes,'bronze',h.isCheckIn,h.checkInTarget||1));
     habitSvCount.current=sv.length;
     habitBzCount.current=bz.length;
     if(goldH){setGoldTitle(goldH.title);setGoldTime(goldH.estimatedMinutes);setGoldIsCheckIn(!!goldH.isCheckIn);}
     setStep(3);
   };
-  const [usedChipIds,setUsedChipIds]=useState([]);
-  const pickChip=(h,fn)=>{ setUsedChipIds(u=>[...u,h.id]); fn(h); };
-  // 灵感库芯片（非每日习惯，仅显示在输入步骤中供参考；已选过的不再出现）
-  const LibChips=({tier,onPick})=>{
-    const chips=libraryHabits.filter(h=>h.tier===tier&&!usedChipIds.includes(h.id));
+  const [usedChipTitles,setUsedChipTitles]=useState([]);
+  // 灵感库：用户库存习惯 + HABIT_PRESETS 补全，去重合并；已点击的从池子里消失
+  const chipPool=React.useMemo(()=>{
+    const libItems=libraryHabits.map(h=>({title:h.title,estimatedMinutes:h.estimatedMinutes,isCheckIn:!!h.isCheckIn,checkInTarget:h.checkInTarget||1}));
+    const libTitles=new Set(libItems.map(c=>c.title));
+    const presetItems=HABIT_PRESETS.flatMap(cat=>cat.items)
+      .filter(p=>!libTitles.has(p.title))
+      .map(p=>({title:p.title,estimatedMinutes:p.minutes||0,isCheckIn:!!p.isCheckIn,checkInTarget:p.checkInTarget||1}));
+    return [...libItems,...presetItems];
+  },[libraryHabits.length]);
+  const LibChips=({onPick})=>{
+    const chips=chipPool.filter(c=>!usedChipTitles.includes(c.title));
     if(!chips.length) return null;
     return(
       <div className="habit-quick">
         <div className="habit-quick-label">💡 灵感库，点击填入</div>
         <div className="habit-chip-row">
-          {chips.map(h=>(
-            <button key={h.id} className="habit-chip" onClick={()=>onPick(h)}>
-              {h.title}{h.isCheckIn?'':` · ${h.estimatedMinutes}min`}
+          {chips.slice(0,9).map(c=>(
+            <button key={c.title} className="habit-chip" onClick={()=>{
+              setUsedChipTitles(u=>[...u,c.title]);
+              onPick(c);
+            }}>
+              {c.title}{c.isCheckIn?'':(c.estimatedMinutes?` · ${c.estimatedMinutes}min`:'')}
             </button>
           ))}
         </div>
@@ -1680,10 +1709,10 @@ function DailyPlanModal({onDone,dayN,today,habits=[]}){
     if(skip){goToBronze();return;}
     if(svStep<habitSvCount.current){
       // 确认/编辑习惯槽位：覆盖写回（允许用户修改）
-      if(curIn.trim()){const u=[...silverRef.current];u[svStep]=newTask(curIn.trim(),curT,'silver',curIsCheckIn);silverRef.current=u;}
+      if(curIn.trim()){const u=[...silverRef.current];u[svStep]=newTask(curIn.trim(),curT,'silver',curIsCheckIn,curCiTarget);silverRef.current=u;}
     } else {
       // 新增槽位
-      if(curIn.trim()) silverRef.current=[...silverRef.current,newTask(curIn.trim(),curT,'silver',curIsCheckIn)];
+      if(curIn.trim()) silverRef.current=[...silverRef.current,newTask(curIn.trim(),curT,'silver',curIsCheckIn,curCiTarget)];
     }
     const next=svStep+1;
     if(next>=3){goToBronze();}else{setSvStep(next);if(next>=habitSvCount.current)resetCur();}
@@ -1692,10 +1721,10 @@ function DailyPlanModal({onDone,dayN,today,habits=[]}){
     if(skip){finish();return;}
     if(bzStep<habitBzCount.current){
       // 确认/编辑习惯槽位
-      if(curIn.trim()){const u=[...bronzeRef.current];u[bzStep]=newTask(curIn.trim(),curT,'bronze',curIsCheckIn);bronzeRef.current=u;}
+      if(curIn.trim()){const u=[...bronzeRef.current];u[bzStep]=newTask(curIn.trim(),curT,'bronze',curIsCheckIn,curCiTarget);bronzeRef.current=u;}
     } else {
       // 新增槽位
-      if(curIn.trim()) bronzeRef.current=[...bronzeRef.current,newTask(curIn.trim(),curT,'bronze',curIsCheckIn)];
+      if(curIn.trim()) bronzeRef.current=[...bronzeRef.current,newTask(curIn.trim(),curT,'bronze',curIsCheckIn,curCiTarget)];
     }
     const next=bzStep+1;
     if(next>=5) finish(); else{setBzStep(next);if(next>=habitBzCount.current)resetCur();}
@@ -1745,10 +1774,17 @@ function DailyPlanModal({onDone,dayN,today,habits=[]}){
     <StepDots cur={1} total={4}/>
     <div className="modal-title">🥇 今日最重要的一件事</div>
     <div className="modal-hint">这件事必须完成。如果今天只能做一件事，就是它。</div>
-    <LibChips tier="gold" onPick={h=>pickChip(h,h=>{setGoldTitle(h.title);setGoldTime(h.estimatedMinutes);setGoldIsCheckIn(!!h.isCheckIn);setTimeout(()=>planInputRef.current?.focus(),50);})}/>
+    <LibChips onPick={c=>{setGoldTitle(c.title);setGoldTime(c.estimatedMinutes);setGoldIsCheckIn(!!c.isCheckIn);setGoldCiTarget(c.checkInTarget||1);setTimeout(()=>planInputRef.current?.focus(),50);}}/>
     <div className="form-group"><label className="form-label">任务名称</label>
       <input ref={planInputRef} className="form-input" placeholder="今天最重要的事情是…" value={goldTitle} onChange={e=>setGoldTitle(e.target.value)} onKeyDown={e=>e.key==='Enter'&&goldTitle.trim()&&setStep(4)} maxLength={100}/></div>
-    <div className="form-group"><label className="form-label">预计用时</label><TimePicker value={goldTime} onChange={setGoldTime} tier="gold" isCheckIn={goldIsCheckIn} onCheckInChange={setGoldIsCheckIn}/></div>
+    <div className="form-group"><label className="form-label">预计用时</label><TimePicker value={goldTime} onChange={setGoldTime} tier="gold" isCheckIn={goldIsCheckIn} onCheckInChange={v=>{setGoldIsCheckIn(v);if(!v)setGoldCiTarget(1);}}/></div>
+    {goldIsCheckIn&&<div style={{display:'flex',alignItems:'center',gap:8,marginBottom:14}}>
+      <span style={{fontSize:12,color:'var(--text-secondary)'}}>目标次数</span>
+      <input type="number" min={1} max={99} value={goldCiTarget} onChange={e=>setGoldCiTarget(Math.max(1,Math.min(99,+e.target.value||1)))}
+        style={{width:54,padding:'4px 8px',background:'var(--input-bg)',border:'1px solid var(--input-border)',borderRadius:8,color:'var(--text-primary)',fontSize:13,textAlign:'center'}}/>
+      <span style={{fontSize:12,color:'var(--text-secondary)'}}>次</span>
+      {goldCiTarget>1&&<span style={{fontSize:11,color:'var(--gold)'}}>满{goldCiTarget}次自动完成</span>}
+    </div>}
     <button className="btn btn-gold" disabled={!goldTitle.trim()} onClick={()=>{setSvStep(0);setStep(4);}}>确定 →</button>
   </div></div>);
   // ── step 4: 银牌
@@ -1756,10 +1792,17 @@ function DailyPlanModal({onDone,dayN,today,habits=[]}){
     <StepDots cur={2} total={4}/>
     <div className="modal-title">🥈 重要的事 ({svStep+1}/3)</div>
     <div className="modal-hint">{isSvHabit?'已选习惯，确认或修改后继续 →':'这些事很重要，今天尽量完成。可以跳过某项。'}</div>
-    <LibChips tier="silver" onPick={h=>pickChip(h,h=>{setCurIn(h.title);setCurT(h.estimatedMinutes);setCurIsCheckIn(!!h.isCheckIn);setTimeout(()=>planInputRef.current?.focus(),50);})}/>
+    <LibChips onPick={c=>{setCurIn(c.title);setCurT(c.estimatedMinutes);setCurIsCheckIn(!!c.isCheckIn);setCurCiTarget(c.checkInTarget||1);setTimeout(()=>planInputRef.current?.focus(),50);}}/>
     <div className="form-group"><label className="form-label">任务名称（可跳过）</label>
       <input ref={planInputRef} className="form-input" placeholder={`第 ${svStep+1} 件重要的事…`} value={curIn} onChange={e=>setCurIn(e.target.value)} onKeyDown={e=>e.key==='Enter'&&curIn.trim()&&doSilver(false)} maxLength={100}/></div>
-    <div className="form-group"><label className="form-label">预计用时</label><TimePicker value={curT} onChange={setCurT} tier="silver" isCheckIn={curIsCheckIn} onCheckInChange={setCurIsCheckIn}/></div>
+    <div className="form-group"><label className="form-label">预计用时</label><TimePicker value={curT} onChange={setCurT} tier="silver" isCheckIn={curIsCheckIn} onCheckInChange={v=>{setCurIsCheckIn(v);if(!v)setCurCiTarget(1);}}/></div>
+    {curIsCheckIn&&<div style={{display:'flex',alignItems:'center',gap:8,marginBottom:14}}>
+      <span style={{fontSize:12,color:'var(--text-secondary)'}}>目标次数</span>
+      <input type="number" min={1} max={99} value={curCiTarget} onChange={e=>setCurCiTarget(Math.max(1,Math.min(99,+e.target.value||1)))}
+        style={{width:54,padding:'4px 8px',background:'var(--input-bg)',border:'1px solid var(--input-border)',borderRadius:8,color:'var(--text-primary)',fontSize:13,textAlign:'center'}}/>
+      <span style={{fontSize:12,color:'var(--text-secondary)'}}>次</span>
+      {curCiTarget>1&&<span style={{fontSize:11,color:'var(--silver)'}}>满{curCiTarget}次自动完成</span>}
+    </div>}
     <button className="btn btn-silver" disabled={!curIn.trim()} onClick={()=>doSilver(false)}>{isSvHabit?'确认 →':'确定 →'}</button>
     {!isSvHabit&&<button className="btn btn-ghost" onClick={()=>doSilver(true)}>跳过，完成银牌计划</button>}
   </div></div>);}
@@ -1768,10 +1811,17 @@ function DailyPlanModal({onDone,dayN,today,habits=[]}){
     <StepDots cur={3} total={4}/>
     <div className="modal-title">🥉 还需要做的事 ({bzStep+1}/5)</div>
     <div className="modal-hint">{isBzHabit?'已选习惯，确认或修改后继续 →':'这些是今日待办，完成更好，完不成也不要紧。'}</div>
-    <LibChips tier="bronze" onPick={h=>pickChip(h,h=>{setCurIn(h.title);setCurT(h.estimatedMinutes);setCurIsCheckIn(!!h.isCheckIn);setTimeout(()=>planInputRef.current?.focus(),50);})}/>
+    <LibChips onPick={c=>{setCurIn(c.title);setCurT(c.estimatedMinutes);setCurIsCheckIn(!!c.isCheckIn);setCurCiTarget(c.checkInTarget||1);setTimeout(()=>planInputRef.current?.focus(),50);}}/>
     <div className="form-group"><label className="form-label">任务名称（可跳过）</label>
       <input ref={planInputRef} className="form-input" placeholder={`第 ${bzStep+1} 件待办…`} value={curIn} onChange={e=>setCurIn(e.target.value)} onKeyDown={e=>!isLast&&e.key==='Enter'&&curIn.trim()&&doBronze(false)} maxLength={100}/></div>
-    <div className="form-group"><label className="form-label">预计用时</label><TimePicker value={curT} onChange={setCurT} tier="bronze" isCheckIn={curIsCheckIn} onCheckInChange={setCurIsCheckIn}/></div>
+    <div className="form-group"><label className="form-label">预计用时</label><TimePicker value={curT} onChange={setCurT} tier="bronze" isCheckIn={curIsCheckIn} onCheckInChange={v=>{setCurIsCheckIn(v);if(!v)setCurCiTarget(1);}}/></div>
+    {curIsCheckIn&&<div style={{display:'flex',alignItems:'center',gap:8,marginBottom:14}}>
+      <span style={{fontSize:12,color:'var(--text-secondary)'}}>目标次数</span>
+      <input type="number" min={1} max={99} value={curCiTarget} onChange={e=>setCurCiTarget(Math.max(1,Math.min(99,+e.target.value||1)))}
+        style={{width:54,padding:'4px 8px',background:'var(--input-bg)',border:'1px solid var(--input-border)',borderRadius:8,color:'var(--text-primary)',fontSize:13,textAlign:'center'}}/>
+      <span style={{fontSize:12,color:'var(--text-secondary)'}}>次</span>
+      {curCiTarget>1&&<span style={{fontSize:11,color:'var(--bronze)'}}>满{curCiTarget}次自动完成</span>}
+    </div>}
     {isBzHabit
       ? <button className="btn btn-bronze" disabled={!curIn.trim()} onClick={()=>doBronze(false)}>确认 →</button>
       : isLast
