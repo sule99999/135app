@@ -274,6 +274,7 @@
     .card-inner{padding:13px 14px 13px 18px;position:relative;z-index:2}
     .task-card.locked{opacity:.35;cursor:not-allowed;pointer-events:none}
     .task-card.done-card{opacity:.60;cursor:default}
+    .task-card:not(.locked):not(.done-card){touch-action:manipulation}
     .task-card:not(.locked):active{transform:scale(0.985)}
     .task-card:not(.locked):hover{transform:translateY(-3px)}
     .task-card-gold:not(.locked):hover  {box-shadow:0 12px 32px rgba(200,148,0,0.48),0 4px 10px rgba(0,0,0,0.50),inset 0 1.5px 0 rgba(255,248,140,0.60),inset 0 -1.5px 0 rgba(0,0,0,0.42)}
@@ -291,7 +292,7 @@
     .card-edit-btn{background:none;border:none;cursor:pointer;font-size:15px;opacity:.5;border-radius:8px;line-height:1;transition:opacity .15s;min-width:40px;min-height:40px;display:inline-flex;align-items:center;justify-content:center;padding:0;margin:-8px -2px;-webkit-tap-highlight-color:transparent}
     .card-btn-group{margin-left:auto;display:flex;gap:0;flex-shrink:0;align-items:center}
     .card-edit-btn:hover{opacity:1}
-    .add-task-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:11px;border-radius:13px;border:1.5px dashed var(--subtle-border);background:none;color:var(--text-secondary);font-size:13px;font-weight:600;cursor:pointer;margin-top:4px;transition:border-color .2s,color .2s}
+    .add-task-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:11px;border-radius:13px;border:1.5px dashed var(--subtle-border);background:none;color:var(--text-secondary);font-size:13px;font-weight:600;cursor:pointer;margin-top:4px;transition:border-color .2s,color .2s;touch-action:manipulation}
     .add-task-btn:hover{border-color:var(--gold);color:var(--gold)}
     .tier-btn-row{display:flex;gap:8px;margin-bottom:14px}
     .tier-btn{flex:1;padding:8px 0;border-radius:10px;border:1.5px solid var(--subtle-border);background:none;color:var(--text-secondary);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s}
@@ -817,6 +818,9 @@
     .habit-auto-tag{font-size:10px;padding:2px 7px;border-radius:10px;background:rgba(255,185,0,0.15);color:var(--gold);border:1px solid rgba(255,185,0,0.3);margin-left:6px;font-weight:600}
     .habit-add-btn{width:100%;padding:11px;background:rgba(255,185,0,0.08);border:1.5px dashed rgba(255,185,0,0.4);border-radius:12px;color:var(--gold);font-size:13px;font-weight:600;cursor:pointer;margin-top:4px;transition:all .18s}
     .habit-add-btn:active{transform:scale(0.97)}
+    .habit-today-btn{padding:3px 9px;border-radius:8px;border:1px solid rgba(61,220,132,0.4);background:rgba(61,220,132,0.07);color:#3ddc84;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;flex-shrink:0;line-height:1.4}
+    .habit-today-btn:hover:not(:disabled){background:rgba(61,220,132,0.18);border-color:rgba(61,220,132,0.7)}
+    .habit-today-btn:disabled{opacity:0.45;cursor:default;border-color:var(--chip-border);background:var(--chip-bg);color:var(--text-secondary)}
     .habit-tier-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
     .habit-tier-dot.gold{background:var(--gold)}
     .habit-tier-dot.silver{background:var(--silver)}
@@ -885,7 +889,7 @@ const { useState, useEffect, useCallback, useRef, useMemo } = React;
 
 // ── CONSTANTS ────────────────────────────────────────
 const SK = { FIRST:'135app_first', PLANS:'135app_plans', THEME:'135app_theme', EVENTS:'135app_events', SOUND:'135app_sound', HAPTIC:'135app_haptic', WELCOMED:'135app_welcomed', ACTIVE_DATE:'135app_active_date', HABITS:'135app_habits' };
-const TIME_OPTS = [5,10,15,25,30,45,60,90,120];
+const TIME_OPTS = [5,10,15,20,25,30,45,60,90,120];
 const THEMES = [
   {id:'white',    label:'☀️ 纯白',   desc:'简洁明亮白色',swatch:'#ffffff', text:'#c8900a'},
   {id:'dark',     label:'🌑 深色',   desc:'经典深夜模式',swatch:'#090912', text:'#FFD700'},
@@ -1290,12 +1294,13 @@ const HABIT_PRESETS=[
     {title:'核心卷腹',minutes:5},{title:'单词背诵',minutes:10},{title:'站立办公',minutes:20},
   ]},
 ];
-function HabitsManager({habits,onSave,onClose}){
+function HabitsManager({habits,onSave,onClose,onAddToday,plan}){
   const [editing,setEditing]=useState(null);
   const [showRec,setShowRec]=useState(false);
   const [selP,setSelP]=useState(null);
   const [selTier,setSelTier]=useState('bronze');
   const [selMin,setSelMin]=useState(15);
+  const [justAdded,setJustAdded]=useState([]);
   const tierLabel={gold:'🥇',silver:'🥈',bronze:'🥉'};
   const handleSaveHabit=h=>{
     const exists=habits.find(x=>x.id===h.id);
@@ -1314,6 +1319,20 @@ function HabitsManager({habits,onSave,onClose}){
     onSave([...habits,h]);
     setSelP(null);
   };
+  // 检查习惯是否已在今日计划中
+  const isInToday=h=>{
+    if(!plan)return false;
+    const all=[plan.goldTask,...(plan.silverTasks||[]),...(plan.bronzeTasks||[])].filter(Boolean);
+    return all.some(t=>t.title===h.title)||justAdded.includes(h.id);
+  };
+  const handleAddToday=h=>{
+    if(!onAddToday||isInToday(h))return;
+    const task={id:genId(),title:h.title,estimatedMinutes:h.isCheckIn?0:h.estimatedMinutes,
+      tier:h.tier,status:'idle',actualMinutes:null,pauseCount:0,
+      timerStartedAt:null,completedAt:null,remainingSeconds:null,isCheckIn:!!h.isCheckIn};
+    onAddToday(task);
+    setJustAdded(a=>[...a,h.id]);
+  };
   if(editing!==null) return <HabitForm habit={editing==='new'?null:editing} onSave={handleSaveHabit} onClose={()=>setEditing(null)}/>;
   return(
     <div className="overlay" onClick={onClose}>
@@ -1325,7 +1344,9 @@ function HabitsManager({habits,onSave,onClose}){
             还没有习惯，点下方添加吧
           </div>
         )}
-        {habits.map(h=>(
+        {habits.map(h=>{
+          const inToday=isInToday(h);
+          return(
           <div key={h.id} className="habit-item">
             <div className={`habit-tier-dot ${h.tier}`}/>
             <div className="habit-item-info">
@@ -1335,10 +1356,18 @@ function HabitsManager({habits,onSave,onClose}){
               </div>
               <div className="habit-item-meta">{h.isCheckIn?'打卡任务':`${h.estimatedMinutes} 分钟`}</div>
             </div>
+            {plan&&<button
+              className="habit-today-btn"
+              onClick={()=>handleAddToday(h)}
+              disabled={inToday}
+              title={inToday?'已加入今日':'加入今日计划'}>
+              {inToday?'✓':'＋'}
+            </button>}
             <button className="card-edit-btn" onClick={()=>setEditing(h)} title="编辑">✏️</button>
             <button className="card-edit-btn" style={{color:'var(--danger)'}} onClick={()=>handleDelete(h.id)} title="删除">🗑️</button>
           </div>
-        ))}
+          );
+        })}
         <button className="habit-add-btn" onClick={()=>setEditing('new')}>＋ 添加习惯或模板</button>
         <button className="habit-rec-btn" onClick={()=>{setShowRec(v=>!v);setSelP(null);}}>
           {showRec?'▲ 收起推荐':'✨ 推荐养成好习惯'}
@@ -1811,7 +1840,7 @@ function PomodoroTimer({task,onComplete,onPause}){
     <div className="dialog-title">增加时间</div>
     <div className="dialog-sub">继续为该任务追加计时</div>
     <div className="time-chips" style={{justifyContent:'center',marginBottom:16}}>
-      {[10,15,25,30,45].map(t=>(<button key={t} className={`time-chip${addMin===t?' chip-gold':''}`} onClick={()=>setAddMin(t)}>+{t}分钟</button>))}
+      {[10,15,20,25,30,45].map(t=>(<button key={t} className={`time-chip${addMin===t?' chip-gold':''}`} onClick={()=>setAddMin(t)}>+{t}分钟</button>))}
     </div>
     <button className="dialog-btn dialog-yes" style={{width:'100%',padding:12,marginBottom:9}} onClick={handleAddTime}>继续计时</button>
     <button className="dialog-cancel" onClick={()=>onPause(task,0)}>放弃，回到主界面</button>
@@ -1989,16 +2018,34 @@ function TaskCard({task,locked,onStart,onEdit,onDelete,onUndoComplete,onQuickSav
   };
   const cancelInlineEdit=()=>setIsInlineEdit(false);
   // 长按 (移动端)
-  const handleTouchStart=()=>{
+  const touchStartPos=useRef({x:0,y:0});
+  const touchMoved=useRef(false);
+  const handleTouchStart=e=>{
+    touchMoved.current=false;
+    touchStartPos.current={x:e.touches[0].clientX,y:e.touches[0].clientY};
     if(locked||!onQuickSave) return;
-    longPressTimer.current=setTimeout(()=>{ setEditVal(task.title); setIsInlineEdit(true); },600);
+    longPressTimer.current=setTimeout(()=>{
+      touchMoved.current=true; // 长按触发，阻止后续 touchend click
+      setEditVal(task.title); setIsInlineEdit(true);
+    },600);
   };
-  const handleTouchEnd=()=>clearTimeout(longPressTimer.current);
-
+  const handleTouchMove=e=>{
+    clearTimeout(longPressTimer.current);
+    const dx=e.touches[0].clientX-touchStartPos.current.x;
+    const dy=e.touches[0].clientY-touchStartPos.current.y;
+    if(Math.abs(dx)>8||Math.abs(dy)>8) touchMoved.current=true;
+  };
+  const handleTouchEnd=e=>{
+    clearTimeout(longPressTimer.current);
+    if(!touchMoved.current&&!locked&&!isInlineEdit){
+      e.preventDefault(); // 阻止 300ms 合成 click，直接触发
+      onStart(task);
+    }
+  };
   const handleClick=()=>{ if(locked||isInlineEdit) return; onStart(task); };
   return(
     <div className={`task-card task-card-${tier}${locked?' locked':''}`} onClick={handleClick}
-         onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} onTouchMove={handleTouchEnd}>
+         onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} onTouchMove={handleTouchMove}>
       <div className="card-inner">
         <div className="card-top">
           {isInlineEdit?(
@@ -2617,7 +2664,7 @@ function App(){
           </div>
         </div>
         <button className="habit-btn" onClick={()=>setShowHabits(true)} title="习惯管理">
-          <svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         </button>
         <button className="settings-btn" onClick={()=>setShowTheme(true)} title="选择主题">
           <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
@@ -2631,7 +2678,7 @@ function App(){
       {!welcomed&&<WelcomeModal onStart={()=>setWelcomed(true)}/>}
       {welcomed&&!plan&&<DailyPlanModal onDone={savePlan} dayN={dc} today={today} habits={habits}/>}
       {showTheme&&<ThemePanel current={theme} onChange={setTheme} onClose={()=>setShowTheme(false)}/>}
-      {showHabits&&<HabitsManager habits={habits} onSave={setHabits} onClose={()=>setShowHabits(false)}/>}
+      {showHabits&&<HabitsManager habits={habits} onSave={setHabits} onClose={()=>setShowHabits(false)} plan={plan} onAddToday={addTask}/>}
 
       <div className="bottom-nav">
         <button className={`nav-btn${view==='dash'?' active':''}`} onClick={()=>setView('dash')}>
