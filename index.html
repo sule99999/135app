@@ -510,7 +510,70 @@
     .sum-table td{padding:8px 9px;border-bottom:1px solid var(--table-r-border)}
     .sum-table tr:last-child td{border-bottom:none}
 
-    .badge-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
+    /* ── 收工弹窗 ── */
+    .wrapup-overlay{position:fixed;inset:0;background:var(--overlay-bg);display:flex;align-items:center;justify-content:center;z-index:55;padding:20px;animation:fadeIn .25s}
+    .wrapup-modal{width:100%;max-width:380px;background:var(--dialog-bg);border-radius:26px;padding:28px 22px 22px;border:1px solid var(--subtle-border);box-shadow:0 24px 64px rgba(0,0,0,0.55);animation:slideUp .35s cubic-bezier(.2,.8,.4,1)}
+    .wrapup-hero{text-align:center;margin-bottom:20px}
+    .wrapup-emoji{font-size:54px;line-height:1;display:block;margin-bottom:8px;animation:popIn .5s cubic-bezier(.34,1.56,.64,1)}
+    .wrapup-title{font-size:18px;font-weight:800;background:linear-gradient(90deg,#FFD700,#FF9500);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:3px}
+    .wrapup-date{font-size:11px;color:var(--text-secondary)}
+    .wrapup-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+    .wrapup-stat{background:var(--chip-bg);border:1px solid var(--chip-border);border-radius:14px;padding:11px 6px;text-align:center}
+    .wrapup-stat-val{font-size:22px;font-weight:800;line-height:1;margin-bottom:3px}
+    .wrapup-stat-lbl{font-size:10px;color:var(--text-secondary);line-height:1.3}
+    .wrapup-insight{background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.22);border-radius:13px;padding:12px 14px;margin-bottom:16px;display:flex;gap:10px;align-items:flex-start}
+    .wrapup-insight-emoji{font-size:20px;line-height:1;flex-shrink:0;margin-top:1px}
+    .wrapup-insight-text{font-size:12px;color:var(--text-primary);line-height:1.6}
+    .wrapup-close{width:100%;padding:12px;border-radius:13px;background:linear-gradient(90deg,rgba(255,215,0,0.18),rgba(255,149,0,0.12));border:1.5px solid rgba(255,215,0,0.4);color:var(--gold);font-size:14px;font-weight:700;cursor:pointer;transition:all .18s}
+    .wrapup-close:hover{background:linear-gradient(90deg,rgba(255,215,0,0.28),rgba(255,149,0,0.20));transform:translateY(-1px)}
+    /* ── 升降级按钮 ── */
+    .tier-change-row{display:flex;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--subtle-border)}
+    .tier-up-btn,.tier-down-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:9px 6px;border-radius:11px;font-size:12px;font-weight:700;cursor:pointer;transition:all .18s;border:1.5px solid}
+    .tier-up-btn{background:rgba(255,215,0,0.07);border-color:rgba(255,215,0,0.35);color:var(--gold)}
+    .tier-up-btn:hover:not(:disabled){background:rgba(255,215,0,0.15);border-color:rgba(255,215,0,0.7);transform:translateY(-1px)}
+    .tier-down-btn{background:rgba(130,130,184,0.07);border-color:var(--btn-ghost-border);color:var(--text-secondary)}
+    .tier-down-btn:hover:not(:disabled){background:rgba(130,130,184,0.14);border-color:var(--silver-border);color:var(--silver);transform:translateY(-1px)}
+    .tier-up-btn:disabled,.tier-down-btn:disabled{opacity:.32;cursor:not-allowed;transform:none}
+    .tier-change-hint{font-size:10px;color:var(--text-secondary);text-align:center;margin-top:7px;line-height:1.5}
+
+    .wrapup-btn{background:var(--chip-bg);border:1px solid var(--chip-border);border-radius:12px;padding:8px;font-size:0;line-height:1;cursor:pointer;transition:background .2s,border-color .2s,transform .15s;width:38px;height:38px;display:flex;align-items:center;justify-content:center}
+    .wrapup-btn:hover{background:rgba(255,215,0,0.12);border-color:rgba(255,215,0,0.5);transform:scale(1.08)}
+    .wrapup-btn svg{width:18px;height:18px;stroke:var(--text-secondary);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke .2s}
+    .wrapup-btn:hover svg{stroke:var(--gold)}
+
+    /* ── 洞察卡 ── */
+    .insight-card{background:var(--bg-secondary);border-radius:13px;padding:13px;margin-bottom:11px;border:1px solid var(--subtle-border)}
+    .insight-card-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text-secondary);margin-bottom:10px}
+    .insight-strip{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:11px;margin-bottom:7px}
+    .insight-strip:last-child{margin-bottom:0}
+    .insight-strip.type-praise{background:rgba(61,220,132,0.07);border:1px solid rgba(61,220,132,0.2)}
+    .insight-strip.type-warning{background:rgba(255,149,0,0.07);border:1px solid rgba(255,149,0,0.22)}
+    .insight-strip.type-tip{background:rgba(130,130,184,0.07);border:1px solid rgba(130,130,184,0.18)}
+    .insight-strip-emoji{font-size:18px;line-height:1;flex-shrink:0;margin-top:1px}
+    .insight-strip-text{font-size:12px;color:var(--text-primary);line-height:1.6}
+
+    /* ── 层级勋章 ── */
+    .badge-grid{display:flex;flex-direction:column;gap:11px}
+    .badge-row{display:flex;align-items:center;gap:12px;padding:11px 13px;background:var(--chip-bg);border:1px solid var(--chip-border);border-radius:13px;transition:border-color .2s}
+    .badge-row.lvl-active{border-color:var(--gold-border)}
+    .badge-row-icon{font-size:26px;line-height:1;flex-shrink:0;width:38px;text-align:center}
+    .badge-row-body{flex:1;min-width:0}
+    .badge-row-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+    .badge-row-name{font-size:13px;font-weight:700;color:var(--text-primary)}
+    .badge-row-level{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px}
+    .lvl-0 .badge-row-level{background:var(--chip-bg);color:var(--text-secondary);border:1px solid var(--chip-border)}
+    .lvl-1 .badge-row-level{background:rgba(205,127,50,0.15);color:#cd7f32;border:1px solid rgba(205,127,50,0.4)}
+    .lvl-2 .badge-row-level{background:rgba(200,200,240,0.15);color:var(--silver);border:1px solid var(--silver-border)}
+    .lvl-3 .badge-row-level{background:rgba(255,215,0,0.13);color:var(--gold);border:1px solid var(--gold-border)}
+    .lvl-4 .badge-row-level{background:linear-gradient(90deg,rgba(255,215,0,0.2),rgba(255,80,80,0.15));color:#ff9500;border:1px solid rgba(255,149,0,0.5)}
+    .badge-prog-track{height:4px;background:var(--progress-track);border-radius:2px;overflow:hidden}
+    .badge-prog-fill{height:100%;border-radius:2px;transition:width .6s cubic-bezier(.2,.8,.4,1)}
+    .lvl-1 .badge-prog-fill{background:linear-gradient(90deg,#cd7f32,#e8a060)}
+    .lvl-2 .badge-prog-fill{background:linear-gradient(90deg,var(--silver),#d0d0f0)}
+    .lvl-3 .badge-prog-fill{background:linear-gradient(90deg,var(--gold),#FF9500)}
+    .lvl-4 .badge-prog-fill{background:linear-gradient(90deg,#FFD700,#FF4500)}
+    .badge-prog-hint{font-size:10px;color:var(--text-secondary);margin-top:3px}
+    /* keep old classes for any fallback references */
     .badge-tile{text-align:center}
     .badge-icon{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:21px;margin:0 auto 4px}
     .badge-locked  {background:var(--chip-bg);opacity:.3;filter:grayscale(1)}
@@ -1008,20 +1071,52 @@ const THEMES = [
   {id:'cream',    label:'☕ 奶油',   desc:'温暖奶油色',  swatch:'#faf7f0', text:'#8B6000'},
   {id:'lavender', label:'💜 薰衣草', desc:'优雅紫罗兰',  swatch:'#f5f3ff', text:'#5040c0'},
 ];
-const BADGES = [
-  {id:'first_gold',  emoji:'🥇',name:'首个金牌', check:s=>s.goldDone>=1},
-  {id:'silver_clean',emoji:'🥈',name:'银牌全清', check:s=>s.silverFull>=1},
-  {id:'perfect_day', emoji:'🏆',name:'完美一天', check:s=>s.perfect>=1},
-  {id:'streak3',     emoji:'🔥',name:'三连打卡', check:s=>s.maxStreak>=3},
-  {id:'streak7',     emoji:'⚡',name:'七天连击', check:s=>s.maxStreak>=7},
-  {id:'streak30',    emoji:'🌟',name:'月度英雄', check:s=>s.maxStreak>=30},
-  {id:'on_time10',   emoji:'⏰',name:'守时达人', check:s=>s.onTime>=10},
-  {id:'early5',      emoji:'🚀',name:'高效飞人', check:s=>s.early>=5},
-  {id:'active7',     emoji:'🗓️',name:'活跃一周', check:s=>s.active>=7},
-  {id:'active30',    emoji:'📅',name:'月度勇士', check:s=>s.active>=20},
-  {id:'gold50',      emoji:'👑',name:'金牌达人', check:s=>s.goldDone>=50},
-  {id:'total100',    emoji:'💎',name:'百任完成', check:s=>s.totalDone>=100},
+const TIERED_BADGES = [
+  { id:'gold_road',  emoji:'🥇', name:'金牌之路',  desc:'累计完成金牌任务',
+    levels:[{name:'起步',t:1},{name:'进阶',t:10},{name:'达人',t:50},{name:'传奇',t:100}], val:s=>s.goldDone },
+  { id:'streak_fire',emoji:'🔥', name:'连击之焰',  desc:'最长连续打卡天数',
+    levels:[{name:'星火',t:3},{name:'燃烧',t:7},{name:'烈焰',t:30},{name:'永恒',t:100}],  val:s=>s.maxStreak },
+  { id:'perfect',    emoji:'🏆', name:'完美主义',  desc:'累计完美天数（全部完成）',
+    levels:[{name:'初现',t:1},{name:'追求',t:5},{name:'精英',t:20},{name:'极致',t:50}],   val:s=>s.perfect },
+  { id:'on_time',    emoji:'⏰', name:'时间掌控',  desc:'累计准时完成任务数',
+    levels:[{name:'入门',t:5},{name:'熟练',t:20},{name:'精通',t:50},{name:'宗师',t:100}], val:s=>s.onTime },
+  { id:'active',     emoji:'🗓️', name:'坚持不懈',  desc:'累计活跃天数',
+    levels:[{name:'起航',t:7},{name:'积累',t:30},{name:'坚守',t:100},{name:'传奇',t:365}],val:s=>s.active },
+  { id:'century',    emoji:'💎', name:'百战老将',  desc:'累计完成任务总数',
+    levels:[{name:'新兵',t:10},{name:'老兵',t:50},{name:'精英',t:100},{name:'传奇',t:500}],val:s=>s.totalDone },
 ];
+
+// ── 洞察引擎 ──────────────────────────────────────────────
+function generateInsights(plans, stats){
+  const days=Object.keys(plans).sort();
+  if(days.length<3) return [{emoji:'🌱',text:'继续坚持，记录更多天后将生成专属洞察',type:'tip'}];
+  const allT=days.flatMap(d=>planTasks(plans[d]));
+  const tierRate=tier=>{const ts=allT.filter(t=>t.tier===tier);return ts.length?ts.filter(t=>t.status==='completed').length/ts.length:null;};
+  const goldRate=tierRate('gold'), silverRate=tierRate('silver'), bronzeRate=tierRate('bronze');
+  const doneWT=allT.filter(t=>t.status==='completed'&&t.actualMinutes&&t.estimatedMinutes);
+  const avgOverrun=doneWT.length>5?doneWT.reduce((s,t)=>s+(t.actualMinutes-t.estimatedMinutes),0)/doneWT.length:null;
+  const dayNames=['周日','周一','周二','周三','周四','周五','周六'];
+  const dayRates=[0,1,2,3,4,5,6].map(wd=>{
+    const ds=days.filter(d=>new Date(d+' 12:00').getDay()===wd);
+    if(ds.length<2) return null;
+    const ts=ds.flatMap(d=>planTasks(plans[d]));
+    return ts.length?{wd,rate:ts.filter(t=>t.status==='completed').length/ts.length,count:ds.length}:null;
+  }).filter(Boolean);
+  const bestDay=dayRates.length?dayRates.reduce((a,b)=>a.rate>b.rate?a:b):null;
+  const milestones=[7,14,30,50,100];
+  const nextM=stats.streak>0?milestones.find(m=>stats.streak<m&&m-stats.streak<=3):null;
+  const insights=[];
+  if(goldRate!==null&&goldRate>=0.85) insights.push({emoji:'🥇',text:`你的金牌完成率高达 ${Math.round(goldRate*100)}%，执行力非常强！`,type:'praise'});
+  else if(goldRate!==null&&goldRate<0.5) insights.push({emoji:'💡',text:`金牌任务完成率只有 ${Math.round(goldRate*100)}%，试试把目标定得更具体一些`,type:'tip'});
+  if(silverRate!==null&&silverRate<0.45) insights.push({emoji:'🥈',text:`银牌完成率为 ${Math.round(silverRate*100)}%，是三层中最弱的——下周试试只规划 2 个`,type:'warning'});
+  if(bronzeRate!==null&&bronzeRate<0.5) insights.push({emoji:'🥉',text:`铜牌完成率为 ${Math.round(bronzeRate*100)}%，任务量是否太多？试试先从 3 个开始`,type:'warning'});
+  if(avgOverrun!==null&&avgOverrun>15) insights.push({emoji:'⏱️',text:`任务平均超时 ${Math.round(avgOverrun)} 分钟，预估时间可以适当调长`,type:'tip'});
+  else if(avgOverrun!==null&&avgOverrun<-5) insights.push({emoji:'🚀',text:`你经常提前完成任务，时间预估非常准确！`,type:'praise'});
+  if(bestDay&&bestDay.rate>0.75&&bestDay.count>=3) insights.push({emoji:'📅',text:`${dayNames[bestDay.wd]}是你效率最高的一天（${Math.round(bestDay.rate*100)}%），重要任务安排在这天吧`,type:'tip'});
+  if(nextM) insights.push({emoji:'🔥',text:`再坚持 ${nextM-stats.streak} 天就能达到 ${nextM} 天连击里程碑！`,type:'praise'});
+  if(stats.perfect>=5) insights.push({emoji:'🌟',text:`你已经有 ${stats.perfect} 个完美天了，是个追求极致的人`,type:'praise'});
+  return insights.length?insights:[{emoji:'💪',text:'每一天的坚持都在积累中，继续保持！',type:'tip'}];
+}
 const EVENT_COLORS = {
   gold:  {hex:'#c8900a', dark:'#FFD700'},
   silver:{hex:'#505060', dark:'#b0b0c8'},
@@ -1711,12 +1806,32 @@ function SettingsPanel({soundEnabled,onSoundChange,hapticEnabled,onHapticChange}
 }
 
 // ── DAILY PLAN MODAL ─────────────────────────────────
-function DailyPlanModal({onDone,dayN,today,habits=[]}){
+function DailyPlanModal({onDone,dayN,today,habits=[],carryoverTasks=[]}){
   const autoHabits=habits.filter(h=>h.autoAdd);
   const libraryHabits=habits.filter(h=>!h.autoAdd);
   const hasAuto=autoHabits.length>0;
+  const hasCarry=carryoverTasks.length>0;
   // step: 1=欢迎  2=习惯确认(仅有autoHabits时)  3=金牌  4=银牌  5=铜牌
   const [step,setStep]=useState(1);
+  // 顺延
+  const [showCarry,setShowCarry]=useState(false);
+  const [selectedCarryIds,setSelectedCarryIds]=useState(()=>carryoverTasks.map(t=>t.id));
+  const toggleCarry=id=>setSelectedCarryIds(ids=>ids.includes(id)?ids.filter(x=>x!==id):[...ids,id]);
+  const goToGold=()=>{ if(hasCarry){setShowCarry(true);}else{setStep(3);} };
+  const applyCarry=()=>{
+    const sel=carryoverTasks.filter(t=>selectedCarryIds.includes(t.id));
+    const goldC=sel.find(t=>t.tier==='gold');
+    const svC=sel.filter(t=>t.tier==='silver');
+    const bzC=sel.filter(t=>t.tier==='bronze');
+    if(goldC&&!goldTitle){setGoldTitle(goldC.title);setGoldTime(goldC.estimatedMinutes||25);setGoldIsCheckIn(!!goldC.isCheckIn);setGoldCiTarget(goldC.checkInTarget||1);}
+    const existSv=silverRef.current;
+    const newSv=[...existSv,...svC.filter(c=>!existSv.find(e=>e.title===c.title)).map(t=>newTask(t.title,t.estimatedMinutes,'silver',t.isCheckIn,t.checkInTarget||1))].slice(0,3);
+    silverRef.current=newSv; habitSvCount.current=newSv.length;
+    const existBz=bronzeRef.current;
+    const newBz=[...existBz,...bzC.filter(c=>!existBz.find(e=>e.title===c.title)).map(t=>newTask(t.title,t.estimatedMinutes,'bronze',t.isCheckIn,t.checkInTarget||1))].slice(0,5);
+    bronzeRef.current=newBz; habitBzCount.current=newBz.length;
+    setShowCarry(false); setStep(3);
+  };
   // 习惯确认：默认全选
   const [checkedIds,setCheckedIds]=useState(()=>autoHabits.map(h=>h.id));
   const toggleHabit=id=>setCheckedIds(ids=>ids.includes(id)?ids.filter(x=>x!==id):[...ids,id]);
@@ -1763,7 +1878,7 @@ function DailyPlanModal({onDone,dayN,today,habits=[]}){
     habitSvCount.current=sv.length;
     habitBzCount.current=bz.length;
     if(goldH){setGoldTitle(goldH.title);setGoldTime(goldH.estimatedMinutes);setGoldIsCheckIn(!!goldH.isCheckIn);}
-    setStep(3);
+    goToGold();
   };
   const [usedChipTitles,setUsedChipTitles]=useState([]);
   // 灵感库：用户库存习惯 + HABIT_PRESETS 补全，去重合并；已点击的从池子里消失
@@ -1824,6 +1939,47 @@ function DailyPlanModal({onDone,dayN,today,habits=[]}){
   }
   const tierLabel={gold:'🥇',silver:'🥈',bronze:'🥉'};
   const tierName={gold:'金牌',silver:'银牌',bronze:'铜牌'};
+  // ── 顺延屏
+  if(showCarry){
+    const carryTierLabel={gold:'🥇 金牌',silver:'🥈 银牌',bronze:'🥉 铜牌'};
+    const carryTierColor={gold:'var(--gold)',silver:'var(--silver)',bronze:'var(--bronze)'};
+    const selCount=selectedCarryIds.length;
+    return(<div className="overlay"><div className="modal-box modal-welcome">
+      <div style={{textAlign:'center',marginBottom:14}}>
+        <div style={{fontSize:36,marginBottom:6}}>📋</div>
+        <div style={{fontSize:16,fontWeight:800,color:'var(--gold)'}}>昨日未完成任务</div>
+        <div style={{fontSize:12,color:'var(--text-secondary)',marginTop:4}}>选择要带入今天计划的任务</div>
+      </div>
+      <div style={{maxHeight:280,overflowY:'auto',marginBottom:12}}>
+        {carryoverTasks.map(t=>{
+          const checked=selectedCarryIds.includes(t.id);
+          return(
+            <div key={t.id} onClick={()=>toggleCarry(t.id)}
+              style={{display:'flex',alignItems:'center',gap:11,padding:'10px 13px',marginBottom:8,borderRadius:12,
+                background:checked?'rgba(255,185,0,0.07)':'var(--chip-bg)',
+                border:`1.5px solid ${checked?'rgba(255,185,0,0.4)':'var(--chip-border)'}`,
+                cursor:'pointer',transition:'all .18s'}}>
+              <div style={{width:20,height:20,borderRadius:6,border:`2px solid ${checked?'var(--gold)':'var(--chip-border)'}`,
+                background:checked?'var(--gold)':'transparent',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,transition:'all .18s'}}>
+                {checked&&<span style={{color:'#000',fontSize:12,fontWeight:800,lineHeight:1}}>✓</span>}
+              </div>
+              <div style={{flex:1,minWidth:0}}>
+                <div style={{fontSize:13,fontWeight:600,color:'var(--text-primary)',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{t.title}</div>
+                <div style={{fontSize:11,color:carryTierColor[t.tier],marginTop:2}}>{carryTierLabel[t.tier]}{t.isCheckIn?' · 打卡':t.estimatedMinutes?` · ${t.estimatedMinutes}分钟`:''}</div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <button className="btn btn-gold" style={{width:'100%',marginBottom:8}}
+        onClick={applyCarry} disabled={selCount===0}>
+        带入今日计划（{selCount} 项）→
+      </button>
+      <button className="btn btn-ghost" style={{width:'100%'}} onClick={()=>{setShowCarry(false);setStep(3);}}>
+        全部跳过，重新规划
+      </button>
+    </div></div>);
+  }
   // ── step 1: 欢迎
   if(step===1) return(<div className="overlay"><div className="modal-box modal-welcome" style={{textAlign:'center'}}>
     <div style={{fontSize:50,marginBottom:11}}>🌟</div>
@@ -1831,7 +1987,7 @@ function DailyPlanModal({onDone,dayN,today,habits=[]}){
     <div style={{fontSize:21,fontWeight:800,marginBottom:6}}>{fmtDate(today)}</div>
     <div style={{fontSize:14,color:'var(--gold)',marginBottom:20}}>这是您使用本系统的第 <span style={{fontSize:26,fontWeight:800}}>{dayN}</span> 天</div>
     <div style={{fontSize:12,color:'var(--text-secondary)',lineHeight:1.7,marginBottom:22}}>今天也要全力以赴！<br/>让我们规划今日的 1·3·5 任务吧 →</div>
-    <button className="btn btn-gold" onClick={()=>hasAuto?setStep(2):setStep(3)}>开始规划今日任务 ✨</button>
+    <button className="btn btn-gold" onClick={()=>hasAuto?setStep(2):goToGold()}>开始规划今日任务 ✨</button>
   </div></div>);
   // ── step 2: 习惯确认（仅当有每日习惯时出现）
   if(step===2) return(<div className="overlay"><div className="modal-box modal-welcome">
@@ -1858,7 +2014,7 @@ function DailyPlanModal({onDone,dayN,today,habits=[]}){
     <button className="btn btn-gold" style={{width:'100%',marginTop:8}} onClick={confirmHabits}>
       确认，开始规划今日新任务 →
     </button>
-    <button className="btn btn-ghost" style={{width:'100%',marginTop:8}} onClick={()=>{silverRef.current=[];bronzeRef.current=[];setStep(3);}}>
+    <button className="btn btn-ghost" style={{width:'100%',marginTop:8}} onClick={()=>{silverRef.current=[];bronzeRef.current=[];goToGold();}}>
       跳过习惯，全部手动规划
     </button>
   </div></div>);
@@ -2161,7 +2317,7 @@ function AddTaskModal({onSave,onClose,plan}){
 }
 
 // ── EDIT TASK MODAL ──────────────────────────────────
-function EditTaskModal({task, onSave, onClose}){
+function EditTaskModal({task, plan, onSave, onChangeTier, onClose}){
   const [title,setTitle]=useState(task.title);
   const [time,setTime]=useState(task.isCheckIn?25:task.estimatedMinutes||25);
   const [isCI,setIsCI]=useState(!!task.isCheckIn);
@@ -2171,6 +2327,30 @@ function EditTaskModal({task, onSave, onClose}){
   const editInputRef=useRef(null);
   useEffect(()=>{ const t=setTimeout(()=>{ if(editInputRef.current){ editInputRef.current.focus(); editInputRef.current.select(); } },80); return ()=>clearTimeout(t); },[]);
   const handleSave=()=>{ if(!title.trim()) return; onSave({...task,title:title.trim(),estimatedMinutes:isCI?0:time,isCheckIn:isCI,checkInTarget:isCI?(ciTarget||1):1}); };
+
+  // 升降级可行性判断
+  const silverCount=(plan?.silverTasks||[]).length;
+  const bronzeCount=(plan?.bronzeTasks||[]).length;
+  const goldTaken=!!plan?.goldTask && plan.goldTask.id!==task.id;
+  const canUpgrade = tier==='bronze'
+    ? silverCount<3
+    : tier==='silver'
+    ? !goldTaken
+    : false; // gold 已是最高
+  const canDowngrade = tier==='gold'
+    ? true            // gold→silver 永远可以
+    : tier==='silver'
+    ? bronzeCount<5   // silver→bronze 需要铜牌有空位
+    : false;          // bronze 已是最低
+  const upTarget  = tier==='bronze'?'silver':tier==='silver'?'gold':null;
+  const downTarget= tier==='gold'?'silver':tier==='silver'?'bronze':null;
+  const upLabel   = tier==='bronze'?'↑ 升为银牌任务':tier==='silver'?'↑ 升为金牌任务':null;
+  const downLabel = tier==='gold'?'↓ 降为银牌任务':tier==='silver'?'↓ 降为铜牌任务':null;
+  const upHint    = tier==='silver'&&goldTaken?'金牌任务已有，无法升级':'';
+  const downHint  = tier==='silver'&&bronzeCount>=5?'铜牌已满5个，无法降级':'';
+
+  const doChangeTier=newTier=>{ if(onChangeTier) onChangeTier(task,newTier); };
+
   return(
     <div className="overlay" onClick={onClose}>
       <div className="modal-box modal-welcome" style={{maxWidth:360}} onClick={e=>e.stopPropagation()}>
@@ -2193,6 +2373,16 @@ function EditTaskModal({task, onSave, onClose}){
           <button className="btn btn-green" style={{flex:1}} onClick={handleSave}>✅ 保存</button>
           <button className="btn btn-ghost" style={{flex:1}} onClick={onClose}>取消</button>
         </div>
+        {(upLabel||downLabel)&&<div className="tier-change-row">
+          {upLabel&&<button className="tier-up-btn" disabled={!canUpgrade} onClick={()=>canUpgrade&&doChangeTier(upTarget)} title={upHint||upLabel}>
+            {upLabel}
+          </button>}
+          {downLabel&&<button className="tier-down-btn" disabled={!canDowngrade} onClick={()=>canDowngrade&&doChangeTier(downTarget)} title={downHint||downLabel}>
+            {downLabel}
+          </button>}
+        </div>}
+        {((upHint&&!canUpgrade)||(downHint&&!canDowngrade))&&
+          <div className="tier-change-hint">{!canUpgrade&&upHint}{!canUpgrade&&!canDowngrade&&' · '}{!canDowngrade&&downHint}</div>}
       </div>
     </div>
   );
@@ -2347,7 +2537,7 @@ function GoldCompleteModal({onClose}){
 }
 
 // ── DASHBOARD ────────────────────────────────────────
-function Dashboard({plan,onUpdate,onAddTask,onDeleteTask}){
+function Dashboard({plan,onUpdate,onAddTask,onDeleteTask,onChangeTier}){
   const [activeId,setActiveId]=useState(null);
   const [editTask,setEditTask]=useState(null);
   const [showAddTask,setShowAddTask]=useState(false);
@@ -2462,7 +2652,7 @@ function Dashboard({plan,onUpdate,onAddTask,onDeleteTask}){
       <button className="add-task-btn" onClick={()=>setShowAddTask(true)}>➕ 新增任务</button>
       {showGoldComplete&&<GoldCompleteModal onClose={()=>setShowGoldComplete(false)}/>}
       {activeTask&&<PomodoroTimer task={activeTask} onComplete={complete} onPause={pause}/>}
-      {editTask&&<EditTaskModal task={editTask} onSave={handleSaveEdit} onClose={()=>setEditTask(null)}/>}
+      {editTask&&<EditTaskModal task={editTask} plan={plan} onSave={handleSaveEdit} onChangeTier={(t,tier)=>{onChangeTier&&onChangeTier(t,tier);setEditTask(null);}} onClose={()=>setEditTask(null)}/>}
       {showAddTask&&<AddTaskModal onSave={handleAddTask} onClose={()=>setShowAddTask(false)} plan={plan}/>}
       {deleteConfirm&&(
         <div className="overlay" onClick={()=>setDeleteConfirm(null)}>
@@ -2482,6 +2672,60 @@ function Dashboard({plan,onUpdate,onAddTask,onDeleteTask}){
 }
 
 // ── DATA REVIEW ──────────────────────────────────────
+// ── 收工弹窗 ─────────────────────────────────────────────
+function WrapUpModal({plan, plans, streak, onClose}){
+  const tasks=planTasks(plan);
+  const done=tasks.filter(t=>t.status==='completed');
+  const totalMins=done.reduce((s,t)=>s+(t.actualMinutes||t.estimatedMinutes||0),0);
+  const hrs=Math.floor(totalMins/60), mins=totalMins%60;
+  const timeStr=hrs>0?`${hrs}h ${mins}m`:`${mins}m`;
+  const allDone=done.length===tasks.length&&tasks.length>0;
+  const days=Object.keys(plans).sort();
+  const allT=days.flatMap(d=>planTasks(plans[d]));
+  const doneT=allT.filter(t=>t.status==='completed');
+  const mxStrk=calcMaxStreak(plans);
+  const stats={
+    active:days.length,totalDone:doneT.length,
+    goldDone:doneT.filter(t=>t.tier==='gold').length,
+    silverFull:days.filter(d=>{const p=plans[d];return p&&p.silverTasks.length>0&&p.silverTasks.every(t=>t.status==='completed');}).length,
+    perfect:days.filter(d=>{const p=plans[d];if(!p)return false;const a=planTasks(p);return a.length>0&&a.every(t=>t.status==='completed');}).length,
+    maxStreak:mxStrk, streak, onTime:doneT.filter(t=>t.actualMinutes&&t.actualMinutes<=t.estimatedMinutes).length,
+    early:doneT.filter(t=>t.actualMinutes&&t.actualMinutes<t.estimatedMinutes*0.9).length,
+  };
+  const insights=generateInsights(plans,stats);
+  const pick=insights[0];
+  return(
+    <div className="wrapup-overlay" onClick={onClose}>
+      <div className="wrapup-modal" onClick={e=>e.stopPropagation()}>
+        <div className="wrapup-hero">
+          <span className="wrapup-emoji">{allDone?'🌟':'🌙'}</span>
+          <div className="wrapup-title">{allDone?'完美收工！':'今日收工'}</div>
+          <div className="wrapup-date">{allDone?'所有任务全部完成，太棒了！':'今天辛苦了，明天继续加油！'}</div>
+        </div>
+        <div className="wrapup-stats">
+          <div className="wrapup-stat">
+            <div className="wrapup-stat-val" style={{color:'var(--gold)'}}>{done.length}<span style={{fontSize:13,fontWeight:500}}>/{tasks.length}</span></div>
+            <div className="wrapup-stat-lbl">任务完成</div>
+          </div>
+          <div className="wrapup-stat">
+            <div className="wrapup-stat-val" style={{color:'var(--success)'}}>{timeStr}</div>
+            <div className="wrapup-stat-lbl">专注时长</div>
+          </div>
+          <div className="wrapup-stat">
+            <div className="wrapup-stat-val" style={{color:'#FF9500'}}>{streak}<span style={{fontSize:11}}>天</span></div>
+            <div className="wrapup-stat-lbl">🔥 连击</div>
+          </div>
+        </div>
+        {pick&&<div className="wrapup-insight">
+          <span className="wrapup-insight-emoji">{pick.emoji}</span>
+          <span className="wrapup-insight-text">{pick.text}</span>
+        </div>}
+        <button className="wrapup-close" onClick={onClose}>收好今天，迎接明天 ✨</button>
+      </div>
+    </div>
+  );
+}
+
 function DataReview({plans}){
   const [tab,setTab]=useState('overview');
   const days=useMemo(()=>Object.keys(plans).sort(),[plans]);
@@ -2540,14 +2784,56 @@ function DataReview({plans}){
       </table></div>);
   };
 
-  const Badges=()=>(<div className="review-card"><div className="review-card-title">🏅 成就勋章墙</div>
-    <div className="badge-grid">{BADGES.map(b=>{const on=b.check(stats);return(<div key={b.id} className="badge-tile"><div className={`badge-icon ${on?'badge-unlocked':'badge-locked'}`}>{b.emoji}</div><div className="badge-name">{b.name}</div></div>);})}</div>
-  </div>);
+  const InsightCard=()=>{
+    const insights=generateInsights(plans,stats);
+    return(<div className="insight-card">
+      <div className="insight-card-title">💡 专属洞察</div>
+      {insights.slice(0,3).map((ins,i)=>(
+        <div key={i} className={`insight-strip type-${ins.type}`}>
+          <span className="insight-strip-emoji">{ins.emoji}</span>
+          <span className="insight-strip-text">{ins.text}</span>
+        </div>
+      ))}
+    </div>);
+  };
+
+  const Badges=()=>{
+    const levelNames=['未解锁','🥉 青铜','🥈 白银','🥇 黄金','👑 传奇'];
+    return(<div className="review-card"><div className="review-card-title">🏅 成就勋章</div>
+      <div className="badge-grid">{TIERED_BADGES.map(b=>{
+        const v=b.val(stats);
+        let lvl=0;
+        b.levels.forEach((l,i)=>{ if(v>=l.t) lvl=i+1; });
+        const atMax=lvl>=b.levels.length;
+        const nextL=atMax?null:b.levels[lvl];
+        const prevT=lvl>0?b.levels[lvl-1].t:0;
+        const prog=nextL?Math.min(100,Math.round((v-prevT)/(nextL.t-prevT)*100)):100;
+        return(
+          <div key={b.id} className={`badge-row lvl-${lvl}${lvl>0?' lvl-active':''}`}>
+            <div className="badge-row-icon" style={{filter:lvl===0?'grayscale(1)':'none',opacity:lvl===0?.35:1}}>{b.emoji}</div>
+            <div className="badge-row-body">
+              <div className="badge-row-top">
+                <span className="badge-row-name">{b.name}</span>
+                <span className="badge-row-level">{lvl===0?'未解锁':levelNames[lvl]}</span>
+              </div>
+              <div className="badge-prog-track">
+                <div className="badge-prog-fill" style={{width:`${prog}%`}}/>
+              </div>
+              <div className="badge-prog-hint">
+                {atMax?`🎉 已达传奇，当前 ${v} ${b.desc.replace('累计','').trim()}`:
+                 `${b.desc} ${v} / ${nextL.t}，距「${nextL.name}」还差 ${nextL.t-v}`}
+              </div>
+            </div>
+          </div>
+        );
+      })}</div>
+    </div>);
+  };
 
   return(<div className="review-wrap">
     <div className="review-top"><h2>📊 数据复盘</h2><p>了解你的时间都去哪了</p></div>
     <div className="review-tabs">{[{id:'overview',l:'概览'},{id:'weekly',l:'每周'},{id:'monthly',l:'每月'},{id:'badges',l:'勋章'}].map(t=>(<button key={t.id} className={`rtab${tab===t.id?' active':''}`} onClick={()=>setTab(t.id)}>{t.l}</button>))}</div>
-    {tab==='overview'&&(<><div className="stats-grid">
+    {tab==='overview'&&(<><InsightCard/><div className="stats-grid">
       <div className="stat-tile"><span className="stat-val" style={{color:'#FF9500'}}>{streak}</span><div className="stat-lbl">🔥 连续打卡</div></div>
       <div className="stat-tile"><span className="stat-val" style={{color:'var(--gold)'}}>{stats.totalDone}</span><div className="stat-lbl">✅ 累计完成</div></div>
       <div className="stat-tile"><span className="stat-val" style={{color:'var(--success)'}}>{stats.perfect}</span><div className="stat-lbl">🌟 完美天数</div></div>
@@ -2809,6 +3095,7 @@ function App(){
   const [view,         setView]         = useState('dash');
   const [showTheme,    setShowTheme]    = useState(false);
   const [showHabits,   setShowHabits]   = useState(false);
+  const [showWrapUp,   setShowWrapUp]   = useState(false);
   // Compute today fresh every render — never stale, immune to state init bugs
   const today = todayStr();
   // Force re-render every 30s and on visibilitychange so midnight is caught immediately
@@ -2881,6 +3168,17 @@ function App(){
   const plan  = activeDate === today ? (plans[today] || null) : null;
   const streak= useMemo(()=>calcStreak(plans),[plans]);
 
+  // 顺延：从最近7天里找最新的有未完成任务的计划
+  const carryoverTasks=useMemo(()=>{
+    for(let i=1;i<=7;i++){
+      const d=new Date(); d.setDate(d.getDate()-i);
+      const k=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+      const p=plans[k]; if(!p) continue;
+      const unfinished=planTasks(p).filter(t=>t.status!=='completed');
+      if(unfinished.length>0) return unfinished;
+    }
+    return [];
+  },[plans,today]);
   const savePlan=p=>{ setPlans(prev=>({...prev,[today]:p})); setActiveDate(today); };
   const updateTask=t=>setPlans(prev=>{
     const p={...prev[today]};
@@ -2905,6 +3203,18 @@ function App(){
     else p.bronzeTasks=(p.bronzeTasks||[]).filter(x=>x.id!==t.id);
     return {...prev,[today]:p};
   });
+  // 升/降级：从原层移除，加入新层，状态重置为 idle
+  const changeTierTask=(task,newTier)=>setPlans(prev=>{
+    const p={...prev[today]};
+    const upgraded={...task,tier:newTier,status:'idle',completedAt:null,actualMinutes:null,remainingSeconds:null,checkInCount:0};
+    if(task.tier==='gold') p.goldTask=null;
+    else if(task.tier==='silver') p.silverTasks=(p.silverTasks||[]).filter(x=>x.id!==task.id);
+    else p.bronzeTasks=(p.bronzeTasks||[]).filter(x=>x.id!==task.id);
+    if(newTier==='gold') p.goldTask=upgraded;
+    else if(newTier==='silver') p.silverTasks=[...(p.silverTasks||[]),upgraded];
+    else p.bronzeTasks=[...(p.bronzeTasks||[]),upgraded];
+    return {...prev,[today]:p};
+  });
 
   return(
     <div id="app-root">
@@ -2920,6 +3230,9 @@ function App(){
             {streak>0&&<span className="streak-chip">🔥 {streak}天连击</span>}
           </div>
         </div>
+        {plan&&<button className="wrapup-btn" onClick={()=>setShowWrapUp(true)} title="今日收工">
+          <svg viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg>
+        </button>}
         <button className="habit-btn" onClick={()=>setShowHabits(true)} title="习惯管理">
           <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         </button>
@@ -2928,14 +3241,15 @@ function App(){
         </button>
       </div>
 
-      {view==='dash'     &&plan &&<Dashboard plan={plan} onUpdate={updateTask} onAddTask={addTask} onDeleteTask={deleteTask}/>}
+      {view==='dash'     &&plan &&<Dashboard plan={plan} onUpdate={updateTask} onAddTask={addTask} onDeleteTask={deleteTask} onChangeTier={changeTierTask}/>}
       {view==='cal'            &&<CalendarView plans={plans} events={events} onAddEvent={addEvent} onDeleteEvent={delEvent}/>}
       {view==='review'         &&<DataReview plans={plans}/>}
       {view==='settings'       &&<SettingsPanel soundEnabled={soundEnabled} onSoundChange={setSoundEnabled} hapticEnabled={hapticEnabled} onHapticChange={setHapticEnabled}/>}
       {!welcomed&&<WelcomeModal onStart={()=>setWelcomed(true)}/>}
-      {welcomed&&!plan&&<DailyPlanModal onDone={savePlan} dayN={dc} today={today} habits={habits}/>}
+      {welcomed&&!plan&&<DailyPlanModal onDone={savePlan} dayN={dc} today={today} habits={habits} carryoverTasks={carryoverTasks}/>}
       {showTheme&&<ThemePanel current={theme} onChange={setTheme} onClose={()=>setShowTheme(false)}/>}
       {showHabits&&<HabitsManager habits={habits} onSave={setHabits} onClose={()=>setShowHabits(false)} plan={plan} onAddToday={addTask}/>}
+      {showWrapUp&&plan&&<WrapUpModal plan={plan} plans={plans} streak={streak} onClose={()=>setShowWrapUp(false)}/>}
 
       <div className="bottom-nav">
         <button className={`nav-btn${view==='dash'?' active':''}`} onClick={()=>setView('dash')}>
