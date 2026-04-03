@@ -526,6 +526,8 @@
     .wrapup-insight-text{font-size:12px;color:var(--text-primary);line-height:1.6}
     .wrapup-close{width:100%;padding:12px;border-radius:13px;background:linear-gradient(90deg,rgba(255,215,0,0.18),rgba(255,149,0,0.12));border:1.5px solid rgba(255,215,0,0.4);color:var(--gold);font-size:14px;font-weight:700;cursor:pointer;transition:all .18s}
     .wrapup-close:hover{background:linear-gradient(90deg,rgba(255,215,0,0.28),rgba(255,149,0,0.20));transform:translateY(-1px)}
+    .wrapup-continue{width:100%;padding:10px;border-radius:13px;background:transparent;border:1px solid var(--subtle-border);color:var(--text-secondary);font-size:13px;font-weight:600;cursor:pointer;transition:all .18s;margin-top:8px}
+    .wrapup-continue:hover{background:var(--chip-bg);border-color:var(--chip-border);color:var(--text-primary);transform:translateY(-1px)}
     /* ── 升降级按钮 ── */
     .tier-change-row{display:flex;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--subtle-border)}
     .tier-up-btn,.tier-down-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:9px 6px;border-radius:11px;font-size:12px;font-weight:700;cursor:pointer;transition:all .18s;border:1.5px solid}
@@ -1060,7 +1062,7 @@
 const { useState, useEffect, useCallback, useRef, useMemo } = React;
 
 // ── CONSTANTS ────────────────────────────────────────
-const SK = { FIRST:'135app_first', PLANS:'135app_plans', THEME:'135app_theme', EVENTS:'135app_events', SOUND:'135app_sound', HAPTIC:'135app_haptic', WELCOMED:'135app_welcomed', ACTIVE_DATE:'135app_active_date', HABITS:'135app_habits' };
+const SK = { FIRST:'135app_first', PLANS:'135app_plans', THEME:'135app_theme', EVENTS:'135app_events', SOUND:'135app_sound', HAPTIC:'135app_haptic', WELCOMED:'135app_welcomed', ACTIVE_DATE:'135app_active_date', HABITS:'135app_habits', PLAN_STYLE:'135app_plan_style', PLAN_HOUR:'135app_plan_hour' };
 const TIME_OPTS = [5,10,15,20,25,30,45,60,90,120];
 const THEMES = [
   {id:'white',    label:'☀️ 纯白',   desc:'简洁明亮白色',swatch:'#ffffff', text:'#c8900a'},
@@ -1131,7 +1133,21 @@ const TIER_TO_COLOR = {gold:'gold', silver:'silver', bronze:'bronze'};
 
 // ── UTILS ────────────────────────────────────────────
 // Use local date (not UTC) so midnight resets correctly in all timezones
-const todayStr = () => { const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
+const todayStr    = () => { const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
+const tomorrowStr = () => { const d=new Date(); d.setDate(d.getDate()+1); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
+// 从 startTime/endTime 字符串("HH:MM")计算分钟数
+function calcEventMins(startTime, endTime){
+  if(!startTime||!endTime) return 30;
+  const [sh,sm]=startTime.split(':').map(Number);
+  const [eh,em]=endTime.split(':').map(Number);
+  const diff=(eh*60+em)-(sh*60+sm);
+  return diff>0?diff:30;
+}
+// 根据规划模式返回"当前应规划哪天"：晚间模式且已过切换时间 → 明天，否则 → 今天
+function getPlanDate(planStyle, planHour){
+  if(planStyle==='evening' && new Date().getHours()>=planHour) return tomorrowStr();
+  return todayStr();
+}
 const genId    = () => Math.random().toString(36).slice(2,10);
 const fmt      = s => { const a=Math.abs(s); return `${String(Math.floor(a/60)).padStart(2,'0')}:${String(a%60).padStart(2,'0')}`; };
 
@@ -1351,6 +1367,8 @@ function TimePicker({value,onChange,tier,isCheckIn,onCheckInChange}){
 // ── WELCOME MODAL ────────────────────────────────────
 function WelcomeModal({onStart}){
   const [step,setStep]=useState(0);
+  const [selStyle,setSelStyle]=useState('morning');
+  const [selHour,setSelHour]=useState(21);
   const SLIDES=[
     {
       emoji:'🌟',
@@ -1384,7 +1402,54 @@ function WelcomeModal({onStart}){
           ))}
         </div>
       ),
-      cta:'明白了，开始吧 🚀',
+      cta:'明白了 →',
+    },
+    {
+      emoji:'🌙',
+      title:'你习惯什么时候做计划？',
+      body:(
+        <div style={{marginBottom:20,textAlign:'left'}}>
+          <div style={{fontSize:12,color:'var(--text-secondary)',marginBottom:14,textAlign:'center',lineHeight:1.6}}>
+            选择你的规划节奏，随时可在设置中修改
+          </div>
+          {[
+            {id:'morning',emoji:'☀️',label:'早上型',desc:'每天早晨开启新计划，精神饱满做决策'},
+            {id:'evening',emoji:'🌙',label:'前一天晚上型',desc:'提前规划明天，让夜晚更有仪式感'},
+          ].map(opt=>(
+            <div key={opt.id} onClick={()=>setSelStyle(opt.id)}
+              style={{display:'flex',alignItems:'center',gap:12,padding:'12px 14px',borderRadius:13,marginBottom:9,
+                background:selStyle===opt.id?'rgba(255,215,0,0.07)':'var(--chip-bg)',
+                border:`1.5px solid ${selStyle===opt.id?'rgba(255,215,0,0.5)':'var(--chip-border)'}`,
+                cursor:'pointer',transition:'all .18s'}}>
+              <span style={{fontSize:26,lineHeight:1,flexShrink:0}}>{opt.emoji}</span>
+              <div style={{flex:1}}>
+                <div style={{fontSize:13,fontWeight:700,color:selStyle===opt.id?'var(--gold)':'var(--text-primary)',marginBottom:2}}>{opt.label}</div>
+                <div style={{fontSize:11,color:'var(--text-secondary)',lineHeight:1.4}}>{opt.desc}</div>
+              </div>
+              <div style={{width:18,height:18,borderRadius:'50%',border:`2px solid ${selStyle===opt.id?'var(--gold)':'var(--chip-border)'}`,
+                background:selStyle===opt.id?'var(--gold)':'transparent',flexShrink:0,display:'flex',alignItems:'center',justifyContent:'center',transition:'all .18s'}}>
+                {selStyle===opt.id&&<span style={{color:'#000',fontSize:11,fontWeight:800,lineHeight:1}}>✓</span>}
+              </div>
+            </div>
+          ))}
+          {selStyle==='evening'&&(
+            <div style={{padding:'11px 14px',borderRadius:11,background:'var(--chip-bg)',border:'1px solid var(--chip-border)',marginTop:4}}>
+              <div style={{fontSize:12,color:'var(--text-secondary)',marginBottom:10}}>晚间规划从几点开始？</div>
+              <div style={{display:'flex',gap:8}}>
+                {[{h:20,label:'8 点'},{h:21,label:'9 点'},{h:22,label:'10 点'},{h:23,label:'11 点'}].map(o=>(
+                  <button key={o.h} onClick={()=>setSelHour(o.h)}
+                    style={{flex:1,padding:'8px 0',borderRadius:9,border:`1.5px solid ${selHour===o.h?'rgba(255,215,0,0.6)':'var(--chip-border)'}`,
+                      background:selHour===o.h?'rgba(255,215,0,0.12)':'transparent',
+                      color:selHour===o.h?'var(--gold)':'var(--text-secondary)',fontSize:13,fontWeight:700,cursor:'pointer',transition:'all .15s'}}>
+                    {o.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      ),
+      cta:'开始使用 🚀',
     },
   ];
   const cur=SLIDES[step];
@@ -1392,7 +1457,6 @@ function WelcomeModal({onStart}){
   return(
     <div className="overlay">
       <div className="modal-box modal-welcome" style={{maxWidth:360,textAlign:'center'}} onClick={e=>e.stopPropagation()}>
-        {/* 步骤指示点 */}
         <div style={{display:'flex',justifyContent:'center',gap:6,marginBottom:20}}>
           {SLIDES.map((_,i)=>(
             <div key={i} style={{width:i===step?20:7,height:7,borderRadius:4,background:i===step?'var(--gold)':'var(--chip-bg)',transition:'width .25s,background .25s'}}/>
@@ -1402,7 +1466,7 @@ function WelcomeModal({onStart}){
         <div style={{fontSize:18,fontWeight:800,color:'var(--text-primary)',marginBottom:14,lineHeight:1.3}}>{cur.title}</div>
         {cur.body}
         <button className="btn btn-gold" style={{width:'100%',padding:'13px 0',fontSize:14,fontWeight:700}}
-          onClick={()=>{ if(isLast) onStart(); else setStep(s=>s+1); }}>
+          onClick={()=>{ if(isLast) onStart(selStyle,selHour); else setStep(s=>s+1); }}>
           {cur.cta}
         </button>
         {step>0&&(
@@ -1562,117 +1626,166 @@ function HabitsManager({habits,onSave,onClose,onAddToday,plan}){
   if(editing!==null) return <HabitForm habit={editing==='new'?null:editing} onSave={handleSaveHabit} onClose={()=>setEditing(null)}/>;
   return(
     <div className="overlay" onClick={onClose}>
-      <div className="modal-box modal-welcome" style={{maxWidth:360,maxHeight:'85vh',overflowY:'auto'}} onClick={e=>e.stopPropagation()}>
-        <div style={{fontSize:16,fontWeight:700,marginBottom:3,color:'var(--text-primary)'}}>🔄 习惯与模板</div>
-        <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:16}}>预设后每天规划时一键加入，无需重复输入</div>
-        {habits.length===0&&!showRec&&(
-          <div style={{textAlign:'center',padding:'20px 0',color:'var(--text-secondary)',fontSize:13}}>
-            还没有习惯，点下方添加吧
-          </div>
-        )}
-        {habits.map(h=>{
-          const inToday=isInToday(h);
-          return(
-          <div key={h.id} className="habit-item">
-            <div className={`habit-tier-dot ${h.tier}`}/>
-            <div className="habit-item-info">
-              <div className="habit-item-title">
-                {tierLabel[h.tier]} {h.title}
-                {h.autoAdd&&<span className="habit-auto-tag">每日</span>}
-              </div>
-              <div className="habit-item-meta">{h.isCheckIn?'打卡任务':`${h.estimatedMinutes} 分钟`}</div>
+      <div className="modal-box modal-welcome" style={{maxWidth:360,maxHeight:'85vh',display:'flex',flexDirection:'column',overflow:'hidden'}} onClick={e=>e.stopPropagation()}>
+        {/* ── 固定顶部标题 ── */}
+        <div style={{flexShrink:0}}>
+          <div style={{fontSize:16,fontWeight:700,marginBottom:3,color:'var(--text-primary)'}}>🔄 习惯与模板</div>
+          <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:16}}>预设后每天规划时一键加入，无需重复输入</div>
+        </div>
+        {/* ── 可滚动中间区域 ── */}
+        <div style={{flex:1,overflowY:'auto',minHeight:0}}>
+          {habits.length===0&&!showRec&&(
+            <div style={{textAlign:'center',padding:'20px 0',color:'var(--text-secondary)',fontSize:13}}>
+              还没有习惯，点下方添加吧
             </div>
-            {plan&&<button
-              className="habit-today-btn"
-              onClick={()=>handleAddToday(h)}
-              disabled={inToday}
-              title={inToday?'已加入今日':'加入今日计划'}>
-              {inToday?'✓':'＋'}
-            </button>}
-            <button className="card-edit-btn" onClick={()=>setEditing(h)} title="编辑">✏️</button>
-            <button className="card-edit-btn" style={{color:'var(--danger)'}} onClick={()=>handleDelete(h.id)} title="删除">🗑️</button>
-          </div>
-          );
-        })}
-        <button className="habit-add-btn" onClick={()=>setEditing('new')}>＋ 添加习惯或模板</button>
-        <button className="habit-rec-btn" onClick={()=>{setShowRec(v=>!v);setSelP(null);}}>
-          {showRec?'▲ 收起推荐':'✨ 推荐养成好习惯'}
-        </button>
-        {showRec&&(
-          <div className="rec-panel">
-            {HABIT_PRESETS.map(cat=>(
-              <div key={cat.cat}>
-                <div className="rec-cat-label">{cat.cat}</div>
-                <div className="rec-chips">
-                  {cat.items.map(item=>{
-                    const isAdded=habits.some(h=>h.title===item.title);
-                    const isActive=selP&&selP.title===item.title;
-                    return(
-                      <button key={item.title}
-                        className={`rec-chip${isActive?' active':''}`}
-                        onClick={()=>!isAdded&&handleSelectPreset(item)}
-                        style={isAdded?{opacity:0.38,cursor:'default'}:{}}>
-                        {item.title}{isAdded?' ✓':''}
-                      </button>
-                    );
-                  })}
+          )}
+          {habits.map(h=>{
+            const inToday=isInToday(h);
+            return(
+            <div key={h.id} className="habit-item">
+              <div className={`habit-tier-dot ${h.tier}`}/>
+              <div className="habit-item-info">
+                <div className="habit-item-title">
+                  {tierLabel[h.tier]} {h.title}
+                  {h.autoAdd&&<span className="habit-auto-tag">每日</span>}
                 </div>
+                <div className="habit-item-meta">{h.isCheckIn?'打卡任务':`${h.estimatedMinutes} 分钟`}</div>
               </div>
-            ))}
-            {selP&&(
-              <div className="rec-confirm">
-                {/* 行1：任务名 + 层级选择 */}
-                <div style={{display:'flex',alignItems:'center',gap:7}}>
-                  <span className="rec-confirm-title">「{selP.title}」</span>
-                  <div className="rec-tier-btns">
-                    {['gold','silver','bronze'].map(t=>(
-                      <button key={t} className={`rec-tier-btn${selTier===t?' sel-'+t:''}`}
-                        onClick={()=>setSelTier(t)}>{tierLabel[t]}</button>
-                    ))}
+              {plan&&<button
+                className="habit-today-btn"
+                onClick={()=>handleAddToday(h)}
+                disabled={inToday}
+                title={inToday?'已加入今日':'加入今日计划'}>
+                {inToday?'✓':'＋'}
+              </button>}
+              <button className="card-edit-btn" onClick={()=>setEditing(h)} title="编辑">✏️</button>
+              <button className="card-edit-btn" style={{color:'var(--danger)'}} onClick={()=>handleDelete(h.id)} title="删除">🗑️</button>
+            </div>
+            );
+          })}
+          <button className="habit-add-btn" onClick={()=>setEditing('new')}>＋ 添加习惯或模板</button>
+          <button className="habit-rec-btn" onClick={()=>{setShowRec(v=>!v);setSelP(null);}}>
+            {showRec?'▲ 收起推荐':'✨ 推荐养成好习惯'}
+          </button>
+          {showRec&&(
+            <div className="rec-panel">
+              {HABIT_PRESETS.map(cat=>(
+                <div key={cat.cat}>
+                  <div className="rec-cat-label">{cat.cat}</div>
+                  <div className="rec-chips">
+                    {cat.items.map(item=>{
+                      const isAdded=habits.some(h=>h.title===item.title);
+                      const isActive=selP&&selP.title===item.title;
+                      return(
+                        <button key={item.title}
+                          className={`rec-chip${isActive?' active':''}`}
+                          onClick={()=>!isAdded&&handleSelectPreset(item)}
+                          style={isAdded?{opacity:0.38,cursor:'default'}:{}}>
+                          {item.title}{isAdded?' ✓':''}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
-                {/* 行2：打卡切换 + 时间/次数 */}
-                <div style={{display:'flex',alignItems:'center',gap:7,flexWrap:'wrap'}}>
-                  <button className={`time-chip${selIsCI?` chip-${selTier}`:''}`}
-                    onClick={()=>{const v=!selIsCI;setSelIsCI(v);if(!v)setSelCiTarget(1);}}>
-                    ✓ 打卡
-                  </button>
-                  {selIsCI?(
-                    <>
-                      <input type="number" className="rec-min-input" value={selCiTarget} min={1} max={99}
-                        onChange={e=>setSelCiTarget(Math.max(1,Math.min(99,+e.target.value||1)))}
-                        style={{width:44}}/>
-                      <span style={{fontSize:11,color:'var(--text-secondary)'}}>次</span>
-                      {selCiTarget>1&&<span style={{fontSize:11,color:'var(--bronze)'}}>满{selCiTarget}次完成</span>}
-                    </>
-                  ):(
-                    <>
-                      <input type="number" className="rec-min-input" value={selMin} min={1} max={180}
-                        onChange={e=>setSelMin(e.target.value)}/>
-                      <span style={{fontSize:11,color:'var(--text-secondary)'}}>min</span>
-                    </>
-                  )}
+              ))}
+            </div>
+          )}
+        </div>
+        {/* ── 固定底部：配置栏 + 完成按钮 ── */}
+        <div style={{flexShrink:0}}>
+          {selP&&(
+            <div className="rec-confirm" style={{marginTop:10,marginBottom:0}}>
+              {/* 行1：任务名 + 层级选择 */}
+              <div style={{display:'flex',alignItems:'center',gap:7}}>
+                <span className="rec-confirm-title">「{selP.title}」</span>
+                <div className="rec-tier-btns">
+                  {['gold','silver','bronze'].map(t=>(
+                    <button key={t} className={`rec-tier-btn${selTier===t?' sel-'+t:''}`}
+                      onClick={()=>setSelTier(t)}>{tierLabel[t]}</button>
+                  ))}
                 </div>
-                {/* 行3：醒目加入按钮 */}
-                <button className="rec-add-btn-full" onClick={handleAddPreset}>＋ 加入习惯模板</button>
               </div>
-            )}
-          </div>
-        )}
-        <button className="btn btn-ghost" style={{width:'100%',marginTop:10}} onClick={onClose}>完成</button>
+              {/* 行2：打卡切换 + 时间/次数 */}
+              <div style={{display:'flex',alignItems:'center',gap:7,flexWrap:'wrap'}}>
+                <button className={`time-chip${selIsCI?` chip-${selTier}`:''}`}
+                  onClick={()=>{const v=!selIsCI;setSelIsCI(v);if(!v)setSelCiTarget(1);}}>
+                  ✓ 打卡
+                </button>
+                {selIsCI?(
+                  <>
+                    <input type="number" className="rec-min-input" value={selCiTarget} min={1} max={99}
+                      onChange={e=>setSelCiTarget(Math.max(1,Math.min(99,+e.target.value||1)))}
+                      style={{width:44}}/>
+                    <span style={{fontSize:11,color:'var(--text-secondary)'}}>次</span>
+                    {selCiTarget>1&&<span style={{fontSize:11,color:'var(--bronze)'}}>满{selCiTarget}次完成</span>}
+                  </>
+                ):(
+                  <>
+                    <input type="number" className="rec-min-input" value={selMin} min={1} max={180}
+                      onChange={e=>setSelMin(e.target.value)}/>
+                    <span style={{fontSize:11,color:'var(--text-secondary)'}}>min</span>
+                  </>
+                )}
+              </div>
+              {/* 行3：醒目加入按钮 */}
+              <button className="rec-add-btn-full" onClick={handleAddPreset}>＋ 加入习惯模板</button>
+            </div>
+          )}
+          <button className="btn btn-ghost" style={{width:'100%',marginTop:10}} onClick={onClose}>完成</button>
+        </div>
       </div>
     </div>
   );
 }
 
 // ── SETTINGS PANEL (系统设置) ─────────────────────────
-function SettingsPanel({soundEnabled,onSoundChange,hapticEnabled,onHapticChange}){
+function SettingsPanel({soundEnabled,onSoundChange,hapticEnabled,onHapticChange,planStyle,onPlanStyleChange,planHour,onPlanHourChange}){
   const canVibrate = typeof navigator!=='undefined' && !!navigator.vibrate;
   return(
     <div className="view-scroll" style={{padding:'20px 16px 40px'}}>
       <div style={{maxWidth:460,margin:'0 auto'}}>
         <div style={{fontSize:18,fontWeight:700,marginBottom:4,color:'var(--text-primary)'}}>⚙️ 设置</div>
         <div style={{fontSize:12,color:'var(--text-secondary)',marginBottom:20}}>系统设置与数据管理</div>
+
+        {/* Planning style group */}
+        <div style={{marginBottom:14,borderRadius:13,background:'var(--bg-secondary)',border:'1px solid var(--subtle-border)',overflow:'hidden'}}>
+          <div style={{padding:'12px 14px',borderBottom:'1px solid var(--subtle-border)'}}>
+            <div style={{fontSize:14,fontWeight:600,color:'var(--text-primary)',marginBottom:2}}>🗓️ 规划习惯</div>
+            <div style={{fontSize:11,color:'var(--text-secondary)'}}>选择您偏好的每日规划时间</div>
+          </div>
+          <div style={{padding:'12px 14px',borderBottom:'1px solid var(--subtle-border)'}}>
+            <div style={{display:'flex',gap:8}}>
+              {[{id:'morning',emoji:'🌅',label:'早上规划'},{id:'evening',emoji:'🌙',label:'晚上规划'}].map(opt=>(
+                <button key={opt.id} onClick={()=>onPlanStyleChange(opt.id)}
+                  style={{flex:1,padding:'9px 8px',borderRadius:10,border:`1.5px solid ${planStyle===opt.id?'rgba(255,215,0,0.55)':'var(--chip-border)'}`,
+                    background:planStyle===opt.id?'rgba(255,215,0,0.08)':'transparent',
+                    color:planStyle===opt.id?'var(--gold)':'var(--text-secondary)',
+                    fontSize:13,fontWeight:700,cursor:'pointer',transition:'all .15s',textAlign:'center'}}>
+                  <div style={{fontSize:20,marginBottom:3}}>{opt.emoji}</div>
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
+          {planStyle==='evening'&&(
+            <div style={{padding:'12px 14px'}}>
+              <div style={{fontSize:12,color:'var(--text-secondary)',marginBottom:9}}>从几点开始可以规划明天？</div>
+              <div style={{display:'flex',gap:8}}>
+                {[{h:20,label:'8 点'},{h:21,label:'9 点'},{h:22,label:'10 点'},{h:23,label:'11 点'}].map(o=>(
+                  <button key={o.h} onClick={()=>onPlanHourChange(o.h)}
+                    style={{flex:1,padding:'8px 0',borderRadius:9,border:`1.5px solid ${planHour===o.h?'rgba(255,215,0,0.6)':'var(--chip-border)'}`,
+                      background:planHour===o.h?'rgba(255,215,0,0.12)':'transparent',
+                      color:planHour===o.h?'var(--gold)':'var(--text-secondary)',fontSize:13,fontWeight:700,cursor:'pointer',transition:'all .15s'}}>
+                    {o.label}
+                  </button>
+                ))}
+              </div>
+              <div style={{fontSize:10,color:'var(--text-secondary)',marginTop:8,lineHeight:1.5}}>
+                到达设定时间后，🌙 收工按钮将出现「收好今天，迎接明天」选项，直接开始明日计划。
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* Sound & Haptic group */}
         <div style={{marginBottom:14,borderRadius:13,background:'var(--bg-secondary)',border:'1px solid var(--subtle-border)',overflow:'hidden'}}>
@@ -1806,18 +1919,42 @@ function SettingsPanel({soundEnabled,onSoundChange,hapticEnabled,onHapticChange}
 }
 
 // ── DAILY PLAN MODAL ─────────────────────────────────
-function DailyPlanModal({onDone,dayN,today,habits=[],carryoverTasks=[]}){
+function DailyPlanModal({onDone,dayN,today,habits=[],carryoverTasks=[],events={}}){
   const autoHabits=habits.filter(h=>h.autoAdd);
   const libraryHabits=habits.filter(h=>!h.autoAdd);
   const hasAuto=autoHabits.length>0;
   const hasCarry=carryoverTasks.length>0;
+  // 今日日历事件（排除全天事件，按开始时间排序）
+  const todayEvents=React.useMemo(()=>
+    Object.values(events||{})
+      .filter(e=>e.date===today)
+      .sort((a,b)=>(a.startTime||'').localeCompare(b.startTime||''))
+  ,[events,today]);
+  const hasTodayEvents=todayEvents.length>0;
   // step: 1=欢迎  2=习惯确认(仅有autoHabits时)  3=金牌  4=银牌  5=铜牌
   const [step,setStep]=useState(1);
+  // 日历事件提示
+  const [showEventPrompt,setShowEventPrompt]=useState(false);
+  const [eventSelections,setEventSelections]=useState(()=>
+    todayEvents.map(e=>({id:e.id,accepted:false,tier:'bronze',minutes:calcEventMins(e.startTime,e.endTime)}))
+  );
+  const applyEvents=()=>{
+    eventSelections.forEach((sel,i)=>{
+      if(!sel.accepted) return;
+      const ev=todayEvents[i];
+      const t=newTask(ev.title,sel.minutes,sel.tier,false,1);
+      if(sel.tier==='gold'){if(!goldTitle){setGoldTitle(ev.title);setGoldTime(sel.minutes);}}
+      else if(sel.tier==='silver'){if(silverRef.current.length<3) silverRef.current=[...silverRef.current,t];}
+      else{if(bronzeRef.current.length<5) bronzeRef.current=[...bronzeRef.current,t];}
+    });
+    setShowEventPrompt(false);
+    if(hasCarry){setShowCarry(true);}else{setStep(3);}
+  };
   // 顺延
   const [showCarry,setShowCarry]=useState(false);
   const [selectedCarryIds,setSelectedCarryIds]=useState(()=>carryoverTasks.map(t=>t.id));
   const toggleCarry=id=>setSelectedCarryIds(ids=>ids.includes(id)?ids.filter(x=>x!==id):[...ids,id]);
-  const goToGold=()=>{ if(hasCarry){setShowCarry(true);}else{setStep(3);} };
+  const goToGold=()=>{ if(hasTodayEvents){setShowEventPrompt(true);}else if(hasCarry){setShowCarry(true);}else{setStep(3);} };
   const applyCarry=()=>{
     const sel=carryoverTasks.filter(t=>selectedCarryIds.includes(t.id));
     const goldC=sel.find(t=>t.tier==='gold');
@@ -1939,6 +2076,74 @@ function DailyPlanModal({onDone,dayN,today,habits=[],carryoverTasks=[]}){
   }
   const tierLabel={gold:'🥇',silver:'🥈',bronze:'🥉'};
   const tierName={gold:'金牌',silver:'银牌',bronze:'铜牌'};
+  // ── 日历事件提示屏
+  if(showEventPrompt){
+    const acceptedCount=eventSelections.filter(s=>s.accepted).length;
+    const tierLabel={gold:'🥇',silver:'🥈',bronze:'🥉'};
+    return(<div className="overlay"><div className="modal-box modal-welcome">
+      <div style={{textAlign:'center',marginBottom:16}}>
+        <div style={{fontSize:36,marginBottom:6}}>📅</div>
+        <div style={{fontSize:16,fontWeight:800,color:'var(--gold)'}}>今日日历事件</div>
+        <div style={{fontSize:12,color:'var(--text-secondary)',marginTop:4}}>
+          您预设了 {todayEvents.length} 个今日事件，是否加入今日任务？
+        </div>
+      </div>
+      <div style={{maxHeight:340,overflowY:'auto',marginBottom:12}}>
+        {todayEvents.map((ev,i)=>{
+          const sel=eventSelections[i];
+          const timeStr=ev.allDay?'全天':ev.startTime?(ev.endTime?`${ev.startTime} – ${ev.endTime}`:ev.startTime):'';
+          return(
+            <div key={ev.id} style={{marginBottom:10,borderRadius:13,
+              border:`1.5px solid ${sel.accepted?'rgba(255,215,0,0.45)':'var(--chip-border)'}`,
+              background:sel.accepted?'rgba(255,215,0,0.06)':'var(--chip-bg)',
+              overflow:'hidden',transition:'all .18s'}}>
+              {/* 事件行 */}
+              <div style={{display:'flex',alignItems:'center',gap:10,padding:'11px 13px',cursor:'pointer'}}
+                onClick={()=>setEventSelections(s=>s.map((x,j)=>j===i?{...x,accepted:!x.accepted}:x))}>
+                <div style={{width:20,height:20,borderRadius:6,flexShrink:0,
+                  border:`2px solid ${sel.accepted?'var(--gold)':'var(--chip-border)'}`,
+                  background:sel.accepted?'var(--gold)':'transparent',
+                  display:'flex',alignItems:'center',justifyContent:'center',transition:'all .18s'}}>
+                  {sel.accepted&&<span style={{color:'#000',fontSize:12,fontWeight:800,lineHeight:1}}>✓</span>}
+                </div>
+                <div style={{flex:1,minWidth:0}}>
+                  <div style={{fontSize:13,fontWeight:600,color:'var(--text-primary)',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{ev.title}</div>
+                  {timeStr&&<div style={{fontSize:11,color:'var(--text-secondary)',marginTop:2}}>⏰ {timeStr}</div>}
+                  {ev.notes&&<div style={{fontSize:11,color:'var(--text-secondary)',marginTop:1,opacity:.8}}>📝 {ev.notes}</div>}
+                </div>
+              </div>
+              {/* 展开的层级 + 时间设置 */}
+              {sel.accepted&&(
+                <div style={{padding:'0 13px 11px',display:'flex',alignItems:'center',gap:7,flexWrap:'wrap',borderTop:'1px solid var(--subtle-border)'}}>
+                  <div style={{display:'flex',gap:5}}>
+                    {['gold','silver','bronze'].map(t=>(
+                      <button key={t} onClick={()=>setEventSelections(s=>s.map((x,j)=>j===i?{...x,tier:t}:x))}
+                        style={{padding:'5px 9px',borderRadius:8,fontSize:14,cursor:'pointer',transition:'all .15s',
+                          border:`1.5px solid ${sel.tier===t?'rgba(255,215,0,0.6)':'var(--chip-border)'}`,
+                          background:sel.tier===t?'rgba(255,215,0,0.13)':'transparent'}}>
+                        {tierLabel[t]}
+                      </button>
+                    ))}
+                  </div>
+                  <input type="number" className="rec-min-input" value={sel.minutes} min={1} max={180}
+                    onChange={e=>setEventSelections(s=>s.map((x,j)=>j===i?{...x,minutes:Math.max(1,+e.target.value||30)}:x))}/>
+                  <span style={{fontSize:11,color:'var(--text-secondary)'}}>min</span>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      <button className="btn btn-gold" style={{width:'100%',marginBottom:8}}
+        onClick={applyEvents} disabled={acceptedCount===0}>
+        加入今日计划（{acceptedCount} 项）→
+      </button>
+      <button className="btn btn-ghost" style={{width:'100%'}}
+        onClick={()=>{setShowEventPrompt(false);if(hasCarry)setShowCarry(true);else setStep(3);}}>
+        跳过，不加入
+      </button>
+    </div></div>);
+  }
   // ── 顺延屏
   if(showCarry){
     const carryTierLabel={gold:'🥇 金牌',silver:'🥈 银牌',bronze:'🥉 铜牌'};
@@ -2344,8 +2549,8 @@ function EditTaskModal({task, plan, onSave, onChangeTier, onClose}){
     : false;          // bronze 已是最低
   const upTarget  = tier==='bronze'?'silver':tier==='silver'?'gold':null;
   const downTarget= tier==='gold'?'silver':tier==='silver'?'bronze':null;
-  const upLabel   = tier==='bronze'?'↑ 升为银牌任务':tier==='silver'?'↑ 升为金牌任务':null;
-  const downLabel = tier==='gold'?'↓ 降为银牌任务':tier==='silver'?'↓ 降为铜牌任务':null;
+  const upLabel   = tier==='bronze'?'🔼 升为银牌任务':tier==='silver'?'🔼 升为金牌任务':null;
+  const downLabel = tier==='gold'?'🔽 降为银牌任务':tier==='silver'?'🔽 降为铜牌任务':null;
   const upHint    = tier==='silver'&&goldTaken?'金牌任务已有，无法升级':'';
   const downHint  = tier==='silver'&&bronzeCount>=5?'铜牌已满5个，无法降级':'';
 
@@ -2673,7 +2878,7 @@ function Dashboard({plan,onUpdate,onAddTask,onDeleteTask,onChangeTier}){
 
 // ── DATA REVIEW ──────────────────────────────────────
 // ── 收工弹窗 ─────────────────────────────────────────────
-function WrapUpModal({plan, plans, streak, onClose}){
+function WrapUpModal({plan, plans, streak, onClose, onPlanTomorrow}){
   const tasks=planTasks(plan);
   const done=tasks.filter(t=>t.status==='completed');
   const totalMins=done.reduce((s,t)=>s+(t.actualMinutes||t.estimatedMinutes||0),0);
@@ -2720,7 +2925,8 @@ function WrapUpModal({plan, plans, streak, onClose}){
           <span className="wrapup-insight-emoji">{pick.emoji}</span>
           <span className="wrapup-insight-text">{pick.text}</span>
         </div>}
-        <button className="wrapup-close" onClick={onClose}>收好今天，迎接明天 ✨</button>
+        <button className="wrapup-close" onClick={onPlanTomorrow||onClose}>🌅 收好今天，迎接明天</button>
+        <button className="wrapup-continue" onClick={onClose}>继续今天</button>
       </div>
     </div>
   );
@@ -3088,6 +3294,8 @@ function App(){
   const [soundEnabled, setSoundEnabled] = useLS(SK.SOUND, true);
   const [hapticEnabled, setHapticEnabled] = useLS(SK.HAPTIC, true);
   const [welcomed,   setWelcomed]   = useLS(SK.WELCOMED, false);
+  const [planStyle,  setPlanStyle]  = useLS(SK.PLAN_STYLE, 'morning');
+  const [planHour,   setPlanHour]   = useLS(SK.PLAN_HOUR, 21);
   const [habits,     setHabits]     = useLS(SK.HABITS, []);
   // activeDate tracks the last day the user officially set up a plan.
   // When activeDate !== today, the planning modal shows — NO data is ever deleted.
@@ -3096,6 +3304,7 @@ function App(){
   const [showTheme,    setShowTheme]    = useState(false);
   const [showHabits,   setShowHabits]   = useState(false);
   const [showWrapUp,   setShowWrapUp]   = useState(false);
+  const [forcePlanDate, setForcePlanDate] = useState(null);
   // Compute today fresh every render — never stale, immune to state init bugs
   const today = todayStr();
   // Force re-render every 30s and on visibilitychange so midnight is caught immediately
@@ -3163,9 +3372,13 @@ function App(){
     const keys=Object.keys(plans).sort();
     return dayCount(keys.length>0 ? keys[0] : (first||today));
   },[plans,first,today]);
-  // Plan is valid only when user has officially activated today via the planning modal.
+  // planDate: which date should the user be planning for, based on their preference
+  const planDate    = forcePlanDate || getPlanDate(planStyle, planHour);
+  // showingDate: the plan currently shown in dashboard (may be ahead if user pre-planned tomorrow)
+  const showingDate = (activeDate && activeDate >= planDate) ? activeDate : planDate;
+  // Plan is valid only when user has officially set up a plan for showingDate.
   // Historical plans are NEVER deleted — they stay in `plans` for calendar & review.
-  const plan  = activeDate === today ? (plans[today] || null) : null;
+  const plan  = (activeDate === showingDate) ? (plans[showingDate] || null) : null;
   const streak= useMemo(()=>calcStreak(plans),[plans]);
 
   // 顺延：从最近7天里找最新的有未完成任务的计划
@@ -3179,33 +3392,33 @@ function App(){
     }
     return [];
   },[plans,today]);
-  const savePlan=p=>{ setPlans(prev=>({...prev,[today]:p})); setActiveDate(today); };
+  const savePlan=p=>{ setPlans(prev=>({...prev,[planDate]:p})); setActiveDate(planDate); };
   const updateTask=t=>setPlans(prev=>{
-    const p={...prev[today]};
+    const p={...prev[showingDate]};
     if(t.tier==='gold') p.goldTask=t;
     else if(t.tier==='silver') p.silverTasks=p.silverTasks.map(x=>x.id===t.id?t:x);
     else p.bronzeTasks=p.bronzeTasks.map(x=>x.id===t.id?t:x);
-    return {...prev,[today]:p};
+    return {...prev,[showingDate]:p};
   });
   const addEvent=e=>setEvents(prev=>({...prev,[e.id]:e}));
   const delEvent=id=>setEvents(prev=>{ const n={...prev}; delete n[id]; return n; });
   const addTask=t=>setPlans(prev=>{
-    const p={...(prev[today]||{})};
+    const p={...(prev[showingDate]||{})};
     if(t.tier==='gold') p.goldTask=t;
     else if(t.tier==='silver') p.silverTasks=[...(p.silverTasks||[]),t];
     else p.bronzeTasks=[...(p.bronzeTasks||[]),t];
-    return {...prev,[today]:p};
+    return {...prev,[showingDate]:p};
   });
   const deleteTask=t=>setPlans(prev=>{
-    const p={...(prev[today]||{})};
+    const p={...(prev[showingDate]||{})};
     if(t.tier==='gold') p.goldTask=null;
     else if(t.tier==='silver') p.silverTasks=(p.silverTasks||[]).filter(x=>x.id!==t.id);
     else p.bronzeTasks=(p.bronzeTasks||[]).filter(x=>x.id!==t.id);
-    return {...prev,[today]:p};
+    return {...prev,[showingDate]:p};
   });
   // 升/降级：从原层移除，加入新层，状态重置为 idle
   const changeTierTask=(task,newTier)=>setPlans(prev=>{
-    const p={...prev[today]};
+    const p={...prev[showingDate]};
     const upgraded={...task,tier:newTier,status:'idle',completedAt:null,actualMinutes:null,remainingSeconds:null,checkInCount:0};
     if(task.tier==='gold') p.goldTask=null;
     else if(task.tier==='silver') p.silverTasks=(p.silverTasks||[]).filter(x=>x.id!==task.id);
@@ -3213,7 +3426,7 @@ function App(){
     if(newTier==='gold') p.goldTask=upgraded;
     else if(newTier==='silver') p.silverTasks=[...(p.silverTasks||[]),upgraded];
     else p.bronzeTasks=[...(p.bronzeTasks||[]),upgraded];
-    return {...prev,[today]:p};
+    return {...prev,[showingDate]:p};
   });
 
   return(
@@ -3244,12 +3457,12 @@ function App(){
       {view==='dash'     &&plan &&<Dashboard plan={plan} onUpdate={updateTask} onAddTask={addTask} onDeleteTask={deleteTask} onChangeTier={changeTierTask}/>}
       {view==='cal'            &&<CalendarView plans={plans} events={events} onAddEvent={addEvent} onDeleteEvent={delEvent}/>}
       {view==='review'         &&<DataReview plans={plans}/>}
-      {view==='settings'       &&<SettingsPanel soundEnabled={soundEnabled} onSoundChange={setSoundEnabled} hapticEnabled={hapticEnabled} onHapticChange={setHapticEnabled}/>}
-      {!welcomed&&<WelcomeModal onStart={()=>setWelcomed(true)}/>}
-      {welcomed&&!plan&&<DailyPlanModal onDone={savePlan} dayN={dc} today={today} habits={habits} carryoverTasks={carryoverTasks}/>}
+      {view==='settings'       &&<SettingsPanel soundEnabled={soundEnabled} onSoundChange={setSoundEnabled} hapticEnabled={hapticEnabled} onHapticChange={setHapticEnabled} planStyle={planStyle} onPlanStyleChange={setPlanStyle} planHour={planHour} onPlanHourChange={setPlanHour}/>}
+      {!welcomed&&<WelcomeModal onStart={(style,hour)=>{setPlanStyle(style);setPlanHour(hour);setWelcomed(true);}}/>}
+      {welcomed&&!plan&&<DailyPlanModal onDone={savePlan} dayN={dc} today={planDate} habits={habits} carryoverTasks={carryoverTasks} events={events}/>}
       {showTheme&&<ThemePanel current={theme} onChange={setTheme} onClose={()=>setShowTheme(false)}/>}
       {showHabits&&<HabitsManager habits={habits} onSave={setHabits} onClose={()=>setShowHabits(false)} plan={plan} onAddToday={addTask}/>}
-      {showWrapUp&&plan&&<WrapUpModal plan={plan} plans={plans} streak={streak} onClose={()=>setShowWrapUp(false)}/>}
+      {showWrapUp&&plan&&<WrapUpModal plan={plan} plans={plans} streak={streak} onClose={()=>setShowWrapUp(false)} onPlanTomorrow={()=>{setForcePlanDate(tomorrowStr());setShowWrapUp(false);}}/>}
 
       <div className="bottom-nav">
         <button className={`nav-btn${view==='dash'?' active':''}`} onClick={()=>setView('dash')}>
