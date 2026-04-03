@@ -1086,6 +1086,12 @@ const TIERED_BADGES = [
     levels:[{name:'起航',t:7},{name:'积累',t:30},{name:'坚守',t:100},{name:'传奇',t:365}],val:s=>s.active },
   { id:'century',    emoji:'💎', name:'百战老将',  desc:'累计完成任务总数',
     levels:[{name:'新兵',t:10},{name:'老兵',t:50},{name:'精英',t:100},{name:'传奇',t:500}],val:s=>s.totalDone },
+  { id:'early_bird', emoji:'🚀', name:'疾风先锋',  desc:'累计提前完成任务数',
+    levels:[{name:'预见',t:3},{name:'疾行',t:15},{name:'飓风',t:40},{name:'闪电',t:100}],  val:s=>s.early },
+  { id:'silver_guard',emoji:'🛡️',name:'银盾卫士',  desc:'累计银牌全满天数',
+    levels:[{name:'初守',t:1},{name:'坚守',t:5},{name:'守护者',t:20},{name:'神盾',t:50}],  val:s=>s.silverFull },
+  { id:'hunter',     emoji:'🏹', name:'万箭猎手',  desc:'累计完成银牌+铜牌任务数',
+    levels:[{name:'猎人',t:10},{name:'精英',t:50},{name:'猎王',t:150},{name:'猎神',t:300}],val:s=>s.totalDone-s.goldDone },
 ];
 
 // ── 洞察引擎 ──────────────────────────────────────────────
@@ -1860,23 +1866,6 @@ function SettingsPanel({soundEnabled,onSoundChange,hapticEnabled,onHapticChange,
           </label>
           <div style={{fontSize:10,color:'var(--text-secondary)',lineHeight:1.5,marginTop:8}}>
             建议定期保存备份，防止浏览器清理缓存时数据丢失
-          </div>
-        </div>
-
-        {/* Reset start date */}
-        <div style={{marginBottom:14,padding:'14px',borderRadius:13,background:'var(--bg-secondary)',border:'1px solid var(--subtle-border)'}}>
-          <div style={{fontSize:11,fontWeight:600,color:'var(--text-secondary)',marginBottom:10,textTransform:'uppercase',letterSpacing:'.5px'}}>使用天数</div>
-          <button className="btn btn-ghost" style={{width:'100%',fontSize:12,padding:'10px 0'}}
-            onClick={()=>{
-              if(window.confirm('将今天设为第1天？\n所有任务记录和数据完整保留，仅重置天数计数。')){
-                const today=new Date();
-                const s=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
-                localStorage.setItem('135app_first',JSON.stringify(s));
-                window.location.reload();
-              }
-            }}>📅 将今天重置为第 1 天</button>
-          <div style={{fontSize:10,color:'var(--text-secondary)',lineHeight:1.5,marginTop:8}}>
-            仅修改天数显示，历史任务数据不受影响
           </div>
         </div>
 
@@ -3583,7 +3572,6 @@ function App(){
       {!isOnline&&<div className="status-banner banner-offline">📡 当前无网络，数据已保存在本地，联网后即可正常访问</div>}
       <div className="app-header">
         <div className="header-left">
-          <div className="app-header-title">The Moment</div>
           <div className="app-header-meta">
             <span className="header-date">{fmtDate(today)}</span>
             <span className="header-day">第 {dc} 天</span>

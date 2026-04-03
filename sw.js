@@ -1,17 +1,17 @@
 // 135app Service Worker
 // 更新版本号可以让旧缓存失效，触发重新下载
-const CACHE_VERSION = 'v3-1.6';
+const CACHE_VERSION = 'v4-1.6';
 const CACHE_NAME = `135app-${CACHE_VERSION}`;
 
 // 需要预缓存的资源（首次安装时下载）
 const PRECACHE_ASSETS = [
   './',
   './index.html',
-  './135-app1.6.html',
   './manifest.json',
   './icon-192.png',
   './icon-512.png',
   './apple-touch-icon.png',
+  './themoment_icon.png',
   'https://unpkg.com/react@18/umd/react.development.js',
   'https://unpkg.com/react-dom@18/umd/react-dom.development.js',
   'https://unpkg.com/@babel/standalone/babel.min.js',
