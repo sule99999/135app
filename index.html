@@ -6,11 +6,11 @@
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="1·3·5" />
+  <meta name="apple-mobile-web-app-title" content="The Moment" />
   <meta name="theme-color" content="#ffffff" id="theme-color-meta" />
   <link rel="manifest" href="manifest.json" />
-  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-  <title>1·3·5 效率系统</title>
+  <link rel="apple-touch-icon" href="themoment_icon.png" />
+  <title>The Moment · 这一刻</title>
   <style>
     /* ═══════════════════════════════════════
        CSS VARIABLES — DEFAULT (DARK)
@@ -1372,7 +1372,7 @@ function WelcomeModal({onStart}){
   const SLIDES=[
     {
       emoji:'🌟',
-      title:'欢迎使用 1·3·5 效率系统',
+      title:'欢迎使用 The Moment · 这一刻',
       body:(
         <div style={{fontSize:13,color:'var(--text-secondary)',lineHeight:1.8,marginBottom:24}}>
           一种简单而强大的时间管理法<br/>
@@ -1807,24 +1807,6 @@ function SettingsPanel({soundEnabled,onSoundChange,hapticEnabled,onHapticChange,
           </div>
         </div>
 
-        {/* New day reset */}
-        <div style={{marginBottom:14,padding:'14px',borderRadius:13,background:'var(--bg-secondary)',border:'1px solid var(--subtle-border)'}}>
-          <div style={{fontSize:11,fontWeight:600,color:'var(--text-secondary)',marginBottom:10,textTransform:'uppercase',letterSpacing:'.5px'}}>新一天</div>
-          <button
-            className="btn btn-gold"
-            style={{width:'100%',padding:'12px 0',fontWeight:700,fontSize:13}}
-            onClick={()=>{
-              if(window.confirm('开始新的一天？\n将重新制定今日计划，所有历史数据完整保留。')){
-                localStorage.removeItem(SK.ACTIVE_DATE);
-                window.location.reload();
-              }
-            }}>
-            🌅 开始新的一天
-          </button>
-          <div style={{fontSize:10,color:'var(--text-secondary)',lineHeight:1.5,marginTop:8}}>
-            历史记录完整保留，仅重新制定今日计划
-          </div>
-        </div>
 
         {/* 数据存储风险提示 */}
         <div style={{marginBottom:14,padding:'14px',borderRadius:13,background:'rgba(255,160,0,0.07)',border:'1px solid rgba(255,160,0,0.22)'}}>
@@ -2191,7 +2173,7 @@ function DailyPlanModal({onDone,dayN,today,habits=[],carryoverTasks=[],events={}
     <div style={{fontSize:12,color:'var(--text-secondary)',marginBottom:5}}>今天是</div>
     <div style={{fontSize:21,fontWeight:800,marginBottom:6}}>{fmtDate(today)}</div>
     <div style={{fontSize:14,color:'var(--gold)',marginBottom:20}}>这是您使用本系统的第 <span style={{fontSize:26,fontWeight:800}}>{dayN}</span> 天</div>
-    <div style={{fontSize:12,color:'var(--text-secondary)',lineHeight:1.7,marginBottom:22}}>今天也要全力以赴！<br/>让我们规划今日的 1·3·5 任务吧 →</div>
+    <div style={{fontSize:12,color:'var(--text-secondary)',lineHeight:1.7,marginBottom:22}}>今天也要全力以赴！<br/>让我们规划今日的任务吧 →</div>
     <button className="btn btn-gold" onClick={()=>hasAuto?setStep(2):goToGold()}>开始规划今日任务 ✨</button>
   </div></div>);
   // ── step 2: 习惯确认（仅当有每日习惯时出现）
@@ -2527,11 +2509,13 @@ function EditTaskModal({task, plan, onSave, onChangeTier, onClose}){
   const [time,setTime]=useState(task.isCheckIn?25:task.estimatedMinutes||25);
   const [isCI,setIsCI]=useState(!!task.isCheckIn);
   const [ciTarget,setCiTarget]=useState(task.checkInTarget||1);
+  const [notes,setNotes]=useState(task.notes||'');
+  const [showNotes,setShowNotes]=useState(!!(task.notes));
   const tier=task.tier;
   const tierLabel=tier==='gold'?'🥇 金牌任务':tier==='silver'?'🥈 银牌任务':'🥉 铜牌任务';
   const editInputRef=useRef(null);
   useEffect(()=>{ const t=setTimeout(()=>{ if(editInputRef.current){ editInputRef.current.focus(); editInputRef.current.select(); } },80); return ()=>clearTimeout(t); },[]);
-  const handleSave=()=>{ if(!title.trim()) return; onSave({...task,title:title.trim(),estimatedMinutes:isCI?0:time,isCheckIn:isCI,checkInTarget:isCI?(ciTarget||1):1}); };
+  const handleSave=()=>{ if(!title.trim()) return; onSave({...task,title:title.trim(),estimatedMinutes:isCI?0:time,isCheckIn:isCI,checkInTarget:isCI?(ciTarget||1):1,notes:notes.trim()||null}); };
 
   // 升降级可行性判断
   const silverCount=(plan?.silverTasks||[]).length;
@@ -2564,7 +2548,13 @@ function EditTaskModal({task, plan, onSave, onChangeTier, onClose}){
         <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:6}}>任务名称</label>
         <input ref={editInputRef} className="plan-input" value={title} onChange={e=>setTitle(e.target.value)}
           onKeyDown={e=>{if(e.key==='Enter') handleSave();}} maxLength={100}
-          style={{width:'100%',marginBottom:16,boxSizing:'border-box'}}/>
+          style={{width:'100%',marginBottom:8,boxSizing:'border-box'}}/>
+        {/* 备注 */}
+        {!showNotes
+          ? <button onClick={()=>setShowNotes(true)} style={{fontSize:11,color:'var(--text-secondary)',background:'none',border:'none',cursor:'pointer',padding:'0 0 12px',textDecoration:'underline',textUnderlineOffset:2}}>＋ 添加备注</button>
+          : <textarea value={notes} onChange={e=>setNotes(e.target.value)} placeholder="备注、背景、参考链接…" rows={2}
+              style={{width:'100%',marginBottom:12,boxSizing:'border-box',background:'var(--input-bg)',border:'1px solid var(--input-border)',borderRadius:10,padding:'8px 10px',fontSize:12,color:'var(--text-primary)',resize:'vertical',lineHeight:1.5,fontFamily:'inherit'}}/>
+        }
         <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:8}}>预计用时</label>
         <TimePicker value={time} onChange={setTime} tier={tier} isCheckIn={isCI} onCheckInChange={v=>{setIsCI(v);if(!v)setCiTarget(1);}}/>
         {isCI&&<div style={{display:'flex',alignItems:'center',gap:8,marginTop:10}}>
@@ -2613,8 +2603,16 @@ function TaskCard({task,locked,onStart,onEdit,onDelete,onUndoComplete,onQuickSav
           <div className="card-meta">
             {task.actualMinutes>0&&<span>用时 {task.actualMinutes}min</span>}
             <span className="card-btn-group">
-              {onUndoComplete&&<button className="card-edit-btn" onClick={e=>{e.stopPropagation();onUndoComplete(task);}} title="撤销完成">↩️</button>}
-              {onDelete&&<button className="card-edit-btn" onClick={e=>{e.stopPropagation();onDelete(task);}} title="删除任务" style={{color:'var(--danger)'}}>🗑️</button>}
+              {onUndoComplete&&<button className="card-edit-btn"
+                onClick={e=>{e.stopPropagation();onUndoComplete(task);}}
+                onTouchStart={e=>e.stopPropagation()}
+                onTouchEnd={e=>{e.stopPropagation();onUndoComplete(task);}}
+                title="撤销完成">↩️</button>}
+              {onDelete&&<button className="card-edit-btn"
+                onClick={e=>{e.stopPropagation();onDelete(task);}}
+                onTouchStart={e=>e.stopPropagation()}
+                onTouchEnd={e=>{e.stopPropagation();onDelete(task);}}
+                title="删除任务" style={{color:'var(--danger)'}}>🗑️</button>}
             </span>
           </div>
           <div className={stampClass}>DONE</div>
@@ -2634,6 +2632,8 @@ function TaskCard({task,locked,onStart,onEdit,onDelete,onUndoComplete,onQuickSav
   const [editVal,setEditVal]=useState('');
   const inlineRef=useRef(null);
   const longPressTimer=useRef(null);
+  // 防止 touchend 之后的合成 click 双重触发
+  const touchHandled=useRef(false);
 
   useEffect(()=>{ if(isInlineEdit&&inlineRef.current) inlineRef.current.focus(); },[isInlineEdit]);
 
@@ -2654,10 +2654,11 @@ function TaskCard({task,locked,onStart,onEdit,onDelete,onUndoComplete,onQuickSav
   const touchMoved=useRef(false);
   const handleTouchStart=e=>{
     touchMoved.current=false;
+    touchHandled.current=false;
     touchStartPos.current={x:e.touches[0].clientX,y:e.touches[0].clientY};
     if(locked||!onQuickSave) return;
     longPressTimer.current=setTimeout(()=>{
-      touchMoved.current=true; // 长按触发，阻止后续 touchend click
+      touchMoved.current=true;
       setEditVal(task.title); setIsInlineEdit(true);
     },600);
   };
@@ -2673,12 +2674,16 @@ function TaskCard({task,locked,onStart,onEdit,onDelete,onUndoComplete,onQuickSav
   };
   const handleTouchEnd=e=>{
     clearTimeout(longPressTimer.current);
+    // 不调用 e.preventDefault()，避免阻断浏览器滚动惯性造成页面跳动
     if(!touchMoved.current&&!locked&&!isInlineEdit){
-      e.preventDefault();
+      touchHandled.current=true;
+      // 300ms 后重置，保证后续 click 正常
+      setTimeout(()=>{ touchHandled.current=false; },300);
       triggerStart();
     }
   };
-  const handleClick=()=>{ triggerStart(); };
+  // 桌面端 click；移动端 touch 已处理过则跳过，避免双重触发
+  const handleClick=()=>{ if(touchHandled.current) return; triggerStart(); };
   // 多次打卡的卡片进度条宽度
   const ciPct = isMultiCI ? Math.min(100, ciCount/ciTarget*100) : 0;
   return(
@@ -2703,6 +2708,7 @@ function TaskCard({task,locked,onStart,onEdit,onDelete,onUndoComplete,onQuickSav
           )}
           <span className={`card-badge badge-${tier}`}>{locked?'🔒':isMultiCI?`${ciCount}/${ciTarget}`:isCI?'✓ 打卡':isPaused?'⏸ 继续':'▶ 开始'}</span>
         </div>
+        {task.notes&&<div style={{fontSize:11,color:'var(--text-secondary)',padding:'2px 0 4px',lineHeight:1.5,wordBreak:'break-word',opacity:.85}}>📝 {task.notes}</div>}
         <div className="card-meta">
           {isMultiCI
             ? <span>每点一次 +1，目标 {ciTarget} 次</span>
@@ -2714,8 +2720,16 @@ function TaskCard({task,locked,onStart,onEdit,onDelete,onUndoComplete,onQuickSav
           }
           {!locked&&(onEdit||onDelete)&&(
             <span className="card-btn-group">
-              {onEdit&&<button className="card-edit-btn" onClick={e=>{e.stopPropagation();onEdit(task);}} title="编辑任务">✏️</button>}
-              {onDelete&&<button className="card-edit-btn" onClick={e=>{e.stopPropagation();onDelete(task);}} title="删除任务" style={{color:'var(--danger)'}}>🗑️</button>}
+              {onEdit&&<button className="card-edit-btn"
+                onClick={e=>{e.stopPropagation();onEdit(task);}}
+                onTouchStart={e=>e.stopPropagation()}
+                onTouchEnd={e=>{e.stopPropagation();onEdit(task);}}
+                title="编辑任务">✏️</button>}
+              {onDelete&&<button className="card-edit-btn"
+                onClick={e=>{e.stopPropagation();onDelete(task);}}
+                onTouchStart={e=>e.stopPropagation()}
+                onTouchEnd={e=>{e.stopPropagation();onDelete(task);}}
+                title="删除任务" style={{color:'var(--danger)'}}>🗑️</button>}
             </span>
           )}
         </div>
@@ -2971,13 +2985,135 @@ function DataReview({plans}){
   };
 
   const WeeklySummary=()=>{
-    const wks={}; days.forEach(d=>{ const w=weekOf(d); if(!wks[w])wks[w]=[]; wks[w].push(d); });
-    const list=Object.entries(wks).sort((a,b)=>b[0].localeCompare(a[0])).slice(0,10);
-    if(!list.length) return(<div className="empty-state"><div className="empty-icon">📊</div><div className="empty-title">暂无数据</div><div className="empty-text">完成一周记录后，这里将显示每周总结</div></div>);
-    return(<div className="review-card"><div className="review-card-title">📅 每周总结</div>
-      <table className="sum-table"><thead><tr><th>周起始</th><th>活跃</th><th>完成</th><th>完成率</th></tr></thead>
-      <tbody>{list.map(([w,ds])=>{const ts=ds.flatMap(d=>planTasks(plans[d]));const dn=ts.filter(t=>t.status==='completed').length;const rate=ts.length?Math.round(dn/ts.length*100):0;const x=new Date(w+' 12:00');return(<tr key={w}><td style={{color:'var(--gold)'}}>{x.getMonth()+1}/{x.getDate()}</td><td>{ds.length}天</td><td>{dn}/{ts.length}</td><td><span style={{color:rate>=80?'var(--success)':rate>=50?'var(--gold)':'var(--danger)'}}>{rate}%</span></td></tr>);})}</tbody>
-      </table></div>);
+    // 计算指定日期所在周的一系列天（周一~周日）
+    const getWeekDays=(refDate)=>{
+      const d=new Date(refDate+' 12:00');
+      const day=d.getDay(); // 0=周日
+      const monday=new Date(d); monday.setDate(d.getDate()-(day===0?6:day-1));
+      return Array.from({length:7},(_,i)=>{ const x=new Date(monday); x.setDate(monday.getDate()+i); return x.toISOString().split('T')[0]; });
+    };
+    const now=new Date();
+    const todayK=now.toISOString().split('T')[0];
+    const thisWeekDays=getWeekDays(todayK);
+    const lastWeekStart=new Date(thisWeekDays[0]+' 12:00'); lastWeekStart.setDate(lastWeekStart.getDate()-7);
+    const lastWeekDays=getWeekDays(lastWeekStart.toISOString().split('T')[0]);
+    const weekStats=(weekDays)=>{
+      const ts=weekDays.flatMap(d=>planTasks(plans[d]||{}));
+      const done=ts.filter(t=>t.status==='completed');
+      const focusMins=done.reduce((s,t)=>s+(t.actualMinutes||t.estimatedMinutes||0),0);
+      const goldDone=done.filter(t=>t.tier==='gold').length;
+      const activeDays=weekDays.filter(d=>plans[d]&&planTasks(plans[d]).length>0).length;
+      const perfectDays=weekDays.filter(d=>{const p=plans[d];if(!p)return false;const a=planTasks(p);return a.length>0&&a.every(t=>t.status==='completed');}).length;
+      const rate=ts.length?Math.round(done.length/ts.length*100):0;
+      return{ts,done,focusMins,goldDone,activeDays,perfectDays,rate,total:ts.length};
+    };
+    const thisW=weekStats(thisWeekDays);
+    const lastW=weekStats(lastWeekDays);
+    const dayNames=['周一','周二','周三','周四','周五','周六','周日'];
+    // 本周每日情况
+    const dayRows=thisWeekDays.map((d,i)=>{
+      const p=plans[d]; const ts=p?planTasks(p):[];
+      const done=ts.filter(t=>t.status==='completed');
+      const isPast=d<=todayK;
+      const isToday=d===todayK;
+      const rate=ts.length?Math.round(done.length/ts.length*100):null;
+      const allDone=ts.length>0&&done.length===ts.length;
+      return{d,i,ts,done,rate,isPast,isToday,allDone,empty:!p||ts.length===0};
+    });
+    // 本周完成的 Top 任务（按层级排序：金>银>铜）
+    const tierOrder={gold:0,silver:1,bronze:2};
+    const topTasks=thisW.done.slice().sort((a,b)=>(tierOrder[a.tier]||2)-(tierOrder[b.tier]||2)).slice(0,5);
+    const diff=(a,b)=>a-b;
+    const arrow=(a,b)=>a>b?'↑':a<b?'↓':'—';
+    const arrowColor=(a,b)=>a>b?'var(--success)':a<b?'var(--danger)':'var(--text-secondary)';
+    const fmt=m=>m>=60?`${Math.floor(m/60)}h${m%60?m%60+'m':''}`:`${m}m`;
+    // 本周起止日期
+    const wkStart=new Date(thisWeekDays[0]+' 12:00');
+    const wkEnd=new Date(thisWeekDays[6]+' 12:00');
+    const fmtMD=d=>`${d.getMonth()+1}月${d.getDate()}日`;
+    if(thisW.activeDays===0 && lastW.activeDays===0)
+      return(<div className="empty-state"><div className="empty-icon">📅</div><div className="empty-title">暂无数据</div><div className="empty-text">开始记录任务后，这里将展示每周回顾</div></div>);
+    return(
+      <div>
+        {/* 本周标题 */}
+        <div style={{textAlign:'center',marginBottom:14}}>
+          <div style={{fontSize:13,color:'var(--text-secondary)',marginBottom:2}}>{fmtMD(wkStart)} – {fmtMD(wkEnd)}</div>
+          <div style={{fontSize:18,fontWeight:800,color:'var(--text-primary)'}}>本周回顾</div>
+        </div>
+        {/* 核心数字 */}
+        <div className="stats-grid" style={{marginBottom:11}}>
+          <div className="stat-tile">
+            <span className="stat-val" style={{color:'var(--gold)'}}>{thisW.done.length}</span>
+            <div className="stat-lbl">✅ 任务完成</div>
+            <div style={{fontSize:10,marginTop:3,color:arrowColor(thisW.done.length,lastW.done.length)}}>
+              {arrow(thisW.done.length,lastW.done.length)} 上周{lastW.done.length}个
+            </div>
+          </div>
+          <div className="stat-tile">
+            <span className="stat-val" style={{color:'var(--success)'}}>{fmt(thisW.focusMins)}</span>
+            <div className="stat-lbl">⏱ 专注时长</div>
+            <div style={{fontSize:10,marginTop:3,color:arrowColor(thisW.focusMins,lastW.focusMins)}}>
+              {arrow(thisW.focusMins,lastW.focusMins)} 上周{fmt(lastW.focusMins)}
+            </div>
+          </div>
+          <div className="stat-tile">
+            <span className="stat-val" style={{color:'var(--gold)'}}>{thisW.rate}%</span>
+            <div className="stat-lbl">📈 完成率</div>
+            <div style={{fontSize:10,marginTop:3,color:arrowColor(thisW.rate,lastW.rate)}}>
+              {arrow(thisW.rate,lastW.rate)} 上周{lastW.rate}%
+            </div>
+          </div>
+        </div>
+        <div className="stats-grid" style={{marginBottom:14}}>
+          <div className="stat-tile"><span className="stat-val" style={{color:'var(--gold)'}}>{thisW.goldDone}</span><div className="stat-lbl">🥇 金牌完成</div></div>
+          <div className="stat-tile"><span className="stat-val" style={{color:'#FF9500'}}>{thisW.activeDays}</span><div className="stat-lbl">📅 活跃天数</div></div>
+          <div className="stat-tile"><span className="stat-val" style={{color:'var(--success)'}}>{thisW.perfectDays}</span><div className="stat-lbl">🌟 完美天数</div></div>
+        </div>
+        {/* 每日打卡条 */}
+        <div className="review-card" style={{marginBottom:11}}>
+          <div className="review-card-title">每日完成情况</div>
+          <div style={{display:'flex',gap:6}}>
+            {dayRows.map((r,i)=>(
+              <div key={r.d} style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',gap:4}}>
+                <div style={{width:'100%',height:44,borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center',fontSize:16,
+                  background:r.empty&&r.isPast?'var(--chip-bg)':r.allDone?'rgba(61,220,132,0.18)':r.rate!=null?`rgba(255,215,0,${Math.max(.08,r.rate/100*.35)})`:'var(--chip-bg)',
+                  border:`1.5px solid ${r.isToday?'var(--gold)':r.allDone?'rgba(61,220,132,0.5)':r.rate!=null?'rgba(255,215,0,0.3)':'var(--chip-border)'}`,
+                  opacity:r.isPast||r.isToday?1:0.4}}>
+                  {r.empty&&r.isPast?'—':r.allDone?'🌟':r.rate!=null?`${r.rate}%`:''}
+                </div>
+                <div style={{fontSize:10,color:r.isToday?'var(--gold)':'var(--text-secondary)',fontWeight:r.isToday?700:400}}>{dayNames[i]}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+        {/* 本周完成的任务 */}
+        {topTasks.length>0&&(
+          <div className="review-card" style={{marginBottom:11}}>
+            <div className="review-card-title">🏆 本周完成的任务</div>
+            {topTasks.map((t,i)=>(
+              <div key={i} style={{display:'flex',alignItems:'center',gap:8,padding:'7px 0',borderBottom:i<topTasks.length-1?'1px solid var(--subtle-border)':'none'}}>
+                <span style={{fontSize:16}}>{t.tier==='gold'?'🥇':t.tier==='silver'?'🥈':'🥉'}</span>
+                <span style={{flex:1,fontSize:13,color:'var(--text-primary)',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{t.title}</span>
+                {t.actualMinutes>0&&<span style={{fontSize:11,color:'var(--text-secondary)',flexShrink:0}}>{t.actualMinutes}min</span>}
+              </div>
+            ))}
+          </div>
+        )}
+        {/* 鼓励语 */}
+        <div style={{padding:'13px 14px',borderRadius:12,background:'rgba(255,215,0,0.06)',border:'1px solid rgba(255,215,0,0.2)',textAlign:'center'}}>
+          <div style={{fontSize:22,marginBottom:6}}>
+            {thisW.rate>=100?'🎉':thisW.rate>=80?'🌟':thisW.rate>=50?'💪':'🌱'}
+          </div>
+          <div style={{fontSize:13,color:'var(--text-primary)',fontWeight:600,lineHeight:1.6}}>
+            {thisW.rate>=100?'完美一周！所有任务全部完成，太厉害了！'
+             :thisW.rate>=80?`表现出色！完成率 ${thisW.rate}%，继续保持！`
+             :thisW.rate>=50?`不错的一周，完成了 ${thisW.done.length} 个任务，下周继续加油！`
+             :thisW.activeDays>0?`播下了 ${thisW.activeDays} 天的种子，积累总比停止好。`
+             :'新的一周，新的开始，加油！💫'}
+          </div>
+        </div>
+      </div>
+    );
   };
 
   const MonthlySummary=()=>{
@@ -3038,7 +3174,7 @@ function DataReview({plans}){
 
   return(<div className="review-wrap">
     <div className="review-top"><h2>📊 数据复盘</h2><p>了解你的时间都去哪了</p></div>
-    <div className="review-tabs">{[{id:'overview',l:'概览'},{id:'weekly',l:'每周'},{id:'monthly',l:'每月'},{id:'badges',l:'勋章'}].map(t=>(<button key={t.id} className={`rtab${tab===t.id?' active':''}`} onClick={()=>setTab(t.id)}>{t.l}</button>))}</div>
+    <div className="review-tabs">{[{id:'overview',l:'概览'},{id:'weekly',l:'周回顾'},{id:'monthly',l:'每月'},{id:'badges',l:'勋章'}].map(t=>(<button key={t.id} className={`rtab${tab===t.id?' active':''}`} onClick={()=>setTab(t.id)}>{t.l}</button>))}</div>
     {tab==='overview'&&(<><InsightCard/><div className="stats-grid">
       <div className="stat-tile"><span className="stat-val" style={{color:'#FF9500'}}>{streak}</span><div className="stat-lbl">🔥 连续打卡</div></div>
       <div className="stat-tile"><span className="stat-val" style={{color:'var(--gold)'}}>{stats.totalDone}</span><div className="stat-lbl">✅ 累计完成</div></div>
@@ -3052,26 +3188,34 @@ function DataReview({plans}){
   </div>);
 }
 
-// ── ADD EVENT MODAL ──────────────────────────────────
-function AddEventModal({initialDate, onSave, onClose}){
-  const [title,setTitle]=useState('');
-  const [date,setDate]=useState(initialDate||todayStr());
-  const [allDay,setAllDay]=useState(false);
-  const [startT,setStartT]=useState('09:00');
-  const [endT,setEndT]=useState('10:00');
-  const [color,setColor]=useState('blue');
-  const [notes,setNotes]=useState('');
+// ── ADD / EDIT EVENT MODAL ────────────────────────────
+function AddEventModal({initialDate, event:editEvt, onSave, onDelete, onClose}){
+  const isEdit=!!editEvt;
+  const [title,setTitle]=useState(isEdit?editEvt.title:'');
+  const [date,setDate]=useState(isEdit?editEvt.date:(initialDate||todayStr()));
+  const [allDay,setAllDay]=useState(isEdit?!!editEvt.allDay:false);
+  const [startT,setStartT]=useState(isEdit?(editEvt.startTime||'09:00'):'09:00');
+  const [endT,setEndT]=useState(isEdit?(editEvt.endTime||'10:00'):'10:00');
+  const [color,setColor]=useState(isEdit?(editEvt.color||'blue'):'blue');
+  const [notes,setNotes]=useState(isEdit?(editEvt.notes||''):'');
 
   const save=()=>{
     if(!title.trim()) return;
-    onSave({id:genId(),title:title.trim(),date,allDay,startTime:allDay?null:startT,endTime:allDay?null:endT,color,notes:notes.trim()||null});
+    const id=isEdit?editEvt.id:genId();
+    onSave({id,title:title.trim(),date,allDay,startTime:allDay?null:startT,endTime:allDay?null:endT,color,notes:notes.trim()||null});
     onClose();
+  };
+  const handleDelete=()=>{
+    if(window.confirm(`删除「${title}」？`)){onDelete(editEvt.id);onClose();}
   };
 
   return(<div className="overlay" onClick={onClose}>
     <div className="modal-box modal-welcome" style={{maxWidth:400}} onClick={e=>e.stopPropagation()}>
-      <div style={{fontSize:16,fontWeight:700,marginBottom:3,color:'var(--text-primary)'}}>📅 添加日历事件</div>
-      <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:15}}>记录计划、提醒或任何事项</div>
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:3}}>
+        <div style={{fontSize:16,fontWeight:700,color:'var(--text-primary)'}}>{isEdit?'✏️ 编辑日历事件':'📅 添加日历事件'}</div>
+        {isEdit&&<button onClick={handleDelete} style={{background:'none',border:'none',cursor:'pointer',fontSize:18,padding:'2px 4px',color:'var(--danger)',opacity:.75}} title="删除事件">🗑️</button>}
+      </div>
+      <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:15}}>{isEdit?'修改事件信息后保存':'记录计划、提醒或任何事项'}</div>
 
       <div className="form-group"><label className="form-label">标题</label>
         <input className="form-input" placeholder="事件名称…" value={title} onChange={e=>setTitle(e.target.value)} onKeyDown={e=>e.key==='Enter'&&save()} autoFocus/>
@@ -3108,7 +3252,7 @@ function AddEventModal({initialDate, onSave, onClose}){
         <input className="form-input form-input-sm" placeholder="备注…" value={notes} onChange={e=>setNotes(e.target.value)}/>
       </div>
 
-      <button className="btn btn-gold" disabled={!title.trim()} onClick={save}>保存事件</button>
+      <button className="btn btn-gold" disabled={!title.trim()} onClick={save}>{isEdit?'保存修改':'保存事件'}</button>
       <button className="btn btn-ghost" onClick={onClose}>取消</button>
     </div>
   </div>);
@@ -3121,6 +3265,7 @@ function CalendarView({plans, events, onAddEvent, onDeleteEvent}){
   const [curMonth,setCurMonth]=useState(new Date().getMonth());
   const [selDate,setSelDate]=useState(todayStr());
   const [showAdd,setShowAdd]=useState(false);
+  const [editingEvent,setEditingEvent]=useState(null);
 
   const today=todayStr();
 
@@ -3241,7 +3386,7 @@ function CalendarView({plans, events, onAddEvent, onDeleteEvent}){
           <div className="allday-strip">
             {alldayEvts.map(e=>(
               <div key={e.id} className="allday-chip" style={{background:getEvtColor(e.colorKey)}}
-                onClick={()=>{if(!e.isTask&&confirm(`删除"${e.title}"?`)) onDeleteEvent(e.id);}}>
+                onClick={()=>{if(!e.isTask){ const raw=events[e.id]; if(raw) setEditingEvent(raw); }}}>
                 {e.title}
               </div>
             ))}
@@ -3260,7 +3405,7 @@ function CalendarView({plans, events, onAddEvent, onDeleteEvent}){
             {evtBlocks.map(e=>(
               <div key={e.id} className="evt-block"
                 style={{top:e.top,height:e.height,background:getEvtColor(e.colorKey),left:54,right:6}}
-                onClick={()=>{if(!e.isTask&&confirm(`删除"${e.title}"?`)) onDeleteEvent(e.id);}}>
+                onClick={()=>{if(!e.isTask){ const raw=events[e.id]; if(raw) setEditingEvent(raw); }}}>
                 <div className="evt-title">{e.isTask?{gold:'🥇',silver:'🥈',bronze:'🥉'}[e.tier]:''} {e.title}</div>
                 {e.height>36&&<div className="evt-time">{String(e.startH).padStart(2,'0')}:{String(e.startM).padStart(2,'0')} – {String(e.endH).padStart(2,'0')}:{String(e.endM).padStart(2,'0')}</div>}
               </div>
@@ -3280,7 +3425,8 @@ function CalendarView({plans, events, onAddEvent, onDeleteEvent}){
   return(
     <div className="cal-wrap">
       {view==='month'?<MonthView/>:<DayView/>}
-      {showAdd&&<AddEventModal initialDate={selDate} onSave={onAddEvent} onClose={()=>setShowAdd(false)}/>}
+      {showAdd&&<AddEventModal initialDate={selDate} onSave={onAddEvent} onDelete={onDeleteEvent} onClose={()=>setShowAdd(false)}/>}
+      {editingEvent&&<AddEventModal event={editingEvent} onSave={onAddEvent} onDelete={onDeleteEvent} onClose={()=>setEditingEvent(null)}/>}
     </div>
   );
 }
@@ -3437,6 +3583,7 @@ function App(){
       {!isOnline&&<div className="status-banner banner-offline">📡 当前无网络，数据已保存在本地，联网后即可正常访问</div>}
       <div className="app-header">
         <div className="header-left">
+          <div className="app-header-title">The Moment</div>
           <div className="app-header-meta">
             <span className="header-date">{fmtDate(today)}</span>
             <span className="header-day">第 {dc} 天</span>

@@ -1,13 +1,13 @@
 // 135app Service Worker
 // 更新版本号可以让旧缓存失效，触发重新下载
-const CACHE_VERSION = 'v2';
+const CACHE_VERSION = 'v3-1.6';
 const CACHE_NAME = `135app-${CACHE_VERSION}`;
 
 // 需要预缓存的资源（首次安装时下载）
 const PRECACHE_ASSETS = [
   './',
   './index.html',
-  './135-app1.3.html',
+  './135-app1.6.html',
   './manifest.json',
   './icon-192.png',
   './icon-512.png',
