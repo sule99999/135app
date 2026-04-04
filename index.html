@@ -2627,7 +2627,7 @@ function TaskCard({task,locked,onStart,onEdit,onDelete,onUndoComplete,onQuickSav
   useEffect(()=>{ if(isInlineEdit&&inlineRef.current) inlineRef.current.focus(); },[isInlineEdit]);
 
   const startInlineEdit=e=>{
-    if(locked||!onQuickSave) return;
+    if(locked||!onQuickSave||task.status==='completed') return;
     e.stopPropagation();
     setEditVal(task.title);
     setIsInlineEdit(true);
@@ -2645,7 +2645,7 @@ function TaskCard({task,locked,onStart,onEdit,onDelete,onUndoComplete,onQuickSav
     touchMoved.current=false;
     touchHandled.current=false;
     touchStartPos.current={x:e.touches[0].clientX,y:e.touches[0].clientY};
-    if(locked||!onQuickSave) return;
+    if(locked||!onQuickSave||task.status==='completed') return;
     longPressTimer.current=setTimeout(()=>{
       touchMoved.current=true;
       setEditVal(task.title); setIsInlineEdit(true);
@@ -2709,7 +2709,7 @@ function TaskCard({task,locked,onStart,onEdit,onDelete,onUndoComplete,onQuickSav
           }
           {!locked&&(onEdit||onDelete)&&(
             <span className="card-btn-group">
-              {onEdit&&<button className="card-edit-btn"
+              {onEdit&&task.status!=='completed'&&<button className="card-edit-btn"
                 onClick={e=>{e.stopPropagation();onEdit(task);}}
                 onTouchStart={e=>e.stopPropagation()}
                 onTouchEnd={e=>{e.stopPropagation();onEdit(task);}}
