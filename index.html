@@ -1544,8 +1544,9 @@ function HabitForm({habit, onSave, onClose}){
         <TimePicker value={mins} onChange={setMins} tier={tier} isCheckIn={isCI} onCheckInChange={v=>{setIsCI(v);if(!v)setCiTarget(1);}}/>
         {isCI&&<div style={{display:'flex',alignItems:'center',gap:8,marginTop:10}}>
           <span style={{fontSize:12,color:'var(--text-secondary)'}}>目标次数</span>
-          <input type="number" min={1} max={99} value={ciTarget}
-            onChange={e=>setCiTarget(Math.max(1,Math.min(99,+e.target.value||1)))}
+          <input type="number" min={1} max={99} value={ciTarget||''}
+            onChange={e=>setCiTarget(Math.min(99,+e.target.value||0))}
+            onBlur={()=>setCiTarget(v=>Math.max(1,+v||1))}
             style={{width:54,padding:'4px 8px',background:'var(--input-bg)',border:'1px solid var(--input-border)',borderRadius:8,color:'var(--text-primary)',fontSize:13,textAlign:'center'}}/>
           <span style={{fontSize:12,color:'var(--text-secondary)'}}>次</span>
           {ciTarget>1&&<span style={{fontSize:11,color:'var(--gold)'}}>每次点卡片 +1，满{ciTarget}次自动完成</span>}
@@ -2463,8 +2464,9 @@ function AddTaskModal({onSave,onClose,plan}){
         <TimePicker value={time} onChange={setTime} tier={tier} isCheckIn={isCI} onCheckInChange={v=>{setIsCI(v);if(!v)setCiTarget(1);}}/>
         {isCI&&<div style={{display:'flex',alignItems:'center',gap:8,marginTop:10}}>
           <span style={{fontSize:12,color:'var(--text-secondary)'}}>目标次数</span>
-          <input type="number" min={1} max={99} value={ciTarget}
-            onChange={e=>setCiTarget(Math.max(1,Math.min(99,+e.target.value||1)))}
+          <input type="number" min={1} max={99} value={ciTarget||''}
+            onChange={e=>setCiTarget(Math.min(99,+e.target.value||0))}
+            onBlur={()=>setCiTarget(v=>Math.max(1,+v||1))}
             style={{width:54,padding:'4px 8px',background:'var(--input-bg)',border:'1px solid var(--input-border)',borderRadius:8,color:'var(--text-primary)',fontSize:13,textAlign:'center'}}/>
           <span style={{fontSize:12,color:'var(--text-secondary)'}}>次</span>
         </div>}
@@ -2548,8 +2550,9 @@ function EditTaskModal({task, plan, onSave, onChangeTier, onClose}){
         <TimePicker value={time} onChange={setTime} tier={tier} isCheckIn={isCI} onCheckInChange={v=>{setIsCI(v);if(!v)setCiTarget(1);}}/>
         {isCI&&<div style={{display:'flex',alignItems:'center',gap:8,marginTop:10}}>
           <span style={{fontSize:12,color:'var(--text-secondary)'}}>目标次数</span>
-          <input type="number" min={1} max={99} value={ciTarget}
-            onChange={e=>setCiTarget(Math.max(1,Math.min(99,+e.target.value||1)))}
+          <input type="number" min={1} max={99} value={ciTarget||''}
+            onChange={e=>setCiTarget(Math.min(99,+e.target.value||0))}
+            onBlur={()=>setCiTarget(v=>Math.max(1,+v||1))}
             style={{width:54,padding:'4px 8px',background:'var(--input-bg)',border:'1px solid var(--input-border)',borderRadius:8,color:'var(--text-primary)',fontSize:13,textAlign:'center'}}/>
           <span style={{fontSize:12,color:'var(--text-secondary)'}}>次</span>
         </div>}
