@@ -2758,6 +2758,16 @@ function Dashboard({plan,onUpdate,onAddTask,onDeleteTask,onChangeTier}){
   const activeTask=activeId?all.find(t=>t.id===activeId):null;
   const done=all.filter(t=>t.status==='completed').length;
 
+  // 后台恢复：页面重载时找回正在计时的任务
+  useEffect(()=>{
+    if(!plan) return;
+    const running=planTasks(plan).find(t=>
+      t.timerStartedAt && t.status!=='completed' && t.status!=='paused' && !t.isCheckIn
+    );
+    if(running) setActiveId(running.id);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[]);
+
   const start=t=>{
     if(t.status==='completed') return;
     // Check-in task: complete immediately (or increment count for multi-check-in)
@@ -2779,9 +2789,12 @@ function Dashboard({plan,onUpdate,onAddTask,onDeleteTask,onChangeTier}){
       return;
     }
     if(t.status==='idle'){
-      // First ever start: record wall-clock start time
-      const updated={...t, timerStartedAt:new Date().toISOString()};
-      onUpdate(updated);
+      if(!t.timerStartedAt){
+        // 真正的第一次启动：记录起始时间
+        const updated={...t, timerStartedAt:new Date().toISOString()};
+        onUpdate(updated);
+      }
+      // 若 timerStartedAt 已存在（后台重载恢复），保留原始时间，不重置
     }
     // If paused: just reopen timer — keep original timerStartedAt
     setActiveId(t.id);
