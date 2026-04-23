@@ -1072,68 +1072,1191 @@
 const { useState, useEffect, useCallback, useRef, useMemo } = React;
 
 // ── CONSTANTS ────────────────────────────────────────
-const SK = { FIRST:'135app_first', PLANS:'135app_plans', THEME:'135app_theme', EVENTS:'135app_events', SOUND:'135app_sound', HAPTIC:'135app_haptic', WELCOMED:'135app_welcomed', ACTIVE_DATE:'135app_active_date', HABITS:'135app_habits', PLAN_STYLE:'135app_plan_style', PLAN_HOUR:'135app_plan_hour' };
+const SK = { FIRST:'135app_first', PLANS:'135app_plans', THEME:'135app_theme', EVENTS:'135app_events', SOUND:'135app_sound', HAPTIC:'135app_haptic', WELCOMED:'135app_welcomed', ACTIVE_DATE:'135app_active_date', HABITS:'135app_habits', PLAN_STYLE:'135app_plan_style', PLAN_HOUR:'135app_plan_hour', LANG:'135app_lang' };
+
+// ── I18N ─────────────────────────────────────────────
+const TRANSLATIONS = {
+  zh: {
+    // 底部导航
+    nav_today:    '今日任务',
+    nav_cal:      '日历',
+    nav_review:   '数据复盘',
+    nav_settings: '设置',
+    // 顶部 header
+    day_count:    (n) => `第 ${n} 天`,
+    streak:       (n) => `🔥 ${n}天连击`,
+    btn_wrapup:   '今日收工',
+    btn_habits:   '习惯管理',
+    btn_theme:    '选择主题',
+    // 任务区
+    gold_title:   '🥇 金牌任务',
+    gold_desc:    '今天最重要的一件事',
+    silver_title: '🥈 银牌任务',
+    silver_desc:  '重要但不紧急',
+    bronze_title: '🥉 铜牌任务',
+    bronze_desc:  '日常事务',
+    add_gold:     '＋ 添加金牌任务',
+    add_silver:   '＋ 添加银牌任务',
+    add_bronze:   '＋ 添加铜牌任务',
+    add_task:     '新增任务',
+    // 任务卡片状态
+    task_start:   '▶ 开始',
+    task_pause:   '⏸ 继续',
+    task_checkin: '✓ 打卡',
+    task_locked:  '🔒',
+    // 全部完成
+    all_done_title: '🎉 今日任务全部完成！',
+    all_done_sub:   '你做到了，今天很棒',
+    // 进度条
+    progress_of:  (done, total) => `今日完成 ${done} / ${total}`,
+    gold_badge:   '已获得',
+    // 弹窗：添加任务
+    modal_add_title:   '添加任务',
+    modal_edit_title:  '编辑任务',
+    modal_save:        '保存',
+    modal_cancel:      '取消',
+    modal_delete:      '删除任务',
+    task_name_ph:      '任务名称',
+    task_time_label:   '预计时间',
+    task_ci_label:     '打卡模式',
+    task_ci_target:    '目标次数',
+    task_ci_hint:      (n) => `每次点卡片 +1，满${n}次自动完成`,
+    task_tier_label:   '层级',
+    // 计时器
+    timer_elapsed:     '已用',
+    timer_overtime:    '超时',
+    timer_pause:       '⏸ 暂停',
+    timer_complete:    '✅ 完成',
+    timer_evaluate:    '评估本次任务',
+    timer_rate_good:   '顺利完成 👍',
+    timer_rate_ok:     '基本完成',
+    timer_rate_hard:   '比较费力',
+    timer_skip:        '跳过评估',
+    timer_confirm:     '确认完成',
+    // 导航提示
+    no_plan_title:  '还没有今日计划',
+    no_plan_btn:    '开始规划今天 →',
+    // 规划向导
+    plan_welcome:   '欢迎使用 The Moment · 这一刻',
+    plan_gold_q:    '今天最重要的一件事是什么？',
+    plan_silver_q:  '添加银牌任务（最多3个）',
+    plan_bronze_q:  '添加铜牌任务（最多5个）',
+    plan_next:      '下一步 →',
+    plan_done:      '开始今天 🚀',
+    plan_skip:      '跳过',
+    plan_add:       '添加',
+    // 设置页
+    settings_title:         '设置',
+    settings_subtitle:      '系统设置与数据管理',
+    settings_lang:          '语言',
+    settings_sound:         '音效',
+    settings_sound_desc:    '点击音、计时完成提示音',
+    settings_haptic:        '触感震动',
+    settings_haptic_on:     '点击轻微震动反馈',
+    settings_haptic_off:    '当前设备不支持震动',
+    settings_plan_style:    '规划习惯',
+    settings_plan_style_desc:'选择您偏好的每日规划时间',
+    settings_morning:       '早上规划',
+    settings_evening:       '晚上规划',
+    settings_plan_hour:     '从几点开始可以规划明天？',
+    settings_backup:        '数据备份',
+    settings_export:        '保存数据备份',
+    settings_import:        '恢复备份（从文件导入）',
+    settings_import_hint:   '建议定期保存备份，防止浏览器清理缓存时数据丢失',
+    settings_danger:        '危险区域',
+    settings_clear:         '清除所有数据，重新开始',
+    settings_clear_confirm: '确定要清除所有数据吗？\n计划、记录、日历事件都会被删除，且无法恢复。',
+    settings_export_done:   '数据已导出',
+    // 今日收工
+    wrapup_title:   '今日收工',
+    wrapup_close:   '✨ 好，明天继续',
+    wrapup_plan:    '顺手规划明天 →',
+    // 日历
+    cal_add_event:  '添加事件',
+    cal_all_day:    '全天',
+    // 数据复盘
+    review_overview:  '概览',
+    review_weekly:    '周回顾',
+    review_monthly:   '每月',
+    review_badges:    '勋章',
+    stat_streak:      '🔥 连续打卡',
+    stat_total:       '✅ 累计完成',
+    stat_perfect:     '🌟 完美天数',
+    stat_gold:        '🥇 金牌完成',
+    stat_ontime:      '⏰ 准时完成',
+    stat_early:       '🚀 提前完成',
+    // 勋章
+    badge_locked:     '未解锁',
+    badge_bronze_lv:  '🥉 青铜',
+    badge_silver_lv:  '🥈 白银',
+    badge_gold_lv:    '🥇 黄金',
+    badge_legend_lv:  '👑 传奇',
+    badge_maxed:      (v, desc) => `🎉 已达传奇，当前 ${v} ${desc}`,
+    badge_progress:   (desc, v, t, name, diff) => `${desc} ${v} / ${t}，距「${name}」还差 ${diff}`,
+    // 习惯管理
+    habits_title:     '习惯管理',
+    habits_add:       '＋ 添加习惯或模板',
+    habits_recommend: '✨ 推荐养成好习惯',
+    habits_collapse:  '▲ 收起推荐',
+    habits_empty:     '还没有习惯，点下方添加吧',
+    habits_in_today:  '已加入今日',
+    habits_add_today: '加入今日计划',
+    habits_delete_confirm: '删除这个习惯？',
+    // 欢迎引导
+    welcome_lang_title:   '选择语言',
+    welcome_lang_subtitle:'Choose your language',
+    welcome_intro_title:  '欢迎使用 The Moment · 这一刻',
+    welcome_intro_body1:  '一种简单而强大的时间管理法',
+    welcome_intro_body2:  '3 分钟规划',
+    welcome_intro_body3:  '聚焦真正重要的事，告别无效忙碌。',
+    welcome_intro_cta:    '了解用法 →',
+    welcome_tier_title:   '每天三层任务，优先级一目了然',
+    welcome_tier_cta:     '明白了 →',
+    welcome_gold_label:   '1 个金牌任务',
+    welcome_gold_desc:    '今天最重要的一件事，必须完成。',
+    welcome_silver_label: '3 个银牌任务',
+    welcome_silver_desc:  '次要但重要，完成金牌后逐一攻克。',
+    welcome_bronze_label: '5 个铜牌任务',
+    welcome_bronze_desc:  '锦上添花，有余力时完成，不强求。',
+    welcome_plan_title:   '你习惯什么时候做计划？',
+    welcome_plan_hint:    '选择你的规划节奏，随时可在设置中修改',
+    welcome_plan_cta:     '开始使用 🚀',
+    welcome_morning_label:'早上型',
+    welcome_morning_desc: '每天早晨开启新计划，精神饱满做决策',
+    welcome_evening_label:'前一天晚上型',
+    welcome_evening_desc: '提前规划明天，让夜晚更有仪式感',
+    welcome_evening_q:    '晚间规划从几点开始？',
+    welcome_prev:         '← 上一步',
+    welcome_settings_hint:'随时可在「设置」中修改语言',
+    // 通用
+    confirm_ok:     '确认',
+    confirm_cancel: '取消',
+    delete:         '删除',
+    save:           '保存',
+    close:          '关闭',
+    minutes:        (n) => `${n}分钟`,
+    times:          (n) => `${n}次`,
+    // 主题
+    theme_panel_title: '🎨 主题颜色',
+    theme_panel_hint:  '选择主题，立即生效自动保存',
+    theme_white_label: '☀️ 纯白', theme_white_desc: '简洁明亮白色',
+    theme_dark_label:  '🌑 深色', theme_dark_desc:  '经典深夜模式',
+    theme_green_label: '🌿 浅绿', theme_green_desc: '清新薄荷绿',
+    theme_blue_label:  '🌊 浅蓝', theme_blue_desc:  '宁静天空蓝',
+    theme_pink_label:  '🌸 浅粉', theme_pink_desc:  '温柔玫瑰粉',
+    theme_cream_label: '☕ 奶油', theme_cream_desc: '温暖奶油色',
+    theme_lavender_label: '💜 薰衣草', theme_lavender_desc: '优雅紫罗兰',
+    // 勋章名称/描述
+    badge_gold_road_name: '金牌之路',   badge_gold_road_desc: '累计完成金牌任务',
+    badge_streak_fire_name: '连击之焰', badge_streak_fire_desc: '最长连续打卡天数',
+    badge_perfect_name: '完美主义',     badge_perfect_desc: '累计完美天数（全部完成）',
+    badge_on_time_name: '时间掌控',     badge_on_time_desc: '累计准时完成任务数',
+    badge_active_name: '坚持不懈',      badge_active_desc: '累计活跃天数',
+    badge_century_name: '百战老将',     badge_century_desc: '累计完成任务总数',
+    badge_early_bird_name: '疾风先锋',  badge_early_bird_desc: '累计提前完成任务数',
+    badge_silver_guard_name: '银盾卫士',badge_silver_guard_desc: '累计银牌全满天数',
+    badge_hunter_name: '万箭猎手',      badge_hunter_desc: '累计完成银牌+铜牌任务数',
+    // 勋章级别名
+    badge_gold_road_levels:    ['起步','进阶','达人','传奇'],
+    badge_streak_fire_levels:  ['星火','燃烧','烈焰','永恒'],
+    badge_perfect_levels:      ['初现','追求','精英','极致'],
+    badge_on_time_levels:      ['入门','熟练','精通','宗师'],
+    badge_active_levels:       ['起航','积累','坚守','传奇'],
+    badge_century_levels:      ['新兵','老兵','精英','传奇'],
+    badge_early_bird_levels:   ['预见','疾行','飓风','闪电'],
+    badge_silver_guard_levels: ['初守','坚守','守护者','神盾'],
+    badge_hunter_levels:       ['猎人','精英','猎王','猎神'],
+    // 洞察
+    insight_seed: '继续坚持，记录更多天后将生成专属洞察',
+    insight_gold_high:  (pct) => `你的金牌完成率高达 ${pct}%，执行力非常强！`,
+    insight_gold_low:   (pct) => `金牌任务完成率只有 ${pct}%，试试把目标定得更具体一些`,
+    insight_silver_low: (pct) => `银牌完成率为 ${pct}%，是三层中最弱的——下周试试只规划 2 个`,
+    insight_bronze_low: (pct) => `铜牌完成率为 ${pct}%，任务量是否太多？试试先从 3 个开始`,
+    insight_over:       (min) => `任务平均超时 ${min} 分钟，预估时间可以适当调长`,
+    insight_under: '你经常提前完成任务，时间预估非常准确！',
+    insight_bestday:    (day, pct) => `${day}是你效率最高的一天（${pct}%），重要任务安排在这天吧`,
+    insight_milestone:  (days, m) => `再坚持 ${days} 天就能达到 ${m} 天连击里程碑！`,
+    insight_perfect_many: (n) => `你已经有 ${n} 个完美天了，是个追求极致的人`,
+    insight_keep: '每一天的坚持都在积累中，继续保持！',
+    // 颜色
+    color_gold:   '🟡 金色',
+    color_silver: '⬜ 银色',
+    color_bronze: '🟤 铜色',
+    color_blue:   '🔵 蓝色',
+    color_green:  '🟢 绿色',
+    color_pink:   '🩷 粉色',
+    color_purple: '🟣 紫色',
+    // 日期格式
+    fmt_ymd: (y,m,d) => `${y}年${m}月${d}日`,
+    fmt_md:  (m,d)   => `${m}月${d}日`,
+    fmt_ym:  (y,m)   => `${y}年${m}月`,
+    // 月名/星期
+    months: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+    day_labels: ['一','二','三','四','五','六','日'],
+    day_names_sun0: ['周日','周一','周二','周三','周四','周五','周六'],
+    day_names_mon0: ['周一','周二','周三','周四','周五','周六','周日'],
+    // 事件
+    event_add_title:  '📅 添加日历事件',
+    event_edit_title: '✏️ 编辑日历事件',
+    event_delete: '删除事件',
+    event_title:  '标题',
+    event_title_ph: '事件名称…',
+    event_date:   '日期',
+    event_allday: '全天事件',
+    event_time:   '时间段',
+    event_time_to:'至',
+    event_color:  '颜色',
+    event_notes:  '备注（可选）',
+    event_notes_ph: '备注…',
+    event_save:       '保存事件',
+    event_save_edit:  '保存修改',
+    event_edit_hint:  '修改事件信息后保存',
+    event_add_hint:   '记录计划、提醒或任何事项',
+    event_delete_confirm: (title) => `删除「${title}」？`,
+    // 日历
+    cal_today_btn:    '今天',
+    cal_month_back:   '‹ 月历',
+    cal_today_suffix: ' · 今天',
+    cal_add:          '+ 添加',
+    cal_empty:        '今天还没有任何记录',
+    cal_empty_hint:   '点击右上角"+ 添加"可添加事件',
+    // 应用顶部横幅
+    banner_incognito: '⚠️ 无痕模式或存储被禁用，您的数据将不会保存',
+    banner_offline:   '📡 当前无网络，数据已保存在本地，联网后恢复正常',
+    // 存储错误
+    storage_error_save:  '⚠️ 数据保存失败，可能处于无痕模式或浏览器禁用了本地存储。',
+    storage_error_quota: '⚠️ 本地存储空间已满！请先在设置页导出数据备份，再清理浏览器缓存。',
+    // 习惯管理
+    habits_section_title: '🔄 习惯与模板',
+    habits_daily:         '每日',
+    habits_checkin_task:  '打卡任务',
+    habits_preset_add:    '＋ 加入习惯模板',
+    habits_checkin_action:'✓ 打卡',
+    habits_done:          '完成',
+    // 习惯编辑
+    habit_form_add_title:  '＋ 添加习惯',
+    habit_form_edit_title: '✏️ 编辑习惯',
+    habit_form_name_label: '习惯名称',
+    habit_form_name_ph:    '例如：阅读、冥想、运动…',
+    habit_form_tier:       '默认层级',
+    habit_form_time:       '预计时间',
+    habit_form_type:       '类型',
+    habit_form_type_duration: '计时任务',
+    habit_form_type_checkin:  '打卡任务',
+    habit_form_target:     '目标次数',
+    habit_form_save:       '保存习惯',
+    habit_form_cancel:     '取消',
+    // 习惯分类
+    habit_cat_brain:  '💡 智力资产',
+    habit_cat_body:   '🏃 健康资产',
+    habit_cat_home:   '🏠 生活资产',
+    habit_cat_social: '💬 情绪社交',
+    habit_cat_micro:  '⚡ 快充微习惯',
+    // 设置：风险提示 + 晚间规划说明 + 恢复备份
+    settings_risk_title: '⚠️ 数据存储风险提示',
+    settings_risk_body:  '您的所有数据保存在本设备浏览器中。以下情况可能导致数据丢失：',
+    settings_risk_1: '• 清除浏览器缓存或 Cookies',
+    settings_risk_2: '• 浏览器长时间未使用自动清理',
+    settings_risk_3: '• 卸载浏览器或重置设备',
+    settings_risk_4: '建议定期"保存数据备份"以防万一。',
+    settings_evening_body: '到达设定时间后，"新的一天"从您设置的规划时间开始。',
+    settings_restore_confirm: '恢复备份将覆盖当前所有数据，确认继续？',
+    settings_restore_error:   '恢复失败：文件格式错误或已损坏',
+    settings_restored:        '数据已恢复',
+    // 每日规划向导
+    plan_step1_today:  '今天是',
+    plan_step1_day_n:  (n) => `这是您使用本系统的第 ${n} 天`,
+    plan_step1_slogan: '今天也要全力以赴！',
+    plan_step1_cta:    '开始规划今日任务 ✨',
+    plan_habit_title:  '🔄 今日习惯确认',
+    plan_habit_hint:   '已选中的习惯会自动加入今日计划，您可取消不想做的',
+    plan_habit_cta:    '确认，开始规划今日新任务 →',
+    plan_habit_skip:   '跳过习惯，全部手动规划',
+    plan_gold_title:   '🥇 今日最重要的一件事',
+    plan_gold_hint:    '这件事必须完成，如果今天只能做一件事，应该是哪件？',
+    plan_silver_title_n: (n) => `🥈 重要的事 (${n}/3)`,
+    plan_silver_habit_hint: '已选习惯，确认或修改后继续 →',
+    plan_silver_hint:  '这些事很重要，但不是最紧急的',
+    plan_bronze_title_n: (n) => `🥉 日常事务 (${n}/5)`,
+    plan_bronze_hint:  '日常琐事，做完就打勾',
+    plan_task_name:    '任务名称',
+    plan_task_name_skip: '任务名称（可跳过）',
+    plan_gold_ph:      '今天最重要的事情是…',
+    plan_silver_ph_n:  (n) => `第 ${n} 件重要的事…`,
+    plan_bronze_ph_n:  (n) => `第 ${n} 件日常事…`,
+    plan_time:         '预计用时',
+    plan_target:       '目标次数',
+    plan_target_unit:  '次',
+    plan_target_hint_n:(n) => `满${n}次自动完成`,
+    plan_confirm:      '确定 →',
+    plan_continue:     '确认 →',
+    plan_silver_skip:  '跳过，完成银牌计划',
+    plan_bronze_skip:  '跳过，完成今日规划',
+    plan_chip_wall:    '💡 灵感库，点击填入',
+    // 规划向导：事件提示
+    plan_events_title:   '今日日历事件',
+    plan_events_hint:    (n) => `您预设了 ${n} 个今日事件，是否加入今日计划？`,
+    plan_events_allday:  '全天',
+    plan_events_confirm: (n) => `加入今日计划（${n} 项）→`,
+    plan_events_skip:    '跳过，不加入',
+    // 规划向导：昨日带入
+    plan_carry_title:   '昨日未完成任务',
+    plan_carry_hint:    '选择要带入今天计划的任务',
+    plan_tier_gold:     '🥇 金牌',
+    plan_tier_silver:   '🥈 银牌',
+    plan_tier_bronze:   '🥉 铜牌',
+    plan_checkin_suffix:' · 打卡',
+    plan_carry_confirm: (n) => `带入今日计划（${n} 项）→`,
+    plan_carry_skip:    '全部跳过，重新规划',
+    // 层级名
+    tier_gold:   '金牌',
+    tier_silver: '银牌',
+    tier_bronze: '铜牌',
+    // 收工
+    wrapup_perfect:     '完美收工！',
+    wrapup_normal:      '今日收工',
+    wrapup_perfect_sub: '所有任务全部完成，太棒了！',
+    wrapup_normal_sub:  '今天辛苦了，明天继续加油！',
+    wrapup_task_done:   '任务完成',
+    wrapup_focus_time:  '专注时长',
+    wrapup_streak_label:'🔥 连击',
+    wrapup_days:        '天',
+    wrapup_goodnight:   '🌅 收好今天，迎接明天',
+    wrapup_continue:    '继续今天',
+    // 数据复盘
+    review_heatmap:       '📅 活跃热力图（近70天）',
+    review_heatmap_less:  '少',
+    review_heatmap_more:  '多',
+    review_bar7d:         '📊 近7天时间对比（分钟）',
+    review_bar_plan:      '计划',
+    review_bar_actual:    '实际',
+    review_week_title:    '本周回顾',
+    review_week_done:     '✅ 任务完成',
+    review_week_focus:    '⏱ 专注时长',
+    review_week_rate:     '📈 完成率',
+    review_week_gold:     '🥇 金牌完成',
+    review_week_active:   '📅 活跃天数',
+    review_week_perfect:  '🌟 完美天数',
+    review_week_cmp_count:(n) => `上周${n}个`,
+    review_week_cmp_time: (t) => `上周${t}`,
+    review_week_cmp_pct:  (p) => `上周${p}%`,
+    review_week_cmp_days: (d) => `上周${d}天`,
+    review_week_daily:    '每日完成情况',
+    review_week_tasks_done:'🏆 本周完成的任务',
+    review_empty:         '暂无数据',
+    review_empty_hint:    '开始记录任务后，这里将展示回顾',
+    review_month_title:   '🗓️ 月度总结',
+    review_month_wait:    '使用满一个月后，这里会展示每月总结',
+    review_month_col_month: '月份',
+    review_month_col_active:'活跃',
+    review_month_col_done:  '完成',
+    review_month_col_gold:  '金牌率',
+    review_month_col_ontime:'准时率',
+    review_month_days:    (n) => `${n}天`,
+    review_insight_title: '💡 专属洞察',
+    review_badges_title:  '🏅 成就勋章',
+    review_top_title:     '📊 数据复盘',
+    review_top_hint:      '了解你的时间都去哪了',
+    // 周鼓励语
+    week_enc_perfect: '这周表现完美！继续保持！✨',
+    week_enc_great:   '这周非常棒，值得为自己鼓掌 👏',
+    week_enc_good:    '稳扎稳打，每天都在进步 💪',
+    week_enc_ok:      '继续加油，下周可以更好！',
+    week_enc_hard:    '慢慢来，每一步都算数 🌱',
+    // Weekly encouragement with context
+    week_msg_perfect: '完美一周！所有任务全部完成，太厉害了！',
+    week_msg_great:   (rate) => `表现出色！完成率 ${rate}%，继续保持！`,
+    week_msg_good:    (n) => `不错的一周，完成了 ${n} 个任务，下周继续加油！`,
+    week_msg_seed:    (days) => `播下了 ${days} 天的种子，积累总比停止好。`,
+    week_msg_new:     '新的一周，新的开始，加油！💫',
+    // Calendar event modal
+    event_modal_add_title: '📅 添加日历事件',
+    event_modal_edit_title: '✏️ 编辑日历事件',
+    event_modal_delete_tip: '删除事件',
+    event_delete_confirm_simple: (title) => `删除「${title}」？`,
+    // Calendar page
+    cal_year_month: (y, m) => `${y}年 ${m}`,
+    cal_today_label: ' · 今天',
+    cal_empty_line1: '今天还没有任何记录',
+    cal_empty_line2: '点击右上角"+ 添加"可添加事件',
+    // Status banners
+    banner_incognito_body: '⚠️ 无痕模式或存储被禁用，关闭页面后数据将丢失，建议切换为普通模式使用',
+    banner_offline_body: '📡 当前无网络，数据已保存在本地，联网后即可正常访问',
+    banner_offline_toast: '📡 当前无网络，数据已保存在本地，联网后恢复正常',
+    // Monthly summary
+    month_cell_year_month: (y, m) => `${y}年${m}月`,
+    month_cell_days_n: (n) => `${n}天`,
+    // Overview tab stats
+    ov_streak: '🔥 连续打卡',
+    ov_total: '✅ 累计完成',
+    ov_perfect: '🌟 完美天数',
+    ov_gold: '🥇 金牌完成',
+    ov_ontime: '⏰ 准时完成',
+    ov_early: '🚀 提前完成',
+    // Badge level labels
+    lvl_locked: '未解锁',
+    lvl_bronze: '🥉 青铜',
+    lvl_silver: '🥈 白银',
+    lvl_gold: '🥇 黄金',
+    lvl_legend: '👑 传奇',
+    badge_max_line: (v, desc) => `🎉 已达传奇，当前 ${v} ${desc}`,
+    badge_progress_line: (desc, v, t, name, diff) => `${desc} ${v} / ${t}，距「${name}」还差 ${diff}`,
+    // Task card misc
+    task_used_time: (n) => `用时 ${n}min`,
+    task_remain_mins: (n) => `剩余约 ${n} 分钟`,
+    task_tap_no_timer: '点击即完成，无需计时',
+    task_edit_hint: '双击编辑标题·长按编辑',
+    task_delete_tip: '删除任务',
+    task_edit_tip: '编辑任务',
+    task_undo_tip: '撤销完成',
+    // Gold solo complete message
+    gold_solo_title: '太棒了！',
+    gold_solo_line1: '今天最重要的事',
+    gold_solo_line2: '已经完成 🎉',
+    gold_solo_body1: '专注在最重要的事上',
+    gold_solo_body2: '这就是高效的秘诀',
+    // Task delete confirm
+    task_delete_confirm_title: (title) => `确定删除「${title}」？`,
+    task_delete_confirm_sub:   '此操作无法撤销。',
+    // Success dialogs
+    task_complete_title: '任务完成！',
+    task_gold_success:   '🥇 金牌任务拿下！太棒了！',
+    task_silver_success: '🥈 银牌任务完成！',
+    task_bronze_success: '🥉 铜牌任务完成！',
+    // Timer dialogs
+    timer_confirm_title: '确认完成任务？',
+    timer_confirm_ov: (m, s) => `已超时 ${m}分${s}秒，确认标记为完成？`,
+    timer_confirm_early: (left) => `距计划还剩 ${left}，确认提前完成？`,
+    timer_keep_going: '继续计时',
+    timer_add_continue: '加时后继续',
+    timer_done_q: '任务完成了吗？',
+    timer_ov_short: (m, s) => `已超时 ${m}分${s}秒`,
+    timer_early_short: (left) => `提前完成，剩余 ${left}`,
+    timer_done_yes: '完成了',
+    timer_add_time: '加时',
+    timer_cancel_back: '取消，回到主界面',
+    timer_add_time_title: '增加时间',
+    timer_add_time_sub: '继续为该任务追加计时',
+    timer_resume: '继续计时',
+    timer_quit_back: '放弃，回到主界面',
+    timer_ov_tip: '⚠️ 超时记录中 — 点击标记完成即可结束',
+    timer_focus_n: (n) => `预计 ${n} 分钟 · 专注进行中…`,
+    timer_extended_n: (n) => `已加时 ${n} 次`,
+    timer_mark_done: '标记完成',
+    timer_early_done: '提前完成',
+    timer_pause_back: '暂停，回到主界面',
+    // Custom time picker
+    tp_custom: '自定义',
+    tp_min: '分钟',
+    tp_custom_n: (n) => `自定义：${n} 分钟`,
+    // Planning finish button & habit slogan
+    plan_finish_today: '完成今日计划 🎯',
+    plan_slogan_line2: '让我们规划今日的任务吧 →',
+    // Add-task modal (inline)
+    add_task_sub: '为今日计划补充任务',
+    add_task_name_ph: '任务内容…',
+    add_over_limit_title: '超出建议数量',
+    add_over_limit_body: (tier, n) => <>1·3·5 效率法建议{tier}任务仅设置 {n} 个，过多容易分散注意力。<br/><br/>仍然确认添加吗？</>,
+    add_over_limit_keep: '坚持添加',
+    add_over_tooltip: (tier, n) => `1·3·5 效率法建议${tier}任务仅设置 ${n} 个，过多会分散注意力哦`,
+    add_over_btn: '超限添加',
+    // Edit-task modal (inline)
+    edit_task_upgrade_silver: '🔼 升为银牌任务',
+    edit_task_upgrade_gold:   '🔼 升为金牌任务',
+    edit_task_downgrade_silver:'🔽 降为银牌任务',
+    edit_task_downgrade_bronze:'🔽 降为铜牌任务',
+    edit_task_gold_taken: '金牌任务已有，无法升级',
+    edit_task_bronze_full: '铜牌已满5个，无法降级',
+    edit_task_add_notes:   '添加备注',
+    edit_task_notes_ph:    '备注、背景、参考链接…',
+    edit_task_times_short: '次',
+    // Target suffix for check-in
+    ci_done_at_n: (n) => `满${n}次完成`,
+    // Settings evening hours
+    hr_8pm: '8 点', hr_9pm: '9 点', hr_10pm: '10 点', hr_11pm: '11 点',
+    // Sound/haptic tooltips
+    sound_off_tip: '点击关闭音效',
+    sound_on_tip: '点击开启音效',
+    haptic_off_tip: '点击关闭震动',
+    haptic_on_tip: '点击开启震动',
+    // Language picker
+    lang_picker_title: '选择语言',
+    lang_picker_sub: 'Choose Language',
+    lang_picker_hint: '随时可在设置中修改',
+    // Welcome intro - planning highlight
+    welcome_plan_highlight: '3 分钟规划',
+    welcome_plan_prefix: '每天只需 ',
+    welcome_plan_suffix: '，',
+    // Habit manager
+    habit_save_hint: '设置好后每天规划时一键加入',
+    habit_preset_hint: '预设后每天规划时一键加入，无需重复输入',
+    habit_auto_title: '每日自动出现',
+    habit_auto_sub: '开启后规划时自动出现，无需手动选择',
+    // 添加任务
+    addtask_over_title: '⚠️ 超限添加',
+    addtask_over_body:  (tier, max) => `今日${tier}任务已达 ${max} 个上限，新增将自动"挤下"优先级最低的一项。继续？`,
+    addtask_override_continue: '继续添加 →',
+    addtask_subtitle:   (tier) => `添加${tier}任务`,
+    addtask_unit_times: '次',
+    addtask_unit_x:     '×',
+    // 编辑任务
+    edittask_upgrade:   '升级',
+    edittask_downgrade: '降级',
+    edittask_notes:     '添加备注',
+    edittask_notes_ph:  '可选备注…',
+    edittask_hint_upgrade:   '可升级为更重要的层级',
+    edittask_hint_downgrade: '可降级为次要层级',
+    // 任务卡片
+    task_tip_undo:   '撤销完成',
+    task_tip_delete: '删除任务',
+    task_tip_edit:   '编辑任务',
+    task_delete_confirm: (name) => `删除「${name}」？`,
+    // 金牌完成弹窗
+    gold_complete_title: '🎉 金牌任务完成！',
+    gold_complete_sub:   '最重要的事已搞定，今天已经成功了 🥇',
+    gold_complete_cta:   '继续 →',
+    // 计时器自定义
+    timer_custom:       '自定义',
+    timer_custom_label: '自定义时间（分钟）',
+    timer_custom_ph:    '如 50',
+  },
+  en: {
+    // Bottom navigation
+    nav_today:    'Today',
+    nav_cal:      'Calendar',
+    nav_review:   'Review',
+    nav_settings: 'Settings',
+    // Header
+    day_count:    (n) => `Day ${n}`,
+    streak:       (n) => `🔥 ${n}-day streak`,
+    btn_wrapup:   'Wrap Up',
+    btn_habits:   'Habits',
+    btn_theme:    'Theme',
+    // Task sections
+    gold_title:   '🥇 Gold Task',
+    gold_desc:    'The one most important thing today',
+    silver_title: '🥈 Silver Tasks',
+    silver_desc:  'Important but not urgent',
+    bronze_title: '🥉 Bronze Tasks',
+    bronze_desc:  'Daily to-dos',
+    add_gold:     '＋ Add Gold Task',
+    add_silver:   '＋ Add Silver Task',
+    add_bronze:   '＋ Add Bronze Task',
+    add_task:     'Add Task',
+    // Task card states
+    task_start:   '▶ Start',
+    task_pause:   '⏸ Resume',
+    task_checkin: '✓ Check In',
+    task_locked:  '🔒',
+    // All done
+    all_done_title: '🎉 All tasks complete!',
+    all_done_sub:   'Amazing — you crushed it today!',
+    // Progress bar
+    progress_of:  (done, total) => `${done} / ${total} done today`,
+    gold_badge:   'Done',
+    // Add/Edit task modal
+    modal_add_title:   'Add Task',
+    modal_edit_title:  'Edit Task',
+    modal_save:        'Save',
+    modal_cancel:      'Cancel',
+    modal_delete:      'Delete Task',
+    task_name_ph:      'Task name',
+    task_time_label:   'Estimated time',
+    task_ci_label:     'Check-in mode',
+    task_ci_target:    'Target count',
+    task_ci_hint:      (n) => `Tap card to add +1, auto-complete at ${n}`,
+    task_tier_label:   'Tier',
+    // Timer
+    timer_elapsed:     'Elapsed',
+    timer_overtime:    'Overtime',
+    timer_pause:       '⏸ Pause',
+    timer_complete:    '✅ Complete',
+    timer_evaluate:    'How did it go?',
+    timer_rate_good:   'Went smoothly 👍',
+    timer_rate_ok:     'Mostly done',
+    timer_rate_hard:   'Struggled a bit',
+    timer_skip:        'Skip',
+    timer_confirm:     'Confirm',
+    // No plan
+    no_plan_title:  'No plan for today yet',
+    no_plan_btn:    'Plan your day →',
+    // Planning wizard
+    plan_welcome:   'Welcome to The Moment',
+    plan_gold_q:    "What's the one most important thing today?",
+    plan_silver_q:  'Add silver tasks (up to 3)',
+    plan_bronze_q:  'Add bronze tasks (up to 5)',
+    plan_next:      'Next →',
+    plan_done:      "Let's go 🚀",
+    plan_skip:      'Skip',
+    plan_add:       'Add',
+    // Settings
+    settings_title:         'Settings',
+    settings_subtitle:      'System settings & data management',
+    settings_lang:          'Language',
+    settings_sound:         'Sound',
+    settings_sound_desc:    'Click & timer completion sounds',
+    settings_haptic:        'Haptic feedback',
+    settings_haptic_on:     'Light haptic on tap',
+    settings_haptic_off:    'Haptic not supported on this device',
+    settings_plan_style:    'Planning habit',
+    settings_plan_style_desc:'Choose your preferred daily planning time',
+    settings_morning:       'Morning planning',
+    settings_evening:       'Evening planning',
+    settings_plan_hour:     'From what time in the evening?',
+    settings_backup:        'Data Backup',
+    settings_export:        'Save data backup',
+    settings_import:        'Restore backup (import file)',
+    settings_import_hint:   'Back up regularly to prevent data loss if the browser clears cache',
+    settings_danger:        'Danger zone',
+    settings_clear:         'Clear all data & start over',
+    settings_clear_confirm: 'Clear ALL data? Plans, records, and calendar events will be permanently deleted.',
+    settings_export_done:   'Data exported',
+    // Wrap up
+    wrapup_title:   "Today's Wrap-Up",
+    wrapup_close:   '✨ Great, see you tomorrow',
+    wrapup_plan:    'Plan tomorrow →',
+    // Calendar
+    cal_add_event:  'Add Event',
+    cal_all_day:    'All day',
+    // Review
+    review_overview:  'Overview',
+    review_weekly:    'Weekly',
+    review_monthly:   'Monthly',
+    review_badges:    'Badges',
+    stat_streak:      '🔥 Streak',
+    stat_total:       '✅ Total Done',
+    stat_perfect:     '🌟 Perfect Days',
+    stat_gold:        '🥇 Gold Done',
+    stat_ontime:      '⏰ On Time',
+    stat_early:       '🚀 Early Done',
+    // Badges
+    badge_locked:     'Locked',
+    badge_bronze_lv:  '🥉 Bronze',
+    badge_silver_lv:  '🥈 Silver',
+    badge_gold_lv:    '🥇 Gold',
+    badge_legend_lv:  '👑 Legend',
+    badge_maxed:      (v, desc) => `🎉 Legendary! Current: ${v} ${desc}`,
+    badge_progress:   (desc, v, t, name, diff) => `${desc}: ${v} / ${t} — ${diff} more to "${name}"`,
+    // Habits
+    habits_title:     'Habits',
+    habits_add:       '＋ Add Habit or Template',
+    habits_recommend: '✨ Recommended Habits',
+    habits_collapse:  '▲ Collapse',
+    habits_empty:     'No habits yet — add one below',
+    habits_in_today:  "In today's plan",
+    habits_add_today: "Add to today's plan",
+    habits_delete_confirm: 'Delete this habit?',
+    // Welcome flow
+    welcome_lang_title:   'Choose Language',
+    welcome_lang_subtitle:'选择语言',
+    welcome_intro_title:  'Welcome to The Moment',
+    welcome_intro_body1:  'A simple yet powerful time management method.',
+    welcome_intro_body2:  '3 minutes of planning',
+    welcome_intro_body3:  'Focus on what truly matters. Escape busy-for-nothing.',
+    welcome_intro_cta:    'Learn more →',
+    welcome_tier_title:   'Three tiers. Crystal-clear priorities.',
+    welcome_tier_cta:     'Got it →',
+    welcome_gold_label:   '1 Gold task',
+    welcome_gold_desc:    'The one most important thing today — must be done.',
+    welcome_silver_label: '3 Silver tasks',
+    welcome_silver_desc:  'Important but secondary — tackle after gold.',
+    welcome_bronze_label: '5 Bronze tasks',
+    welcome_bronze_desc:  'Nice-to-haves — complete if time allows.',
+    welcome_plan_title:   'When do you like to plan?',
+    welcome_plan_hint:    'Choose your rhythm — you can change this in Settings anytime',
+    welcome_plan_cta:     "Let's start 🚀",
+    welcome_morning_label:'Morning person',
+    welcome_morning_desc: 'Start fresh each morning with a clear, focused mind',
+    welcome_evening_label:'Night planner',
+    welcome_evening_desc: 'Plan tomorrow before bed for a calmer morning',
+    welcome_evening_q:    'From what time in the evening?',
+    welcome_prev:         '← Back',
+    welcome_settings_hint:'You can change the language anytime in Settings',
+    // Common
+    confirm_ok:     'OK',
+    confirm_cancel: 'Cancel',
+    delete:         'Delete',
+    save:           'Save',
+    close:          'Close',
+    minutes:        (n) => `${n} min`,
+    times:          (n) => `${n}×`,
+    // Themes
+    theme_panel_title: '🎨 Theme Color',
+    theme_panel_hint:  'Pick a theme — changes apply and save instantly',
+    theme_white_label: '☀️ Pure White',  theme_white_desc: 'Clean, bright white',
+    theme_dark_label:  '🌑 Dark',        theme_dark_desc:  'Classic dark mode',
+    theme_green_label: '🌿 Mint',        theme_green_desc: 'Fresh mint green',
+    theme_blue_label:  '🌊 Sky',         theme_blue_desc:  'Calm sky blue',
+    theme_pink_label:  '🌸 Blossom',     theme_pink_desc:  'Soft rose pink',
+    theme_cream_label: '☕ Cream',       theme_cream_desc: 'Warm cream tone',
+    theme_lavender_label: '💜 Lavender', theme_lavender_desc: 'Elegant violet',
+    // Badges names/descs
+    badge_gold_road_name: 'Gold Road',        badge_gold_road_desc: 'Total gold tasks completed',
+    badge_streak_fire_name: 'Streak Fire',    badge_streak_fire_desc: 'Longest daily check-in streak',
+    badge_perfect_name: 'Perfectionist',      badge_perfect_desc: 'Total perfect days (all completed)',
+    badge_on_time_name: 'Time Master',        badge_on_time_desc: 'Total tasks completed on time',
+    badge_active_name: 'Persevering',         badge_active_desc: 'Total active days',
+    badge_century_name: 'Veteran',            badge_century_desc: 'Total tasks completed',
+    badge_early_bird_name: 'Early Bird',      badge_early_bird_desc: 'Total tasks finished early',
+    badge_silver_guard_name: 'Silver Guard',  badge_silver_guard_desc: 'Days with all silver tasks done',
+    badge_hunter_name: 'Arrow Hunter',        badge_hunter_desc: 'Total silver + bronze tasks done',
+    // Badge level names
+    badge_gold_road_levels:    ['Starter','Rising','Master','Legend'],
+    badge_streak_fire_levels:  ['Spark','Blaze','Inferno','Eternal'],
+    badge_perfect_levels:      ['Emerging','Pursuing','Elite','Ultimate'],
+    badge_on_time_levels:      ['Novice','Skilled','Expert','Grand Master'],
+    badge_active_levels:       ['Setting Sail','Building','Steadfast','Legend'],
+    badge_century_levels:      ['Rookie','Veteran','Elite','Legend'],
+    badge_early_bird_levels:   ['Foresight','Dash','Hurricane','Lightning'],
+    badge_silver_guard_levels: ['Guardian','Steadfast','Protector','Aegis'],
+    badge_hunter_levels:       ['Hunter','Elite','Hunt King','Hunt God'],
+    // Insights
+    insight_seed: 'Keep going — personalized insights unlock after more days logged',
+    insight_gold_high:  (pct) => `Your gold completion rate is ${pct}% — incredible execution!`,
+    insight_gold_low:   (pct) => `Gold task rate is only ${pct}%. Try making the goal more concrete`,
+    insight_silver_low: (pct) => `Silver rate is ${pct}% — weakest of the three. Try just 2 next week`,
+    insight_bronze_low: (pct) => `Bronze rate is ${pct}%. Too many tasks? Try starting with 3`,
+    insight_over:       (min) => `Tasks run ${min} min over on average. Pad your estimates a bit`,
+    insight_under: 'You often finish early — your time estimates are spot on!',
+    insight_bestday:    (day, pct) => `${day} is your most productive day (${pct}%). Schedule key tasks then`,
+    insight_milestone:  (days, m) => `Just ${days} more days to hit the ${m}-day streak milestone!`,
+    insight_perfect_many: (n) => `You've already had ${n} perfect days — a true pursuer of excellence`,
+    insight_keep: 'Every day of consistency adds up. Keep going!',
+    // Colors
+    color_gold:   '🟡 Gold',
+    color_silver: '⬜ Silver',
+    color_bronze: '🟤 Bronze',
+    color_blue:   '🔵 Blue',
+    color_green:  '🟢 Green',
+    color_pink:   '🩷 Pink',
+    color_purple: '🟣 Purple',
+    // Date formats
+    fmt_ymd: (y,m,d) => {
+      const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      return `${months[m-1]} ${d}, ${y}`;
+    },
+    fmt_md: (m,d) => {
+      const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      return `${months[m-1]} ${d}`;
+    },
+    fmt_ym: (y,m) => {
+      const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+      return `${months[m-1]} ${y}`;
+    },
+    // Months/weekdays
+    months: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+    day_labels: ['M','T','W','T','F','S','S'],
+    day_names_sun0: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+    day_names_mon0: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+    // Event modal
+    event_add_title:  '📅 Add Calendar Event',
+    event_edit_title: '✏️ Edit Calendar Event',
+    event_delete: 'Delete event',
+    event_title:  'Title',
+    event_title_ph: 'Event name…',
+    event_date:   'Date',
+    event_allday: 'All-day event',
+    event_time:   'Time range',
+    event_time_to:'to',
+    event_color:  'Color',
+    event_notes:  'Notes (optional)',
+    event_notes_ph: 'Notes…',
+    event_save:       'Save event',
+    event_save_edit:  'Save changes',
+    event_edit_hint:  'Update the event details and save',
+    event_add_hint:   'Log plans, reminders, or anything you need',
+    event_delete_confirm: (title) => `Delete "${title}"?`,
+    // Calendar
+    cal_today_btn:    'Today',
+    cal_month_back:   '‹ Month',
+    cal_today_suffix: ' · Today',
+    cal_add:          '+ Add',
+    cal_empty:        'Nothing logged today yet',
+    cal_empty_hint:   'Tap "+ Add" at the top right to add an event',
+    // App banners
+    banner_incognito: '⚠️ Incognito or storage is disabled — your data will not be saved',
+    banner_offline:   '📡 You are offline. Data is saved locally and will sync when online',
+    // Storage errors
+    storage_error_save:  '⚠️ Failed to save data. You may be in Incognito mode or local storage is disabled.',
+    storage_error_quota: '⚠️ Local storage is full! Export a backup in Settings first, then clear your browser cache.',
+    // Habits manager
+    habits_section_title: '🔄 Habits & Templates',
+    habits_daily:         'Daily',
+    habits_checkin_task:  'Check-in',
+    habits_preset_add:    '＋ Add Template',
+    habits_checkin_action:'✓ Check in',
+    habits_done:          'Done',
+    // Habit form
+    habit_form_add_title:  '＋ Add Habit',
+    habit_form_edit_title: '✏️ Edit Habit',
+    habit_form_name_label: 'Habit name',
+    habit_form_name_ph:    'e.g. Read, Meditate, Exercise…',
+    habit_form_tier:       'Default tier',
+    habit_form_time:       'Estimated time',
+    habit_form_type:       'Type',
+    habit_form_type_duration: 'Timed task',
+    habit_form_type_checkin:  'Check-in task',
+    habit_form_target:     'Target count',
+    habit_form_save:       'Save habit',
+    habit_form_cancel:     'Cancel',
+    // Habit categories
+    habit_cat_brain:  '💡 Mind',
+    habit_cat_body:   '🏃 Health',
+    habit_cat_home:   '🏠 Home & Life',
+    habit_cat_social: '💬 Social & Mood',
+    habit_cat_micro:  '⚡ Micro Boosts',
+    // Settings risk notice + evening + restore
+    settings_risk_title: '⚠️ Data Storage Notice',
+    settings_risk_body:  'All your data is stored in this browser on this device. You may lose data if:',
+    settings_risk_1: '• Browser cache or cookies are cleared',
+    settings_risk_2: '• Browser auto-cleans after long inactivity',
+    settings_risk_3: '• Browser is uninstalled or device is reset',
+    settings_risk_4: 'Back up regularly with "Save data backup" to be safe.',
+    settings_evening_body: 'After the set hour, a "new day" starts from your chosen planning time.',
+    settings_restore_confirm: 'Restoring a backup will overwrite all current data. Continue?',
+    settings_restore_error:   'Restore failed: file format invalid or corrupted',
+    settings_restored:        'Data restored',
+    // Daily plan wizard
+    plan_step1_today:  'Today is',
+    plan_step1_day_n:  (n) => `This is day ${n} of using the app`,
+    plan_step1_slogan: 'Let\u2019s give today our best!',
+    plan_step1_cta:    'Start planning today ✨',
+    plan_habit_title:  '🔄 Confirm Today\u2019s Habits',
+    plan_habit_hint:   'Selected habits auto-join today\u2019s plan — uncheck any you want to skip',
+    plan_habit_cta:    'Confirm & plan new tasks →',
+    plan_habit_skip:   'Skip habits — plan everything manually',
+    plan_gold_title:   '🥇 The one most important thing today',
+    plan_gold_hint:    'This must get done. If you could only do one thing today, what is it?',
+    plan_silver_title_n: (n) => `🥈 Important task (${n}/3)`,
+    plan_silver_habit_hint: 'Habit preselected — confirm or edit to continue →',
+    plan_silver_hint:  'Important, but not urgent',
+    plan_bronze_title_n: (n) => `🥉 Daily to-do (${n}/5)`,
+    plan_bronze_hint:   'Small daily tasks — tick off when done',
+    plan_task_name:    'Task name',
+    plan_task_name_skip: 'Task name (can skip)',
+    plan_gold_ph:      'The most important thing today is…',
+    plan_silver_ph_n:  (n) => `Important task #${n}…`,
+    plan_bronze_ph_n:  (n) => `Daily to-do #${n}…`,
+    plan_time:         'Estimated time',
+    plan_target:       'Target count',
+    plan_target_unit:  'x',
+    plan_target_hint_n:(n) => `Auto-completes after ${n} check-ins`,
+    plan_confirm:      'Confirm →',
+    plan_continue:     'Continue →',
+    plan_silver_skip:  'Skip — finish silver plan',
+    plan_bronze_skip:  'Skip — finish today\u2019s plan',
+    plan_chip_wall:    '💡 Idea bank — tap to fill',
+    // Event prompt
+    plan_events_title:   'Today\u2019s Calendar Events',
+    plan_events_hint:    (n) => `You have ${n} scheduled event(s) today — add them to today\u2019s plan?`,
+    plan_events_allday:  'All day',
+    plan_events_confirm: (n) => `Add to today\u2019s plan (${n}) →`,
+    plan_events_skip:    'Skip — don\u2019t add',
+    // Carryover
+    plan_carry_title:   'Unfinished from Yesterday',
+    plan_carry_hint:    'Pick the tasks to bring into today\u2019s plan',
+    plan_tier_gold:     '🥇 Gold',
+    plan_tier_silver:   '🥈 Silver',
+    plan_tier_bronze:   '🥉 Bronze',
+    plan_checkin_suffix:' · Check-in',
+    plan_carry_confirm: (n) => `Bring into today\u2019s plan (${n}) →`,
+    plan_carry_skip:    'Skip all — plan fresh',
+    // Tier names
+    tier_gold:   'Gold',
+    tier_silver: 'Silver',
+    tier_bronze: 'Bronze',
+    // Wrap-up
+    wrapup_perfect:     'Perfect day!',
+    wrapup_normal:      'Wrapping up today',
+    wrapup_perfect_sub: 'Every task done — amazing!',
+    wrapup_normal_sub:  'You worked hard today. See you tomorrow!',
+    wrapup_task_done:   'Tasks done',
+    wrapup_focus_time:  'Focus time',
+    wrapup_streak_label:'🔥 Streak',
+    wrapup_days:        'd',
+    wrapup_goodnight:   '🌅 Rest well — see you tomorrow',
+    wrapup_continue:    'Back to today',
+    // Review
+    review_heatmap:       '📅 Activity Heatmap (last 70 days)',
+    review_heatmap_less:  'less',
+    review_heatmap_more:  'more',
+    review_bar7d:         '📊 7-day plan vs actual (min)',
+    review_bar_plan:      'Planned',
+    review_bar_actual:    'Actual',
+    review_week_title:    'This Week',
+    review_week_done:     '✅ Tasks Done',
+    review_week_focus:    '⏱ Focus Time',
+    review_week_rate:     '📈 Completion',
+    review_week_gold:     '🥇 Gold Done',
+    review_week_active:   '📅 Active Days',
+    review_week_perfect:  '🌟 Perfect Days',
+    review_week_cmp_count:(n) => `last wk ${n}`,
+    review_week_cmp_time: (t) => `last wk ${t}`,
+    review_week_cmp_pct:  (p) => `last wk ${p}%`,
+    review_week_cmp_days: (d) => `last wk ${d}d`,
+    review_week_daily:    'Daily Completion',
+    review_week_tasks_done:'🏆 Tasks Completed This Week',
+    review_empty:         'No data yet',
+    review_empty_hint:    'Your review appears here once you start logging tasks',
+    review_month_title:   '🗓️ Monthly Summary',
+    review_month_wait:    'After one full month, monthly summaries appear here',
+    review_month_col_month: 'Month',
+    review_month_col_active:'Active',
+    review_month_col_done:  'Done',
+    review_month_col_gold:  'Gold %',
+    review_month_col_ontime:'On-time %',
+    review_month_days:    (n) => `${n}d`,
+    review_insight_title: '💡 Personalized Insights',
+    review_badges_title:  '🏅 Achievements',
+    review_top_title:     '📊 Data Review',
+    review_top_hint:      'See where your time really goes',
+    // Week encouragement
+    week_enc_perfect: 'Perfect week — keep it up! ✨',
+    week_enc_great:   'Great week, give yourself a clap 👏',
+    week_enc_good:    'Steady and making progress every day 💪',
+    week_enc_ok:      'Keep going — next week can be even better!',
+    week_enc_hard:    'Easy does it — every step counts 🌱',
+    // Weekly encouragement with context
+    week_msg_perfect: 'Perfect week! Every task done — incredible!',
+    week_msg_great:   (rate) => `Great job! ${rate}% completion — keep going!`,
+    week_msg_good:    (n) => `Solid week — ${n} tasks done. Next week, even better!`,
+    week_msg_seed:    (days) => `${days} days logged — consistency always beats stopping.`,
+    week_msg_new:     'New week, fresh start — let\u2019s go! 💫',
+    // Calendar event modal
+    event_modal_add_title: '📅 Add Calendar Event',
+    event_modal_edit_title: '✏️ Edit Calendar Event',
+    event_modal_delete_tip: 'Delete event',
+    event_delete_confirm_simple: (title) => `Delete "${title}"?`,
+    // Calendar page
+    cal_year_month: (y, m) => `${m} ${y}`,
+    cal_today_label: ' · Today',
+    cal_empty_line1: 'Nothing logged today yet',
+    cal_empty_line2: 'Tap "+ Add" at the top right to add an event',
+    // Status banners
+    banner_incognito_body: '⚠️ Incognito mode or storage disabled — your data will be lost when the page closes. Please switch to normal browsing.',
+    banner_offline_body: '📡 You are offline. Data is saved locally and will work normally when you reconnect.',
+    banner_offline_toast: '📡 You are offline. Data is saved locally and will sync when online.',
+    // Monthly summary
+    month_cell_year_month: (y, m) => {
+      const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      return `${months[m-1]} ${y}`;
+    },
+    month_cell_days_n: (n) => `${n}d`,
+    // Overview tab stats
+    ov_streak: '🔥 Streak',
+    ov_total: '✅ Total Done',
+    ov_perfect: '🌟 Perfect Days',
+    ov_gold: '🥇 Gold Done',
+    ov_ontime: '⏰ On Time',
+    ov_early: '🚀 Early Done',
+    // Badge level labels
+    lvl_locked: 'Locked',
+    lvl_bronze: '🥉 Bronze',
+    lvl_silver: '🥈 Silver',
+    lvl_gold: '🥇 Gold',
+    lvl_legend: '👑 Legend',
+    badge_max_line: (v, desc) => `🎉 Legendary! Current: ${v} ${desc}`,
+    badge_progress_line: (desc, v, t, name, diff) => `${desc}: ${v} / ${t} — ${diff} more to "${name}"`,
+    // Task card misc
+    task_used_time: (n) => `${n} min`,
+    task_remain_mins: (n) => `~${n} min left`,
+    task_tap_no_timer: 'Tap to complete, no timer needed',
+    task_edit_hint: 'Double-click or long press to edit',
+    task_delete_tip: 'Delete task',
+    task_edit_tip: 'Edit task',
+    task_undo_tip: 'Undo complete',
+    // Gold solo complete message
+    gold_solo_title: 'Excellent!',
+    gold_solo_line1: 'The most important task today',
+    gold_solo_line2: 'is done 🎉',
+    gold_solo_body1: 'Staying focused on what matters most',
+    gold_solo_body2: 'is the secret to real productivity',
+    // Task delete confirm
+    task_delete_confirm_title: (title) => `Delete "${title}"?`,
+    task_delete_confirm_sub:   'This cannot be undone.',
+    // Success dialogs
+    task_complete_title: 'Task Complete!',
+    task_gold_success:   '🥇 Gold task crushed! Amazing!',
+    task_silver_success: '🥈 Silver task done!',
+    task_bronze_success: '🥉 Bronze task done!',
+    // Timer dialogs
+    timer_confirm_title: 'Mark as complete?',
+    timer_confirm_ov: (m, s) => `Overtime by ${m}m ${s}s — confirm done?`,
+    timer_confirm_early: (left) => `${left} remaining — finish early?`,
+    timer_keep_going: 'Keep going',
+    timer_add_continue: 'Add time & continue',
+    timer_done_q: 'Task done?',
+    timer_ov_short: (m, s) => `Overtime: ${m}m ${s}s`,
+    timer_early_short: (left) => `Finished early, ${left} to spare`,
+    timer_done_yes: 'Done',
+    timer_add_time: 'Add time',
+    timer_cancel_back: 'Cancel, go back',
+    timer_add_time_title: 'Add Time',
+    timer_add_time_sub: 'Extend the timer for this task',
+    timer_resume: 'Resume',
+    timer_quit_back: 'Quit, go back',
+    timer_ov_tip: '⚠️ Overtime — tap complete to finish',
+    timer_focus_n: (n) => `Est. ${n} min · Focusing…`,
+    timer_extended_n: (n) => `Extended ${n}×`,
+    timer_mark_done: 'Mark Done',
+    timer_early_done: 'Finish Early',
+    timer_pause_back: 'Pause, go back',
+    // Custom time picker
+    tp_custom: 'Custom',
+    tp_min: 'min',
+    tp_custom_n: (n) => `Custom: ${n} min`,
+    // Planning finish button & habit slogan
+    plan_finish_today: 'Finish today\u2019s plan 🎯',
+    plan_slogan_line2: 'Let\u2019s plan today\u2019s tasks →',
+    // Add-task modal (inline)
+    add_task_sub: 'Add a task to your plan',
+    add_task_name_ph: 'Task title…',
+    add_over_limit_title: 'Exceeds recommended limit',
+    add_over_limit_body: (tier, n) => <>The 1·3·5 method suggests at most {n} {tier} task{n>1?'s':''}.<br/><br/>Add anyway?</>,
+    add_over_limit_keep: 'Add anyway',
+    add_over_tooltip: (tier, n) => `The 1·3·5 method recommends at most ${n} ${tier} task${n>1?'s':''} to stay focused`,
+    add_over_btn: 'Add anyway',
+    // Edit-task modal (inline)
+    edit_task_upgrade_silver: '🔼 Upgrade to Silver',
+    edit_task_upgrade_gold:   '🔼 Upgrade to Gold',
+    edit_task_downgrade_silver:'🔽 Downgrade to Silver',
+    edit_task_downgrade_bronze:'🔽 Downgrade to Bronze',
+    edit_task_gold_taken: 'Gold slot taken, cannot upgrade',
+    edit_task_bronze_full: 'Bronze is full (5/5), cannot downgrade',
+    edit_task_add_notes:   'Add notes',
+    edit_task_notes_ph:    'Notes, context, links…',
+    edit_task_times_short: '×',
+    // Target suffix for check-in
+    ci_done_at_n: (n) => `Done at ${n}×`,
+    // Settings evening hours
+    hr_8pm: '8 PM', hr_9pm: '9 PM', hr_10pm: '10 PM', hr_11pm: '11 PM',
+    // Sound/haptic tooltips
+    sound_off_tip: 'Click to turn off',
+    sound_on_tip: 'Click to turn on',
+    haptic_off_tip: 'Click to disable haptic',
+    haptic_on_tip: 'Click to enable haptic',
+    // Language picker
+    lang_picker_title: 'Choose Language',
+    lang_picker_sub: '选择语言',
+    lang_picker_hint: 'You can change this anytime in Settings',
+    // Welcome intro - planning highlight
+    welcome_plan_highlight: '3 minutes of planning',
+    welcome_plan_prefix: 'Each day, just ',
+    welcome_plan_suffix: ',',
+    // Habit manager
+    habit_save_hint: 'Save once — add with one tap every day when planning',
+    habit_preset_hint: 'Preset once — add in one tap every day. No retyping.',
+    habit_auto_title: 'Auto-add daily',
+    habit_auto_sub: 'Auto-show in planning — no manual pick needed',
+    // Add Task
+    addtask_over_title: '⚠️ Over Limit',
+    addtask_over_body:  (tier, max) => `You\u2019ve hit the ${max}-${tier.toLowerCase()} limit for today. Adding this will "bump" the lowest-priority one. Continue?`,
+    addtask_override_continue: 'Add anyway →',
+    addtask_subtitle:   (tier) => `Add ${tier} task`,
+    addtask_unit_times: 'times',
+    addtask_unit_x:     '×',
+    // Edit Task
+    edittask_upgrade:   'Upgrade',
+    edittask_downgrade: 'Downgrade',
+    edittask_notes:     'Add notes',
+    edittask_notes_ph:  'Optional notes…',
+    edittask_hint_upgrade:   'Promote to a more important tier',
+    edittask_hint_downgrade: 'Demote to a lower tier',
+    // Task card
+    task_tip_undo:   'Undo complete',
+    task_tip_delete: 'Delete task',
+    task_tip_edit:   'Edit task',
+    task_delete_confirm: (name) => `Delete "${name}"?`,
+    // Gold complete
+    gold_complete_title: '🎉 Gold Task Done!',
+    gold_complete_sub:   'The most important thing is handled — today\u2019s already a win 🥇',
+    gold_complete_cta:   'Continue →',
+    // Timer custom
+    timer_custom:       'Custom',
+    timer_custom_label: 'Custom time (minutes)',
+    timer_custom_ph:    'e.g. 50',
+  }
+};
+
+// 读取语言设置（同步，供非 React 代码使用）
+function getLang(){ try{ const s=localStorage.getItem(SK.LANG); if(!s) return 'zh'; try{ return JSON.parse(s)||'zh'; }catch{ return s||'zh'; } }catch(e){ return 'zh'; } }
+// 翻译函数：t('key') 或 t('key', arg1, arg2)
+function t(key, ...args){
+  const lang = getLang();
+  const val = TRANSLATIONS[lang]?.[key] ?? TRANSLATIONS['zh'][key] ?? key;
+  return typeof val === 'function' ? val(...args) : val;
+}
 const TIME_OPTS = [5,10,15,20,25,30,45,60,90,120];
 const THEMES = [
-  {id:'white',    label:'☀️ 纯白',   desc:'简洁明亮白色',swatch:'#ffffff', text:'#c8900a'},
-  {id:'dark',     label:'🌑 深色',   desc:'经典深夜模式',swatch:'#090912', text:'#FFD700'},
-  {id:'green',    label:'🌿 浅绿',   desc:'清新薄荷绿',  swatch:'#f0faf4', text:'#1a7a46'},
-  {id:'blue',     label:'🌊 浅蓝',   desc:'宁静天空蓝',  swatch:'#f0f5ff', text:'#1a4090'},
-  {id:'pink',     label:'🌸 浅粉',   desc:'温柔玫瑰粉',  swatch:'#fff5f7', text:'#c03060'},
-  {id:'cream',    label:'☕ 奶油',   desc:'温暖奶油色',  swatch:'#faf7f0', text:'#8B6000'},
-  {id:'lavender', label:'💜 薰衣草', desc:'优雅紫罗兰',  swatch:'#f5f3ff', text:'#5040c0'},
+  {id:'white',    labelKey:'theme_white_label',    descKey:'theme_white_desc',    swatch:'#ffffff', text:'#c8900a'},
+  {id:'dark',     labelKey:'theme_dark_label',     descKey:'theme_dark_desc',     swatch:'#090912', text:'#FFD700'},
+  {id:'green',    labelKey:'theme_green_label',    descKey:'theme_green_desc',    swatch:'#f0faf4', text:'#1a7a46'},
+  {id:'blue',     labelKey:'theme_blue_label',     descKey:'theme_blue_desc',     swatch:'#f0f5ff', text:'#1a4090'},
+  {id:'pink',     labelKey:'theme_pink_label',     descKey:'theme_pink_desc',     swatch:'#fff5f7', text:'#c03060'},
+  {id:'cream',    labelKey:'theme_cream_label',    descKey:'theme_cream_desc',    swatch:'#faf7f0', text:'#8B6000'},
+  {id:'lavender', labelKey:'theme_lavender_label', descKey:'theme_lavender_desc', swatch:'#f5f3ff', text:'#5040c0'},
 ];
 const TIERED_BADGES = [
-  { id:'gold_road',  emoji:'🥇', name:'金牌之路',  desc:'累计完成金牌任务',
-    levels:[{name:'起步',t:1},{name:'进阶',t:10},{name:'达人',t:50},{name:'传奇',t:100}], val:s=>s.goldDone },
-  { id:'streak_fire',emoji:'🔥', name:'连击之焰',  desc:'最长连续打卡天数',
-    levels:[{name:'星火',t:3},{name:'燃烧',t:7},{name:'烈焰',t:30},{name:'永恒',t:100}],  val:s=>s.maxStreak },
-  { id:'perfect',    emoji:'🏆', name:'完美主义',  desc:'累计完美天数（全部完成）',
-    levels:[{name:'初现',t:1},{name:'追求',t:5},{name:'精英',t:20},{name:'极致',t:50}],   val:s=>s.perfect },
-  { id:'on_time',    emoji:'⏰', name:'时间掌控',  desc:'累计准时完成任务数',
-    levels:[{name:'入门',t:5},{name:'熟练',t:20},{name:'精通',t:50},{name:'宗师',t:100}], val:s=>s.onTime },
-  { id:'active',     emoji:'🗓️', name:'坚持不懈',  desc:'累计活跃天数',
-    levels:[{name:'起航',t:7},{name:'积累',t:30},{name:'坚守',t:100},{name:'传奇',t:365}],val:s=>s.active },
-  { id:'century',    emoji:'💎', name:'百战老将',  desc:'累计完成任务总数',
-    levels:[{name:'新兵',t:10},{name:'老兵',t:50},{name:'精英',t:100},{name:'传奇',t:500}],val:s=>s.totalDone },
-  { id:'early_bird', emoji:'🚀', name:'疾风先锋',  desc:'累计提前完成任务数',
-    levels:[{name:'预见',t:3},{name:'疾行',t:15},{name:'飓风',t:40},{name:'闪电',t:100}],  val:s=>s.early },
-  { id:'silver_guard',emoji:'🛡️',name:'银盾卫士',  desc:'累计银牌全满天数',
-    levels:[{name:'初守',t:1},{name:'坚守',t:5},{name:'守护者',t:20},{name:'神盾',t:50}],  val:s=>s.silverFull },
-  { id:'hunter',     emoji:'🏹', name:'万箭猎手',  desc:'累计完成银牌+铜牌任务数',
-    levels:[{name:'猎人',t:10},{name:'精英',t:50},{name:'猎王',t:150},{name:'猎神',t:300}],val:s=>s.totalDone-s.goldDone },
+  { id:'gold_road',  emoji:'🥇', nameKey:'badge_gold_road_name',    descKey:'badge_gold_road_desc',    levelsKey:'badge_gold_road_levels',
+    levelT:[1,10,50,100], val:s=>s.goldDone },
+  { id:'streak_fire',emoji:'🔥', nameKey:'badge_streak_fire_name',  descKey:'badge_streak_fire_desc',  levelsKey:'badge_streak_fire_levels',
+    levelT:[3,7,30,100], val:s=>s.maxStreak },
+  { id:'perfect',    emoji:'🏆', nameKey:'badge_perfect_name',      descKey:'badge_perfect_desc',      levelsKey:'badge_perfect_levels',
+    levelT:[1,5,20,50], val:s=>s.perfect },
+  { id:'on_time',    emoji:'⏰', nameKey:'badge_on_time_name',      descKey:'badge_on_time_desc',      levelsKey:'badge_on_time_levels',
+    levelT:[5,20,50,100], val:s=>s.onTime },
+  { id:'active',     emoji:'🗓️', nameKey:'badge_active_name',       descKey:'badge_active_desc',       levelsKey:'badge_active_levels',
+    levelT:[7,30,100,365], val:s=>s.active },
+  { id:'century',    emoji:'💎', nameKey:'badge_century_name',      descKey:'badge_century_desc',      levelsKey:'badge_century_levels',
+    levelT:[10,50,100,500], val:s=>s.totalDone },
+  { id:'early_bird', emoji:'🚀', nameKey:'badge_early_bird_name',   descKey:'badge_early_bird_desc',   levelsKey:'badge_early_bird_levels',
+    levelT:[3,15,40,100], val:s=>s.early },
+  { id:'silver_guard',emoji:'🛡️',nameKey:'badge_silver_guard_name', descKey:'badge_silver_guard_desc', levelsKey:'badge_silver_guard_levels',
+    levelT:[1,5,20,50], val:s=>s.silverFull },
+  { id:'hunter',     emoji:'🏹', nameKey:'badge_hunter_name',       descKey:'badge_hunter_desc',       levelsKey:'badge_hunter_levels',
+    levelT:[10,50,150,300], val:s=>s.totalDone-s.goldDone },
 ];
+// Helper: get localized name/desc/levels for a badge
+function badgeName(b){ return t(b.nameKey); }
+function badgeDesc(b){ return t(b.descKey); }
+function badgeLevels(b){
+  const names = t(b.levelsKey);
+  return b.levelT.map((threshold, i) => ({ name: names[i], t: threshold }));
+}
+// Helper: get localized theme label/desc
+function themeLabel(th){ return t(th.labelKey); }
+function themeDesc(th){ return t(th.descKey); }
 
 // ── 洞察引擎 ──────────────────────────────────────────────
 function generateInsights(plans, stats){
   const days=Object.keys(plans).sort();
-  if(days.length<3) return [{emoji:'🌱',text:'继续坚持，记录更多天后将生成专属洞察',type:'tip'}];
+  if(days.length<3) return [{emoji:'🌱',text:t('insight_seed'),type:'tip'}];
   const allT=days.flatMap(d=>planTasks(plans[d]));
   const tierRate=tier=>{const ts=allT.filter(t=>t.tier===tier);return ts.length?ts.filter(t=>t.status==='completed').length/ts.length:null;};
   const goldRate=tierRate('gold'), silverRate=tierRate('silver'), bronzeRate=tierRate('bronze');
   const doneWT=allT.filter(t=>t.status==='completed'&&t.actualMinutes&&t.estimatedMinutes);
   const avgOverrun=doneWT.length>5?doneWT.reduce((s,t)=>s+(t.actualMinutes-t.estimatedMinutes),0)/doneWT.length:null;
-  const dayNames=['周日','周一','周二','周三','周四','周五','周六'];
+  const dayNames=t('day_names_sun0'); // Sunday-indexed
   const dayRates=[0,1,2,3,4,5,6].map(wd=>{
     const ds=days.filter(d=>new Date(d+' 12:00').getDay()===wd);
     if(ds.length<2) return null;
     const ts=ds.flatMap(d=>planTasks(plans[d]));
-    return ts.length?{wd,rate:ts.filter(t=>t.status==='completed').length/ts.length,count:ds.length}:null;
+    return ts.length?{wd,rate:ts.filter(ti=>ti.status==='completed').length/ts.length,count:ds.length}:null;
   }).filter(Boolean);
   const bestDay=dayRates.length?dayRates.reduce((a,b)=>a.rate>b.rate?a:b):null;
   const milestones=[7,14,30,50,100];
   const nextM=stats.streak>0?milestones.find(m=>stats.streak<m&&m-stats.streak<=3):null;
   const insights=[];
-  if(goldRate!==null&&goldRate>=0.85) insights.push({emoji:'🥇',text:`你的金牌完成率高达 ${Math.round(goldRate*100)}%，执行力非常强！`,type:'praise'});
-  else if(goldRate!==null&&goldRate<0.5) insights.push({emoji:'💡',text:`金牌任务完成率只有 ${Math.round(goldRate*100)}%，试试把目标定得更具体一些`,type:'tip'});
-  if(silverRate!==null&&silverRate<0.45) insights.push({emoji:'🥈',text:`银牌完成率为 ${Math.round(silverRate*100)}%，是三层中最弱的——下周试试只规划 2 个`,type:'warning'});
-  if(bronzeRate!==null&&bronzeRate<0.5) insights.push({emoji:'🥉',text:`铜牌完成率为 ${Math.round(bronzeRate*100)}%，任务量是否太多？试试先从 3 个开始`,type:'warning'});
-  if(avgOverrun!==null&&avgOverrun>15) insights.push({emoji:'⏱️',text:`任务平均超时 ${Math.round(avgOverrun)} 分钟，预估时间可以适当调长`,type:'tip'});
-  else if(avgOverrun!==null&&avgOverrun<-5) insights.push({emoji:'🚀',text:`你经常提前完成任务，时间预估非常准确！`,type:'praise'});
-  if(bestDay&&bestDay.rate>0.75&&bestDay.count>=3) insights.push({emoji:'📅',text:`${dayNames[bestDay.wd]}是你效率最高的一天（${Math.round(bestDay.rate*100)}%），重要任务安排在这天吧`,type:'tip'});
-  if(nextM) insights.push({emoji:'🔥',text:`再坚持 ${nextM-stats.streak} 天就能达到 ${nextM} 天连击里程碑！`,type:'praise'});
-  if(stats.perfect>=5) insights.push({emoji:'🌟',text:`你已经有 ${stats.perfect} 个完美天了，是个追求极致的人`,type:'praise'});
-  return insights.length?insights:[{emoji:'💪',text:'每一天的坚持都在积累中，继续保持！',type:'tip'}];
+  if(goldRate!==null&&goldRate>=0.85) insights.push({emoji:'🥇',text:t('insight_gold_high',Math.round(goldRate*100)),type:'praise'});
+  else if(goldRate!==null&&goldRate<0.5) insights.push({emoji:'💡',text:t('insight_gold_low',Math.round(goldRate*100)),type:'tip'});
+  if(silverRate!==null&&silverRate<0.45) insights.push({emoji:'🥈',text:t('insight_silver_low',Math.round(silverRate*100)),type:'warning'});
+  if(bronzeRate!==null&&bronzeRate<0.5) insights.push({emoji:'🥉',text:t('insight_bronze_low',Math.round(bronzeRate*100)),type:'warning'});
+  if(avgOverrun!==null&&avgOverrun>15) insights.push({emoji:'⏱️',text:t('insight_over',Math.round(avgOverrun)),type:'tip'});
+  else if(avgOverrun!==null&&avgOverrun<-5) insights.push({emoji:'🚀',text:t('insight_under'),type:'praise'});
+  if(bestDay&&bestDay.rate>0.75&&bestDay.count>=3) insights.push({emoji:'📅',text:t('insight_bestday',dayNames[bestDay.wd],Math.round(bestDay.rate*100)),type:'tip'});
+  if(nextM) insights.push({emoji:'🔥',text:t('insight_milestone',nextM-stats.streak,nextM),type:'praise'});
+  if(stats.perfect>=5) insights.push({emoji:'🌟',text:t('insight_perfect_many',stats.perfect),type:'praise'});
+  return insights.length?insights:[{emoji:'💪',text:t('insight_keep'),type:'tip'}];
 }
 const EVENT_COLORS = {
   gold:  {hex:'#c8900a', dark:'#FFD700'},
@@ -1144,7 +2267,8 @@ const EVENT_COLORS = {
   pink:  {hex:'#c0406a', dark:'#ff6699'},
   purple:{hex:'#6040c0', dark:'#9966ff'},
 };
-const COLOR_LABELS = {gold:'🟡 金色',silver:'⬜ 银色',bronze:'🟤 铜色',blue:'🔵 蓝色',green:'🟢 绿色',pink:'🩷 粉色',purple:'🟣 紫色'};
+const COLOR_KEYS = {gold:'color_gold',silver:'color_silver',bronze:'color_bronze',blue:'color_blue',green:'color_green',pink:'color_pink',purple:'color_purple'};
+const colorLabel = (c) => t(COLOR_KEYS[c] || 'color_gold');
 const TIER_TO_COLOR = {gold:'gold', silver:'silver', bronze:'bronze'};
 
 // ── UTILS ────────────────────────────────────────────
@@ -1251,8 +2375,8 @@ function playSuccess(){  // cheerful arpeggio on task complete
   [523,659,784,1047].forEach((f,i)=>playTone(ctx,f,t+i*0.12,0.45,0.10));
 }
 function haptic(pattern=[100]){ if(!isHapticOn()) return; try{ navigator.vibrate&&navigator.vibrate(pattern); }catch(e){} }
-const fmtDate  = d => { const x=new Date(d+' 12:00'); return `${x.getFullYear()}年${x.getMonth()+1}月${x.getDate()}日`; };
-const fmtDateShort = d => { const x=new Date(d+' 12:00'); return `${x.getMonth()+1}月${x.getDate()}日`; };
+const fmtDate  = d => { const x=new Date(d+' 12:00'); return t('fmt_ymd', x.getFullYear(), x.getMonth()+1, x.getDate()); };
+const fmtDateShort = d => { const x=new Date(d+' 12:00'); return t('fmt_md', x.getMonth()+1, x.getDate()); };
 const dayCount = f => {
   if(!f) return 1;
   // Parse both dates as local noon to avoid UTC-offset day-boundary errors
@@ -1292,9 +2416,9 @@ function useLS(key,def){
       localStorage.setItem(key,JSON.stringify(nv));
     }catch(e){
       if(e&&(e.name==='QuotaExceededError'||e.name==='NS_ERROR_DOM_QUOTA_REACHED'||e.code===22)){
-        showToast('⚠️ 本地存储空间已满！请先在设置页导出数据备份，再清理浏览器缓存。',6000);
+        showToast(t('storage_error_quota'),6000);
       }else{
-        showToast('⚠️ 数据保存失败，可能处于无痕模式或浏览器禁用了本地存储。',5000);
+        showToast(t('storage_error_save'),5000);
       }
     }
     return nv;
@@ -1357,80 +2481,127 @@ function TimePicker({value,onChange,tier,isCheckIn,onCheckInChange}){
     <div>
       <div className="time-chips">
         {onCheckInChange&&(
-          <button className={`time-chip${isCheckIn?` chip-${tier}`:''}`} onClick={selectCheckIn}>✓ 打卡</button>
+          <button className={`time-chip${isCheckIn?` chip-${tier}`:''}`} onClick={selectCheckIn}>{t('task_checkin')}</button>
         )}
-        {TIME_OPTS.map(t=>(
-          <button key={t} className={`time-chip${!isCheckIn&&value===t&&!customMode?` chip-${tier}`:''}`} onClick={()=>selectPreset(t)}>{t}分钟</button>
+        {TIME_OPTS.map(tm=>(
+          <button key={tm} className={`time-chip${!isCheckIn&&value===tm&&!customMode?` chip-${tier}`:''}`} onClick={()=>selectPreset(tm)}>{t('minutes', tm)}</button>
         ))}
-        <button className={`time-chip${(customMode||isCustom)&&!isCheckIn?` chip-${tier}`:''}`} onClick={openCustom}>自定义</button>
+        <button className={`time-chip${(customMode||isCustom)&&!isCheckIn?` chip-${tier}`:''}`} onClick={openCustom}>{t('tp_custom')}</button>
       </div>
       {customMode&&(
         <div className="custom-time-row" style={{marginTop:8}}>
-          <input className="custom-time-input" type="number" min="1" max="600" placeholder="分钟"
+          <input className="custom-time-input" type="number" min="1" max="600" placeholder={t('tp_min')}
             value={customVal} onChange={e=>setCustomVal(e.target.value)}
             onKeyDown={e=>e.key==='Enter'&&applyCustom()} autoFocus/>
-          <button className={`time-chip chip-${tier}`} onClick={applyCustom}>确认</button>
-          <button className="time-chip" onClick={()=>{setCustomMode(false);setCustomVal('');}}>取消</button>
+          <button className={`time-chip chip-${tier}`} onClick={applyCustom}>{t('confirm_ok')}</button>
+          <button className="time-chip" onClick={()=>{setCustomMode(false);setCustomVal('');}}>{t('confirm_cancel')}</button>
         </div>
       )}
       {isCustom&&!customMode&&(
-        <div style={{fontSize:11,color:'var(--text-secondary)',marginTop:6}}>自定义：{value} 分钟</div>
+        <div style={{fontSize:11,color:'var(--text-secondary)',marginTop:6}}>{t('tp_custom_n', value)}</div>
       )}
     </div>
   );
 }
 
 // ── WELCOME MODAL ────────────────────────────────────
-function WelcomeModal({onStart}){
-  const [step,setStep]=useState(0);
+// step -1 = language picker (shown before dot indicators)
+// step 0..N = content slides
+function WelcomeModal({lang, onLangChange, onStart}){
+  const [step,setStep]=useState(-1);   // start at language picker
   const [selStyle,setSelStyle]=useState('morning');
   const [selHour,setSelHour]=useState(21);
+
+  // Pick language and advance to slide 0
+  const pickLang=(l)=>{
+    onLangChange&&onLangChange(l);
+    setStep(0);
+  };
+
+  // ── Language picker (step -1) ────────────────────────
+  if(step===-1) return(
+    <div className="overlay">
+      <div className="modal-box modal-welcome" style={{maxWidth:340,textAlign:'center'}} onClick={e=>e.stopPropagation()}>
+        <div style={{fontSize:40,marginBottom:14}}>🌐</div>
+        <div style={{fontSize:20,fontWeight:800,color:'var(--text-primary)',marginBottom:6,lineHeight:1.3}}>
+          选择语言
+        </div>
+        <div style={{fontSize:14,color:'var(--text-secondary)',marginBottom:28}}>
+          Choose Language
+        </div>
+        <div style={{display:'flex',flexDirection:'column',gap:12,marginBottom:20}}>
+          {[
+            {id:'zh',flag:'🇨🇳',label:'中文',sub:'简体中文'},
+            {id:'en',flag:'🇺🇸',label:'English',sub:'English'},
+          ].map(opt=>(
+            <button key={opt.id} onClick={()=>pickLang(opt.id)}
+              style={{display:'flex',alignItems:'center',gap:14,padding:'14px 18px',borderRadius:14,
+                border:`2px solid ${(lang||'zh')===opt.id?'rgba(255,215,0,0.7)':'var(--chip-border)'}`,
+                background:(lang||'zh')===opt.id?'rgba(255,215,0,0.08)':'var(--chip-bg)',
+                cursor:'pointer',transition:'all .18s',textAlign:'left',width:'100%'}}>
+              <span style={{fontSize:28,lineHeight:1}}>{opt.flag}</span>
+              <div style={{flex:1}}>
+                <div style={{fontSize:16,fontWeight:700,color:(lang||'zh')===opt.id?'var(--gold)':'var(--text-primary)'}}>{opt.label}</div>
+                <div style={{fontSize:12,color:'var(--text-secondary)',marginTop:1}}>{opt.sub}</div>
+              </div>
+              {(lang||'zh')===opt.id&&<span style={{color:'var(--gold)',fontSize:18,fontWeight:800}}>✓</span>}
+            </button>
+          ))}
+        </div>
+        <div style={{fontSize:11,color:'var(--text-secondary)',lineHeight:1.6}}>
+          {lang==='en'?'You can change this anytime in Settings':'随时可在设置中修改'}
+        </div>
+      </div>
+    </div>
+  );
+
+  // ── Content slides (step 0, 1, 2) ───────────────────
   const SLIDES=[
     {
       emoji:'🌟',
-      title:'欢迎使用 The Moment · 这一刻',
+      title:t('welcome_intro_title'),
       body:(
         <div style={{fontSize:13,color:'var(--text-secondary)',lineHeight:1.8,marginBottom:24}}>
-          一种简单而强大的时间管理法<br/>
-          每天只需 <span style={{color:'var(--gold)',fontWeight:700}}>5 分钟规划</span>，<br/>
-          聚焦真正重要的事，告别无效忙碌。
+          {t('welcome_intro_body1')}<br/>
+          <>{t('welcome_plan_prefix')}<span style={{color:'var(--gold)',fontWeight:700}}>{t('welcome_plan_highlight')}</span>{t('welcome_plan_suffix')}</><br/>
+          {t('welcome_intro_body3')}
         </div>
       ),
-      cta:'了解用法 →',
+      cta:t('welcome_intro_cta'),
     },
     {
       emoji:'📋',
-      title:'每天三层任务，优先级一目了然',
+      title:t('welcome_tier_title'),
       body:(
         <div style={{display:'flex',flexDirection:'column',gap:9,marginBottom:22,textAlign:'left'}}>
           {[
-            {emoji:'🥇',title:'1 个金牌任务',desc:'今天最重要的一件事，必须完成。',color:'var(--gold)'},
-            {emoji:'🥈',title:'3 个银牌任务',desc:'次要但重要，完成金牌后逐一攻克。',color:'var(--silver)'},
-            {emoji:'🥉',title:'5 个铜牌任务',desc:'锦上添花，有余力时完成，不强求。',color:'var(--bronze)'},
+            {emoji:'🥇',label:t('welcome_gold_label'),desc:t('welcome_gold_desc'),color:'var(--gold)'},
+            {emoji:'🥈',label:t('welcome_silver_label'),desc:t('welcome_silver_desc'),color:'var(--silver)'},
+            {emoji:'🥉',label:t('welcome_bronze_label'),desc:t('welcome_bronze_desc'),color:'var(--bronze)'},
           ].map(s=>(
             <div key={s.emoji} style={{display:'flex',alignItems:'center',gap:11,padding:'9px 12px',borderRadius:11,background:'var(--bg-secondary)',border:'1px solid var(--subtle-border)'}}>
               <span style={{fontSize:24,lineHeight:1,flexShrink:0}}>{s.emoji}</span>
               <div>
-                <div style={{fontSize:13,fontWeight:700,color:s.color,marginBottom:1}}>{s.title}</div>
+                <div style={{fontSize:13,fontWeight:700,color:s.color,marginBottom:1}}>{s.label}</div>
                 <div style={{fontSize:11,color:'var(--text-secondary)',lineHeight:1.4}}>{s.desc}</div>
               </div>
             </div>
           ))}
         </div>
       ),
-      cta:'明白了 →',
+      cta:t('welcome_tier_cta'),
     },
     {
-      emoji:'🌙',
-      title:'你习惯什么时候做计划？',
+      emoji:'🗓️',
+      title:t('welcome_plan_title'),
       body:(
         <div style={{marginBottom:20,textAlign:'left'}}>
           <div style={{fontSize:12,color:'var(--text-secondary)',marginBottom:14,textAlign:'center',lineHeight:1.6}}>
-            选择你的规划节奏，随时可在设置中修改
+            {t('welcome_plan_hint')}
           </div>
           {[
-            {id:'morning',emoji:'☀️',label:'早上型',desc:'每天早晨开启新计划，精神饱满做决策'},
-            {id:'evening',emoji:'🌙',label:'前一天晚上型',desc:'提前规划明天，让夜晚更有仪式感'},
+            {id:'morning',emoji:'☀️',label:t('welcome_morning_label'),desc:t('welcome_morning_desc')},
+            {id:'evening',emoji:'🌙',label:t('welcome_evening_label'),desc:t('welcome_evening_desc')},
           ].map(opt=>(
             <div key={opt.id} onClick={()=>setSelStyle(opt.id)}
               style={{display:'flex',alignItems:'center',gap:12,padding:'12px 14px',borderRadius:13,marginBottom:9,
@@ -1450,9 +2621,9 @@ function WelcomeModal({onStart}){
           ))}
           {selStyle==='evening'&&(
             <div style={{padding:'11px 14px',borderRadius:11,background:'var(--chip-bg)',border:'1px solid var(--chip-border)',marginTop:4}}>
-              <div style={{fontSize:12,color:'var(--text-secondary)',marginBottom:10}}>晚间规划从几点开始？</div>
+              <div style={{fontSize:12,color:'var(--text-secondary)',marginBottom:10}}>{t('welcome_evening_q')}</div>
               <div style={{display:'flex',gap:8}}>
-                {[{h:20,label:'8 点'},{h:21,label:'9 点'},{h:22,label:'10 点'},{h:23,label:'11 点'}].map(o=>(
+                {[{h:20,label:'8:00'},{h:21,label:'9:00'},{h:22,label:'10:00'},{h:23,label:'11:00'}].map(o=>(
                   <button key={o.h} onClick={()=>setSelHour(o.h)}
                     style={{flex:1,padding:'8px 0',borderRadius:9,border:`1.5px solid ${selHour===o.h?'rgba(255,215,0,0.6)':'var(--chip-border)'}`,
                       background:selHour===o.h?'rgba(255,215,0,0.12)':'transparent',
@@ -1465,14 +2636,16 @@ function WelcomeModal({onStart}){
           )}
         </div>
       ),
-      cta:'开始使用 🚀',
+      cta:t('welcome_plan_cta'),
     },
   ];
+
   const cur=SLIDES[step];
   const isLast=step===SLIDES.length-1;
   return(
     <div className="overlay">
       <div className="modal-box modal-welcome" style={{maxWidth:360,textAlign:'center'}} onClick={e=>e.stopPropagation()}>
+        {/* Step dots — only for content slides */}
         <div style={{display:'flex',justifyContent:'center',gap:6,marginBottom:20}}>
           {SLIDES.map((_,i)=>(
             <div key={i} style={{width:i===step?20:7,height:7,borderRadius:4,background:i===step?'var(--gold)':'var(--chip-bg)',transition:'width .25s,background .25s'}}/>
@@ -1487,7 +2660,7 @@ function WelcomeModal({onStart}){
         </button>
         {step>0&&(
           <button className="btn btn-ghost" style={{width:'100%',marginTop:8,padding:'9px 0',fontSize:12}}
-            onClick={()=>setStep(s=>s-1)}>← 上一步</button>
+            onClick={()=>setStep(s=>s-1)}>{t('welcome_prev')}</button>
         )}
       </div>
     </div>
@@ -1499,18 +2672,18 @@ function ThemePanel({current,onChange,onClose}){
   return(
     <div className="overlay" onClick={onClose}>
       <div className="modal-box modal-welcome" style={{maxWidth:360}} onClick={e=>e.stopPropagation()}>
-        <div style={{fontSize:16,fontWeight:700,marginBottom:3,color:'var(--text-primary)'}}>🎨 主题颜色</div>
-        <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:14}}>选择主题，立即生效自动保存</div>
+        <div style={{fontSize:16,fontWeight:700,marginBottom:3,color:'var(--text-primary)'}}>{t('theme_panel_title')}</div>
+        <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:14}}>{t('theme_panel_hint')}</div>
         <div className="theme-btn-row">
-          {THEMES.map(t=>(
-            <button key={t.id} className={`theme-opt${current===t.id?' selected':''}`} onClick={()=>{onChange(t.id);onClose();}}>
-              <div className="theme-swatch" style={{background:t.swatch}}><span style={{color:t.text,fontWeight:800,fontSize:13}}>A</span></div>
-              <div style={{flex:1}}><div className="theme-label">{t.label}</div><div style={{fontSize:11,color:'var(--text-secondary)'}}>{t.desc}</div></div>
-              {current===t.id&&<span className="theme-check">✓</span>}
+          {THEMES.map(th=>(
+            <button key={th.id} className={`theme-opt${current===th.id?' selected':''}`} onClick={()=>{onChange(th.id);onClose();}}>
+              <div className="theme-swatch" style={{background:th.swatch}}><span style={{color:th.text,fontWeight:800,fontSize:13}}>A</span></div>
+              <div style={{flex:1}}><div className="theme-label">{themeLabel(th)}</div><div style={{fontSize:11,color:'var(--text-secondary)'}}>{themeDesc(th)}</div></div>
+              {current===th.id&&<span className="theme-check">✓</span>}
             </button>
           ))}
         </div>
-        <button className="btn btn-ghost" style={{marginTop:13}} onClick={onClose}>关闭</button>
+        <button className="btn btn-ghost" style={{marginTop:13}} onClick={onClose}>{t('close')}</button>
       </div>
     </div>
   );
@@ -1535,67 +2708,85 @@ function HabitForm({habit, onSave, onClose}){
   return(
     <div className="overlay" onClick={onClose}>
       <div className="modal-box modal-welcome" style={{maxWidth:360}} onClick={e=>e.stopPropagation()}>
-        <div style={{fontSize:16,fontWeight:700,marginBottom:3,color:'var(--text-primary)'}}>{habit?'✏️ 编辑习惯':'➕ 添加习惯'}</div>
-        <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:16}}>设置好后每天规划时一键加入</div>
-        <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:6}}>习惯名称</label>
+        <div style={{fontSize:16,fontWeight:700,marginBottom:3,color:'var(--text-primary)'}}>{habit?t('habit_form_edit_title'):t('habit_form_add_title')}</div>
+        <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:16}}>{t('habit_save_hint')}</div>
+        <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:6}}>{t('habit_form_name_label')}</label>
         <input ref={inputRef} className="plan-input" value={title} onChange={e=>setTitle(e.target.value)}
           onKeyDown={e=>{if(e.key==='Enter'&&canSave)handleSave();}} maxLength={50}
-          placeholder="例：运动、阅读、冥想…" style={{width:'100%',marginBottom:14,boxSizing:'border-box'}}/>
-        <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:6}}>所属类别</label>
+          placeholder={t('habit_form_name_ph')} style={{width:'100%',marginBottom:14,boxSizing:'border-box'}}/>
+        <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:6}}>{t('habit_form_tier')}</label>
         <div className="tier-btn-row" style={{marginBottom:14}}>
-          {['gold','silver','bronze'].map(t=>(
-            <button key={t} className={`tier-btn${tier===t?' active-'+t:''}`} onClick={()=>setTier(t)}
-              style={tier===t?{borderColor:tierColor[t],color:tierColor[t]}:{}}>
-              {t==='gold'?'🥇 金牌':t==='silver'?'🥈 银牌':'🥉 铜牌'}
+          {['gold','silver','bronze'].map(tr=>(
+            <button key={tr} className={`tier-btn${tier===tr?' active-'+tr:''}`} onClick={()=>setTier(tr)}
+              style={tier===tr?{borderColor:tierColor[tr],color:tierColor[tr]}:{}}>
+              {tr==='gold'?t('plan_tier_gold'):tr==='silver'?t('plan_tier_silver'):t('plan_tier_bronze')}
             </button>
           ))}
         </div>
-        <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:6}}>预计用时</label>
+        <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:6}}>{t('habit_form_time')}</label>
         <TimePicker value={mins} onChange={setMins} tier={tier} isCheckIn={isCI} onCheckInChange={v=>{setIsCI(v);if(!v)setCiTarget(1);}}/>
         {isCI&&<div style={{display:'flex',alignItems:'center',gap:8,marginTop:10}}>
-          <span style={{fontSize:12,color:'var(--text-secondary)'}}>目标次数</span>
+          <span style={{fontSize:12,color:'var(--text-secondary)'}}>{t('habit_form_target')}</span>
           <input type="number" min={1} max={99} value={ciTarget||''}
             onChange={e=>setCiTarget(Math.min(99,+e.target.value||0))}
             onBlur={()=>setCiTarget(v=>Math.max(1,+v||1))}
             style={{width:54,padding:'4px 8px',background:'var(--input-bg)',border:'1px solid var(--input-border)',borderRadius:8,color:'var(--text-primary)',fontSize:13,textAlign:'center'}}/>
-          <span style={{fontSize:12,color:'var(--text-secondary)'}}>次</span>
-          {ciTarget>1&&<span style={{fontSize:11,color:'var(--gold)'}}>每次点卡片 +1，满{ciTarget}次自动完成</span>}
+          <span style={{fontSize:12,color:'var(--text-secondary)'}}>{t('plan_target_unit')}</span>
+          {ciTarget>1&&<span style={{fontSize:11,color:'var(--gold)'}}>{t('plan_target_hint_n',ciTarget)}</span>}
         </div>}
         <div style={{display:'flex',alignItems:'center',gap:10,marginTop:14,padding:'10px 12px',background:'rgba(255,185,0,0.06)',borderRadius:10,border:'1px solid rgba(255,185,0,0.18)'}}>
           <div style={{flex:1}}>
-            <div style={{fontSize:13,fontWeight:600,color:'var(--text-primary)'}}>每日自动出现</div>
-            <div style={{fontSize:11,color:'var(--text-secondary)',marginTop:2}}>开启后规划时自动出现，无需手动选择</div>
+            <div style={{fontSize:13,fontWeight:600,color:'var(--text-primary)'}}>{t('habit_auto_title')}</div>
+            <div style={{fontSize:11,color:'var(--text-secondary)',marginTop:2}}>{t('habit_auto_sub')}</div>
           </div>
           <button className={`sound-toggle ${autoAdd?'on':'off'}`} onClick={()=>setAutoAdd(v=>!v)}/>
         </div>
         <div style={{display:'flex',gap:8,marginTop:14}}>
-          <button className="btn btn-gold" style={{flex:1}} disabled={!canSave} onClick={handleSave}>保存</button>
-          <button className="btn btn-ghost" style={{flex:1}} onClick={onClose}>取消</button>
+          <button className="btn btn-gold" style={{flex:1}} disabled={!canSave} onClick={handleSave}>{t('save')}</button>
+          <button className="btn btn-ghost" style={{flex:1}} onClick={onClose}>{t('confirm_cancel')}</button>
         </div>
       </div>
     </div>
   );
 }
+// HABIT_PRESETS: each item has title_zh/title_en. presetTitle() picks the current language.
+// When matching against existing habits we compare both localized versions.
 const HABIT_PRESETS=[
-  {cat:'💡 智力资产',items:[
-    {title:'深度阅读',minutes:20},{title:'外语听力',minutes:15},{title:'复盘思考',minutes:10},
-    {title:'网课学习',minutes:45},{title:'编程练习',minutes:60},
+  {catKey:'habit_cat_brain',items:[
+    {title_zh:'深度阅读',title_en:'Deep reading',minutes:20},
+    {title_zh:'外语听力',title_en:'Language listening',minutes:15},
+    {title_zh:'复盘思考',title_en:'Reflection',minutes:10},
+    {title_zh:'网课学习',title_en:'Online course',minutes:45},
+    {title_zh:'编程练习',title_en:'Coding practice',minutes:60},
   ]},
-  {cat:'🏃 健康资产',items:[
-    {title:'冥想呼吸',minutes:5},{title:'瑜伽伸展',minutes:20},{title:'居家健身',minutes:30},
-    {title:'护眼远眺',minutes:5},{title:'户外散步',minutes:15},
+  {catKey:'habit_cat_body',items:[
+    {title_zh:'冥想呼吸',title_en:'Meditation',minutes:5},
+    {title_zh:'瑜伽伸展',title_en:'Yoga & stretch',minutes:20},
+    {title_zh:'居家健身',title_en:'Home workout',minutes:30},
+    {title_zh:'护眼远眺',title_en:'Eye rest',minutes:5},
+    {title_zh:'户外散步',title_en:'Outdoor walk',minutes:15},
   ]},
-  {cat:'🏠 生活资产',items:[
-    {title:'极简整理',minutes:10},{title:'每日饮水',minutes:0,isCheckIn:true,checkInTarget:8},
-    {title:'记账总结',minutes:5},{title:'烹饪备餐',minutes:30},
+  {catKey:'habit_cat_home',items:[
+    {title_zh:'极简整理',title_en:'Quick tidy-up',minutes:10},
+    {title_zh:'每日饮水',title_en:'Daily water',minutes:0,isCheckIn:true,checkInTarget:8},
+    {title_zh:'记账总结',title_en:'Track expenses',minutes:5},
+    {title_zh:'烹饪备餐',title_en:'Cook / meal prep',minutes:30},
   ]},
-  {cat:'💬 情绪社交',items:[
-    {title:'感恩日记',minutes:5},{title:'家人通话',minutes:15},{title:'发呆放空',minutes:10},
+  {catKey:'habit_cat_social',items:[
+    {title_zh:'感恩日记',title_en:'Gratitude journal',minutes:5},
+    {title_zh:'家人通话',title_en:'Call family',minutes:15},
+    {title_zh:'发呆放空',title_en:'Zone out & relax',minutes:10},
   ]},
-  {cat:'⚡ 快充微习惯',items:[
-    {title:'核心卷腹',minutes:5},{title:'单词背诵',minutes:10},{title:'站立办公',minutes:20},
+  {catKey:'habit_cat_micro',items:[
+    {title_zh:'核心卷腹',title_en:'Core crunches',minutes:5},
+    {title_zh:'单词背诵',title_en:'Vocab drill',minutes:10},
+    {title_zh:'站立办公',title_en:'Stand & work',minutes:20},
   ]},
 ];
+// Get localized preset title based on current language
+function presetTitle(item){ return getLang()==='en' ? item.title_en : item.title_zh; }
+// Compare against habits in any language
+function presetMatches(item, habitTitle){ return habitTitle===item.title_zh || habitTitle===item.title_en; }
 function HabitsManager({habits,onSave,onClose,onAddToday,plan}){
   const [editing,setEditing]=useState(null);
   const [showRec,setShowRec]=useState(false);
@@ -1611,15 +2802,15 @@ function HabitsManager({habits,onSave,onClose,onAddToday,plan}){
     const next=exists?habits.map(x=>x.id===h.id?h:x):[...habits,h];
     onSave(next); setEditing(null);
   };
-  const handleDelete=id=>{ if(window.confirm('删除这个习惯？'))onSave(habits.filter(h=>h.id!==id)); };
+  const handleDelete=id=>{ if(window.confirm(t('habits_delete_confirm')))onSave(habits.filter(h=>h.id!==id)); };
   const handleSelectPreset=item=>{
-    if(selP&&selP.title===item.title){setSelP(null);return;}
+    if(selP && presetTitle(selP)===presetTitle(item)){setSelP(null);return;}
     setSelP(item); setSelMin(item.minutes||0); setSelTier('bronze');
     setSelIsCI(!!item.isCheckIn); setSelCiTarget(item.checkInTarget||1);
   };
   const handleAddPreset=()=>{
     if(!selP)return;
-    const h={id:Date.now()+Math.random(),title:selP.title,tier:selTier,
+    const h={id:Date.now()+Math.random(),title:presetTitle(selP),tier:selTier,
       estimatedMinutes:selIsCI?0:Number(selMin)||5,isCheckIn:selIsCI,
       checkInTarget:selIsCI?(selCiTarget||1):1,autoAdd:false};
     onSave([...habits,h]);
@@ -1646,14 +2837,14 @@ function HabitsManager({habits,onSave,onClose,onAddToday,plan}){
       <div className="modal-box modal-welcome" style={{maxWidth:360,maxHeight:'85vh',display:'flex',flexDirection:'column',overflow:'hidden'}} onClick={e=>e.stopPropagation()}>
         {/* ── 固定顶部标题 ── */}
         <div style={{flexShrink:0}}>
-          <div style={{fontSize:16,fontWeight:700,marginBottom:3,color:'var(--text-primary)'}}>🔄 习惯与模板</div>
-          <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:16}}>预设后每天规划时一键加入，无需重复输入</div>
+          <div style={{fontSize:16,fontWeight:700,marginBottom:3,color:'var(--text-primary)'}}>{t('habits_section_title')}</div>
+          <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:16}}>{t('habit_preset_hint')}</div>
         </div>
         {/* ── 可滚动中间区域 ── */}
         <div style={{flex:1,overflowY:'auto',minHeight:0}}>
           {habits.length===0&&!showRec&&(
             <div style={{textAlign:'center',padding:'20px 0',color:'var(--text-secondary)',fontSize:13}}>
-              还没有习惯，点下方添加吧
+              {t('habits_empty')}
             </div>
           )}
           {habits.map(h=>{
@@ -1664,41 +2855,42 @@ function HabitsManager({habits,onSave,onClose,onAddToday,plan}){
               <div className="habit-item-info">
                 <div className="habit-item-title">
                   {tierLabel[h.tier]} {h.title}
-                  {h.autoAdd&&<span className="habit-auto-tag">每日</span>}
+                  {h.autoAdd&&<span className="habit-auto-tag">{t('habits_daily')}</span>}
                 </div>
-                <div className="habit-item-meta">{h.isCheckIn?'打卡任务':`${h.estimatedMinutes} 分钟`}</div>
+                <div className="habit-item-meta">{h.isCheckIn?t('habits_checkin_task'):t('minutes',h.estimatedMinutes)}</div>
               </div>
               {plan&&<button
                 className="habit-today-btn"
                 onClick={()=>handleAddToday(h)}
                 disabled={inToday}
-                title={inToday?'已加入今日':'加入今日计划'}>
+                title={inToday?t('habits_in_today'):t('habits_add_today')}>
                 {inToday?'✓':'＋'}
               </button>}
-              <button className="card-edit-btn" onClick={()=>setEditing(h)} title="编辑">✏️</button>
-              <button className="card-edit-btn" style={{color:'var(--danger)'}} onClick={()=>handleDelete(h.id)} title="删除">🗑️</button>
+              <button className="card-edit-btn" onClick={()=>setEditing(h)} title={t('task_tip_edit')}>✏️</button>
+              <button className="card-edit-btn" style={{color:'var(--danger)'}} onClick={()=>handleDelete(h.id)} title={t('delete')}>🗑️</button>
             </div>
             );
           })}
-          <button className="habit-add-btn" onClick={()=>setEditing('new')}>＋ 添加习惯或模板</button>
+          <button className="habit-add-btn" onClick={()=>setEditing('new')}>{t('habits_add')}</button>
           <button className="habit-rec-btn" onClick={()=>{setShowRec(v=>!v);setSelP(null);}}>
-            {showRec?'▲ 收起推荐':'✨ 推荐养成好习惯'}
+            {showRec?t('habits_collapse'):t('habits_recommend')}
           </button>
           {showRec&&(
             <div className="rec-panel">
               {HABIT_PRESETS.map(cat=>(
-                <div key={cat.cat}>
-                  <div className="rec-cat-label">{cat.cat}</div>
+                <div key={cat.catKey}>
+                  <div className="rec-cat-label">{t(cat.catKey)}</div>
                   <div className="rec-chips">
                     {cat.items.map(item=>{
-                      const isAdded=habits.some(h=>h.title===item.title);
-                      const isActive=selP&&selP.title===item.title;
+                      const localTitle=presetTitle(item);
+                      const isAdded=habits.some(h=>presetMatches(item,h.title));
+                      const isActive=selP&&presetTitle(selP)===localTitle;
                       return(
-                        <button key={item.title}
+                        <button key={item.title_zh}
                           className={`rec-chip${isActive?' active':''}`}
                           onClick={()=>!isAdded&&handleSelectPreset(item)}
                           style={isAdded?{opacity:0.38,cursor:'default'}:{}}>
-                          {item.title}{isAdded?' ✓':''}
+                          {localTitle}{isAdded?' ✓':''}
                         </button>
                       );
                     })}
@@ -1714,11 +2906,11 @@ function HabitsManager({habits,onSave,onClose,onAddToday,plan}){
             <div className="rec-confirm" style={{marginTop:10,marginBottom:0}}>
               {/* 行1：任务名 + 层级选择 */}
               <div style={{display:'flex',alignItems:'center',gap:7}}>
-                <span className="rec-confirm-title">「{selP.title}」</span>
+                <span className="rec-confirm-title">「{presetTitle(selP)}」</span>
                 <div className="rec-tier-btns">
-                  {['gold','silver','bronze'].map(t=>(
-                    <button key={t} className={`rec-tier-btn${selTier===t?' sel-'+t:''}`}
-                      onClick={()=>setSelTier(t)}>{tierLabel[t]}</button>
+                  {['gold','silver','bronze'].map(tr=>(
+                    <button key={tr} className={`rec-tier-btn${selTier===tr?' sel-'+tr:''}`}
+                      onClick={()=>setSelTier(tr)}>{tierLabel[tr]}</button>
                   ))}
                 </div>
               </div>
@@ -1726,15 +2918,15 @@ function HabitsManager({habits,onSave,onClose,onAddToday,plan}){
               <div style={{display:'flex',alignItems:'center',gap:7,flexWrap:'wrap'}}>
                 <button className={`time-chip${selIsCI?` chip-${selTier}`:''}`}
                   onClick={()=>{const v=!selIsCI;setSelIsCI(v);if(!v)setSelCiTarget(1);}}>
-                  ✓ 打卡
+                  {t('habits_checkin_action')}
                 </button>
                 {selIsCI?(
                   <>
                     <input type="number" className="rec-min-input" value={selCiTarget} min={1} max={99}
                       onChange={e=>setSelCiTarget(Math.max(1,Math.min(99,+e.target.value||1)))}
                       style={{width:44}}/>
-                    <span style={{fontSize:11,color:'var(--text-secondary)'}}>次</span>
-                    {selCiTarget>1&&<span style={{fontSize:11,color:'var(--bronze)'}}>满{selCiTarget}次完成</span>}
+                    <span style={{fontSize:11,color:'var(--text-secondary)'}}>{t('plan_target_unit')}</span>
+                    {selCiTarget>1&&<span style={{fontSize:11,color:'var(--bronze)'}}>{t('ci_done_at_n', selCiTarget)}</span>}
                   </>
                 ):(
                   <>
@@ -1745,10 +2937,10 @@ function HabitsManager({habits,onSave,onClose,onAddToday,plan}){
                 )}
               </div>
               {/* 行3：醒目加入按钮 */}
-              <button className="rec-add-btn-full" onClick={handleAddPreset}>＋ 加入习惯模板</button>
+              <button className="rec-add-btn-full" onClick={handleAddPreset}>{t('habits_preset_add')}</button>
             </div>
           )}
-          <button className="btn btn-ghost" style={{width:'100%',marginTop:10}} onClick={onClose}>完成</button>
+          <button className="btn btn-ghost" style={{width:'100%',marginTop:10}} onClick={onClose}>{t('habits_done')}</button>
         </div>
       </div>
     </div>
@@ -1756,23 +2948,43 @@ function HabitsManager({habits,onSave,onClose,onAddToday,plan}){
 }
 
 // ── SETTINGS PANEL (系统设置) ─────────────────────────
-function SettingsPanel({soundEnabled,onSoundChange,hapticEnabled,onHapticChange,planStyle,onPlanStyleChange,planHour,onPlanHourChange}){
+function SettingsPanel({soundEnabled,onSoundChange,hapticEnabled,onHapticChange,planStyle,onPlanStyleChange,planHour,onPlanHourChange,lang,onLangChange}){
   const canVibrate = typeof navigator!=='undefined' && !!navigator.vibrate;
   return(
     <div className="view-scroll" style={{padding:'20px 16px 40px'}}>
       <div style={{maxWidth:460,margin:'0 auto'}}>
-        <div style={{fontSize:18,fontWeight:700,marginBottom:4,color:'var(--text-primary)'}}>⚙️ 设置</div>
-        <div style={{fontSize:12,color:'var(--text-secondary)',marginBottom:20}}>系统设置与数据管理</div>
+        <div style={{fontSize:18,fontWeight:700,marginBottom:4,color:'var(--text-primary)'}}>⚙️ {t('settings_title')}</div>
+        <div style={{fontSize:12,color:'var(--text-secondary)',marginBottom:20}}>{t('settings_subtitle')}</div>
+
+        {/* Language toggle */}
+        <div style={{marginBottom:14,borderRadius:13,background:'var(--bg-secondary)',border:'1px solid var(--subtle-border)',overflow:'hidden'}}>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'12px 14px'}}>
+            <div>
+              <div style={{fontSize:14,fontWeight:600,color:'var(--text-primary)'}}>🌐 {t('settings_lang')}</div>
+            </div>
+            <div style={{display:'flex',gap:6}}>
+              {[{id:'zh',label:'中文'},{id:'en',label:'English'}].map(opt=>(
+                <button key={opt.id} onClick={()=>onLangChange&&onLangChange(opt.id)}
+                  style={{padding:'6px 14px',borderRadius:8,border:`1.5px solid ${(lang||'zh')===opt.id?'rgba(255,215,0,0.6)':'var(--chip-border)'}`,
+                    background:(lang||'zh')===opt.id?'rgba(255,215,0,0.12)':'transparent',
+                    color:(lang||'zh')===opt.id?'var(--gold)':'var(--text-secondary)',
+                    fontSize:13,fontWeight:700,cursor:'pointer',transition:'all .15s'}}>
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
 
         {/* Planning style group */}
         <div style={{marginBottom:14,borderRadius:13,background:'var(--bg-secondary)',border:'1px solid var(--subtle-border)',overflow:'hidden'}}>
           <div style={{padding:'12px 14px',borderBottom:'1px solid var(--subtle-border)'}}>
-            <div style={{fontSize:14,fontWeight:600,color:'var(--text-primary)',marginBottom:2}}>🗓️ 规划习惯</div>
-            <div style={{fontSize:11,color:'var(--text-secondary)'}}>选择您偏好的每日规划时间</div>
+            <div style={{fontSize:14,fontWeight:600,color:'var(--text-primary)',marginBottom:2}}>🗓️ {t('settings_plan_style')}</div>
+            <div style={{fontSize:11,color:'var(--text-secondary)'}}>{t('settings_plan_style_desc')}</div>
           </div>
           <div style={{padding:'12px 14px',borderBottom:'1px solid var(--subtle-border)'}}>
             <div style={{display:'flex',gap:8}}>
-              {[{id:'morning',emoji:'🌅',label:'早上规划'},{id:'evening',emoji:'🌙',label:'晚上规划'}].map(opt=>(
+              {[{id:'morning',emoji:'🌅',label:t('settings_morning')},{id:'evening',emoji:'🌙',label:t('settings_evening')}].map(opt=>(
                 <button key={opt.id} onClick={()=>onPlanStyleChange(opt.id)}
                   style={{flex:1,padding:'9px 8px',borderRadius:10,border:`1.5px solid ${planStyle===opt.id?'rgba(255,215,0,0.55)':'var(--chip-border)'}`,
                     background:planStyle===opt.id?'rgba(255,215,0,0.08)':'transparent',
@@ -1786,9 +2998,9 @@ function SettingsPanel({soundEnabled,onSoundChange,hapticEnabled,onHapticChange,
           </div>
           {planStyle==='evening'&&(
             <div style={{padding:'12px 14px'}}>
-              <div style={{fontSize:12,color:'var(--text-secondary)',marginBottom:9}}>从几点开始可以规划明天？</div>
+              <div style={{fontSize:12,color:'var(--text-secondary)',marginBottom:9}}>{t('settings_plan_hour')} </div>
               <div style={{display:'flex',gap:8}}>
-                {[{h:20,label:'8 点'},{h:21,label:'9 点'},{h:22,label:'10 点'},{h:23,label:'11 点'}].map(o=>(
+                {[{h:20,label:t('hr_8pm')},{h:21,label:t('hr_9pm')},{h:22,label:t('hr_10pm')},{h:23,label:t('hr_11pm')}].map(o=>(
                   <button key={o.h} onClick={()=>onPlanHourChange(o.h)}
                     style={{flex:1,padding:'8px 0',borderRadius:9,border:`1.5px solid ${planHour===o.h?'rgba(255,215,0,0.6)':'var(--chip-border)'}`,
                       background:planHour===o.h?'rgba(255,215,0,0.12)':'transparent',
@@ -1798,7 +3010,7 @@ function SettingsPanel({soundEnabled,onSoundChange,hapticEnabled,onHapticChange,
                 ))}
               </div>
               <div style={{fontSize:10,color:'var(--text-secondary)',marginTop:8,lineHeight:1.5}}>
-                到达设定时间后，🌙 收工按钮将出现「收好今天，迎接明天」选项，直接开始明日计划。
+                {t('settings_evening_body')}
               </div>
             </div>
           )}
@@ -1809,40 +3021,39 @@ function SettingsPanel({soundEnabled,onSoundChange,hapticEnabled,onHapticChange,
           {/* Sound toggle */}
           <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'12px 14px',borderBottom:'1px solid var(--subtle-border)'}}>
             <div>
-              <div style={{fontSize:14,fontWeight:600,color:'var(--text-primary)'}}>🔔 系统音效</div>
-              <div style={{fontSize:11,color:'var(--text-secondary)',marginTop:3}}>点击音、计时完成提示音</div>
+              <div style={{fontSize:14,fontWeight:600,color:'var(--text-primary)'}}>🔔 {t('settings_sound')}</div>
+              <div style={{fontSize:11,color:'var(--text-secondary)',marginTop:3}}>{t('settings_sound_desc')}</div>
             </div>
-            <button className={`sound-toggle ${soundEnabled?'on':'off'}`} onClick={()=>onSoundChange(!soundEnabled)} title={soundEnabled?'点击关闭音效':'点击开启音效'}/>
+            <button className={`sound-toggle ${soundEnabled?'on':'off'}`} onClick={()=>onSoundChange(!soundEnabled)} title={soundEnabled?t('sound_off_tip'):t('sound_on_tip')}/>
           </div>
           {/* Haptic toggle */}
           <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'12px 14px',opacity:canVibrate?1:0.4}}>
             <div>
-              <div style={{fontSize:14,fontWeight:600,color:'var(--text-primary)'}}>📳 触感震动</div>
-              <div style={{fontSize:11,color:'var(--text-secondary)',marginTop:3}}>{canVibrate?'点击轻微震动反馈':'当前设备不支持震动'}</div>
+              <div style={{fontSize:14,fontWeight:600,color:'var(--text-primary)'}}>📳 {t('settings_haptic')}</div>
+              <div style={{fontSize:11,color:'var(--text-secondary)',marginTop:3}}>{canVibrate?t('settings_haptic_on'):t('settings_haptic_off')}</div>
             </div>
-            <button className={`sound-toggle ${hapticEnabled?'on':'off'}`} onClick={()=>canVibrate&&onHapticChange(!hapticEnabled)} title={hapticEnabled?'点击关闭震动':'点击开启震动'}/>
+            <button className={`sound-toggle ${hapticEnabled?'on':'off'}`} onClick={()=>canVibrate&&onHapticChange(!hapticEnabled)} title={hapticEnabled?t('haptic_off_tip'):t('haptic_on_tip')}/>
           </div>
         </div>
 
 
         {/* 数据存储风险提示 */}
         <div style={{marginBottom:14,padding:'14px',borderRadius:13,background:'rgba(255,160,0,0.07)',border:'1px solid rgba(255,160,0,0.22)'}}>
-          <div style={{fontSize:11,fontWeight:700,color:'var(--gold)',marginBottom:10,textTransform:'uppercase',letterSpacing:'.5px'}}>⚠️ 数据存储风险提示</div>
+          <div style={{fontSize:11,fontWeight:700,color:'var(--gold)',marginBottom:10,textTransform:'uppercase',letterSpacing:'.5px'}}>{t('settings_risk_title')}</div>
           <div style={{fontSize:12,color:'var(--text-primary)',lineHeight:1.75}}>
-            <div style={{marginBottom:6}}>📌 本工具所有数据存储在浏览器本地（localStorage），以下情况会导致数据丢失：</div>
+            <div style={{marginBottom:6}}>📌 {t('settings_risk_body')}</div>
             <div style={{fontSize:11,color:'var(--text-secondary)',paddingLeft:12,lineHeight:2}}>
-              · 无痕 / 隐身模式下使用，关闭窗口即丢失<br/>
-              · 手动清除浏览器缓存 / Cookie<br/>
-              · 浏览器自动清理存储（移动端常见）<br/>
-              · localStorage 配额耗尽时，新数据无法保存
+              {t('settings_risk_1')}<br/>
+              {t('settings_risk_2')}<br/>
+              {t('settings_risk_3')}
             </div>
-            <div style={{marginTop:8,fontSize:11,color:'var(--gold)',fontWeight:600}}>💡 建议：定期使用下方「保存数据备份」导出 JSON 文件，妥善保管。</div>
+            <div style={{marginTop:8,fontSize:11,color:'var(--gold)',fontWeight:600}}>💡 {t('settings_risk_4')}</div>
           </div>
         </div>
 
         {/* Data backup */}
         <div style={{marginBottom:14,padding:'14px',borderRadius:13,background:'var(--bg-secondary)',border:'1px solid var(--subtle-border)'}}>
-          <div style={{fontSize:11,fontWeight:600,color:'var(--text-secondary)',marginBottom:10,textTransform:'uppercase',letterSpacing:'.5px'}}>数据备份</div>
+          <div style={{fontSize:11,fontWeight:600,color:'var(--text-secondary)',marginBottom:10,textTransform:'uppercase',letterSpacing:'.5px'}}>{t('settings_backup')}</div>
           <button className="btn btn-ghost" style={{width:'100%',fontSize:12,padding:'10px 0',marginBottom:8}}
             onClick={()=>{
               const data={version:2,exportedAt:new Date().toISOString(),
@@ -1854,9 +3065,9 @@ function SettingsPanel({soundEnabled,onSoundChange,hapticEnabled,onHapticChange,
               const a=document.createElement('a');
               a.href=url;a.download=`135app-backup-${new Date().toISOString().slice(0,10)}.json`;
               a.click();URL.revokeObjectURL(url);
-            }}>💾 保存数据备份</button>
+            }}>💾 {t('settings_export')}</button>
           <label className="btn btn-ghost" style={{width:'100%',fontSize:12,padding:'10px 0',textAlign:'center',cursor:'pointer',display:'block',boxSizing:'border-box'}}>
-            📥 恢复备份（从文件导入）
+            📥 {t('settings_import')}
             <input type="file" accept=".json" style={{display:'none'}} onChange={e=>{
               const file=e.target.files[0]; if(!file)return;
               const reader=new FileReader();
@@ -1864,36 +3075,35 @@ function SettingsPanel({soundEnabled,onSoundChange,hapticEnabled,onHapticChange,
                 try{
                   const d=JSON.parse(ev.target.result);
                   if(!d.plans) throw new Error('invalid');
-                  if(!window.confirm('恢复备份将覆盖当前所有数据，确定继续吗？')) return;
+                  if(!window.confirm(t('settings_restore_confirm'))) return;
                   if(d.first)  localStorage.setItem('135app_first',d.first);
                   if(d.plans)  localStorage.setItem('135app_plans',JSON.stringify(d.plans));
                   if(d.events) localStorage.setItem('135app_events',JSON.stringify(d.events));
                   window.location.reload();
-                }catch(err){ alert('文件格式有误，无法恢复'); }
+                }catch(err){ alert(t('settings_restore_error')); }
               };
               reader.readAsText(file);
               e.target.value='';
             }}/>
           </label>
           <div style={{fontSize:10,color:'var(--text-secondary)',lineHeight:1.5,marginTop:8}}>
-            建议定期保存备份，防止浏览器清理缓存时数据丢失
+            {t('settings_import_hint')}
           </div>
         </div>
 
         {/* Danger zone */}
         <div style={{padding:'14px',borderRadius:13,background:'rgba(255,82,82,0.06)',border:'1px solid rgba(255,82,82,0.18)'}}>
-          <div style={{fontSize:11,fontWeight:600,color:'var(--danger)',marginBottom:10,textTransform:'uppercase',letterSpacing:'.5px'}}>危险区域</div>
+          <div style={{fontSize:11,fontWeight:600,color:'var(--danger)',marginBottom:10,textTransform:'uppercase',letterSpacing:'.5px'}}>{t('settings_danger')}</div>
           <button
             className="btn"
             style={{width:'100%',background:'rgba(255,82,82,0.12)',color:'var(--danger)',border:'1px solid rgba(255,82,82,0.3)',borderRadius:10,padding:'10px 0',fontWeight:700,fontSize:13,cursor:'pointer'}}
             onClick={()=>{
-              if(window.confirm('确定要清除所有数据吗？\n计划、记录、日历事件都会被删除，且无法恢复。')){
-                Object.values({FIRST:'135app_first',PLANS:'135app_plans',THEME:'135app_theme',EVENTS:'135app_events'})
-                  .forEach(k=>localStorage.removeItem(k));
+              if(window.confirm(t('settings_clear_confirm'))){
+                Object.values(SK).forEach(k=>localStorage.removeItem(k));
                 window.location.reload();
               }
             }}
-          >🗑️ 清除所有数据，重新开始</button>
+          >🗑️ {t('settings_clear')}</button>
         </div>
       </div>
     </div>
@@ -2005,8 +3215,8 @@ function DailyPlanModal({onDone,dayN,today,habits=[],carryoverTasks=[],events={}
     const libItems=libraryHabits.map(h=>({title:h.title,estimatedMinutes:h.estimatedMinutes,isCheckIn:!!h.isCheckIn,checkInTarget:h.checkInTarget||1}));
     const libTitles=new Set(libItems.map(c=>c.title));
     const presetItems=HABIT_PRESETS.flatMap(cat=>cat.items)
-      .filter(p=>!libTitles.has(p.title))
-      .map(p=>({title:p.title,estimatedMinutes:p.minutes||0,isCheckIn:!!p.isCheckIn,checkInTarget:p.checkInTarget||1}));
+      .filter(p=>!libTitles.has(p.title_zh)&&!libTitles.has(p.title_en))
+      .map(p=>({title:presetTitle(p),estimatedMinutes:p.minutes||0,isCheckIn:!!p.isCheckIn,checkInTarget:p.checkInTarget||1}));
     return [...libItems,...presetItems];
   },[libraryHabits.length]);
   const LibChips=({onPick})=>{
@@ -2014,7 +3224,7 @@ function DailyPlanModal({onDone,dayN,today,habits=[],carryoverTasks=[],events={}
     if(!chips.length) return null;
     return(
       <div className="chip-wall-wrap">
-        <div className="chip-wall-label">💡 灵感库，点击填入</div>
+        <div className="chip-wall-label">{t('plan_chip_wall')}</div>
         <div className="chip-wall">
           {chips.slice(0,8).map(c=>(
             <button key={c.title} className="chip-pin" onClick={()=>{
@@ -2057,7 +3267,7 @@ function DailyPlanModal({onDone,dayN,today,habits=[],carryoverTasks=[],events={}
     if(next>=5) finish(); else{setBzStep(next);if(next>=habitBzCount.current)resetCur();}
   }
   const tierLabel={gold:'🥇',silver:'🥈',bronze:'🥉'};
-  const tierName={gold:'金牌',silver:'银牌',bronze:'铜牌'};
+  const tierName={gold:t('tier_gold'),silver:t('tier_silver'),bronze:t('tier_bronze')};
   // ── 日历事件提示屏
   if(showEventPrompt){
     const acceptedCount=eventSelections.filter(s=>s.accepted).length;
@@ -2065,15 +3275,15 @@ function DailyPlanModal({onDone,dayN,today,habits=[],carryoverTasks=[],events={}
     return(<div className="overlay"><div className="modal-box modal-welcome">
       <div style={{textAlign:'center',marginBottom:16}}>
         <div style={{fontSize:36,marginBottom:6}}>📅</div>
-        <div style={{fontSize:16,fontWeight:800,color:'var(--gold)'}}>今日日历事件</div>
+        <div style={{fontSize:16,fontWeight:800,color:'var(--gold)'}}>{t('plan_events_title')}</div>
         <div style={{fontSize:12,color:'var(--text-secondary)',marginTop:4}}>
-          您预设了 {todayEvents.length} 个今日事件，是否加入今日任务？
+          {t('plan_events_hint',todayEvents.length)}
         </div>
       </div>
       <div style={{maxHeight:340,overflowY:'auto',marginBottom:12}}>
         {todayEvents.map((ev,i)=>{
           const sel=eventSelections[i];
-          const timeStr=ev.allDay?'全天':ev.startTime?(ev.endTime?`${ev.startTime} – ${ev.endTime}`:ev.startTime):'';
+          const timeStr=ev.allDay?t('plan_events_allday'):ev.startTime?(ev.endTime?`${ev.startTime} – ${ev.endTime}`:ev.startTime):'';
           return(
             <div key={ev.id} style={{marginBottom:10,borderRadius:13,
               border:`1.5px solid ${sel.accepted?'rgba(255,215,0,0.45)':'var(--chip-border)'}`,
@@ -2098,12 +3308,12 @@ function DailyPlanModal({onDone,dayN,today,habits=[],carryoverTasks=[],events={}
               {sel.accepted&&(
                 <div style={{padding:'0 13px 11px',display:'flex',alignItems:'center',gap:7,flexWrap:'wrap',borderTop:'1px solid var(--subtle-border)'}}>
                   <div style={{display:'flex',gap:5}}>
-                    {['gold','silver','bronze'].map(t=>(
-                      <button key={t} onClick={()=>setEventSelections(s=>s.map((x,j)=>j===i?{...x,tier:t}:x))}
+                    {['gold','silver','bronze'].map(tr=>(
+                      <button key={tr} onClick={()=>setEventSelections(s=>s.map((x,j)=>j===i?{...x,tier:tr}:x))}
                         style={{padding:'5px 9px',borderRadius:8,fontSize:14,cursor:'pointer',transition:'all .15s',
-                          border:`1.5px solid ${sel.tier===t?'rgba(255,215,0,0.6)':'var(--chip-border)'}`,
-                          background:sel.tier===t?'rgba(255,215,0,0.13)':'transparent'}}>
-                        {tierLabel[t]}
+                          border:`1.5px solid ${sel.tier===tr?'rgba(255,215,0,0.6)':'var(--chip-border)'}`,
+                          background:sel.tier===tr?'rgba(255,215,0,0.13)':'transparent'}}>
+                        {tierLabel[tr]}
                       </button>
                     ))}
                   </div>
@@ -2118,30 +3328,30 @@ function DailyPlanModal({onDone,dayN,today,habits=[],carryoverTasks=[],events={}
       </div>
       <button className="btn btn-gold" style={{width:'100%',marginBottom:8}}
         onClick={applyEvents} disabled={acceptedCount===0}>
-        加入今日计划（{acceptedCount} 项）→
+        {t('plan_events_confirm',acceptedCount)}
       </button>
       <button className="btn btn-ghost" style={{width:'100%'}}
         onClick={()=>{setShowEventPrompt(false);if(hasCarry)setShowCarry(true);else setStep(3);}}>
-        跳过，不加入
+        {t('plan_events_skip')}
       </button>
     </div></div>);
   }
   // ── 顺延屏
   if(showCarry){
-    const carryTierLabel={gold:'🥇 金牌',silver:'🥈 银牌',bronze:'🥉 铜牌'};
+    const carryTierLabel={gold:t('plan_tier_gold'),silver:t('plan_tier_silver'),bronze:t('plan_tier_bronze')};
     const carryTierColor={gold:'var(--gold)',silver:'var(--silver)',bronze:'var(--bronze)'};
     const selCount=selectedCarryIds.length;
     return(<div className="overlay"><div className="modal-box modal-welcome">
       <div style={{textAlign:'center',marginBottom:14}}>
         <div style={{fontSize:36,marginBottom:6}}>📋</div>
-        <div style={{fontSize:16,fontWeight:800,color:'var(--gold)'}}>昨日未完成任务</div>
-        <div style={{fontSize:12,color:'var(--text-secondary)',marginTop:4}}>选择要带入今天计划的任务</div>
+        <div style={{fontSize:16,fontWeight:800,color:'var(--gold)'}}>{t('plan_carry_title')}</div>
+        <div style={{fontSize:12,color:'var(--text-secondary)',marginTop:4}}>{t('plan_carry_hint')}</div>
       </div>
       <div style={{maxHeight:280,overflowY:'auto',marginBottom:12}}>
-        {carryoverTasks.map(t=>{
-          const checked=selectedCarryIds.includes(t.id);
+        {carryoverTasks.map(ct=>{
+          const checked=selectedCarryIds.includes(ct.id);
           return(
-            <div key={t.id} onClick={()=>toggleCarry(t.id)}
+            <div key={ct.id} onClick={()=>toggleCarry(ct.id)}
               style={{display:'flex',alignItems:'center',gap:11,padding:'10px 13px',marginBottom:8,borderRadius:12,
                 background:checked?'rgba(255,185,0,0.07)':'var(--chip-bg)',
                 border:`1.5px solid ${checked?'rgba(255,185,0,0.4)':'var(--chip-border)'}`,
@@ -2151,8 +3361,8 @@ function DailyPlanModal({onDone,dayN,today,habits=[],carryoverTasks=[],events={}
                 {checked&&<span style={{color:'#000',fontSize:12,fontWeight:800,lineHeight:1}}>✓</span>}
               </div>
               <div style={{flex:1,minWidth:0}}>
-                <div style={{fontSize:13,fontWeight:600,color:'var(--text-primary)',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{t.title}</div>
-                <div style={{fontSize:11,color:carryTierColor[t.tier],marginTop:2}}>{carryTierLabel[t.tier]}{t.isCheckIn?' · 打卡':t.estimatedMinutes?` · ${t.estimatedMinutes}分钟`:''}</div>
+                <div style={{fontSize:13,fontWeight:600,color:'var(--text-primary)',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{ct.title}</div>
+                <div style={{fontSize:11,color:carryTierColor[ct.tier],marginTop:2}}>{carryTierLabel[ct.tier]}{ct.isCheckIn?t('plan_checkin_suffix'):ct.estimatedMinutes?` · ${t('minutes',ct.estimatedMinutes)}`:''}</div>
               </div>
             </div>
           );
@@ -2160,26 +3370,26 @@ function DailyPlanModal({onDone,dayN,today,habits=[],carryoverTasks=[],events={}
       </div>
       <button className="btn btn-gold" style={{width:'100%',marginBottom:8}}
         onClick={applyCarry} disabled={selCount===0}>
-        带入今日计划（{selCount} 项）→
+        {t('plan_carry_confirm',selCount)}
       </button>
       <button className="btn btn-ghost" style={{width:'100%'}} onClick={()=>{setShowCarry(false);setStep(3);}}>
-        全部跳过，重新规划
+        {t('plan_carry_skip')}
       </button>
     </div></div>);
   }
   // ── step 1: 欢迎
   if(step===1) return(<div className="overlay"><div className="modal-box modal-welcome" style={{textAlign:'center'}}>
     <div style={{fontSize:50,marginBottom:11}}>🌟</div>
-    <div style={{fontSize:12,color:'var(--text-secondary)',marginBottom:5}}>今天是</div>
+    <div style={{fontSize:12,color:'var(--text-secondary)',marginBottom:5}}>{t('plan_step1_today')}</div>
     <div style={{fontSize:21,fontWeight:800,marginBottom:6}}>{fmtDate(today)}</div>
-    <div style={{fontSize:14,color:'var(--gold)',marginBottom:20}}>这是您使用本系统的第 <span style={{fontSize:26,fontWeight:800}}>{dayN}</span> 天</div>
-    <div style={{fontSize:12,color:'var(--text-secondary)',lineHeight:1.7,marginBottom:22}}>今天也要全力以赴！<br/>让我们规划今日的任务吧 →</div>
-    <button className="btn btn-gold" onClick={()=>hasAuto?setStep(2):goToGold()}>开始规划今日任务 ✨</button>
+    <div style={{fontSize:14,color:'var(--gold)',marginBottom:20}}>{t('plan_step1_day_n',dayN)}</div>
+    <div style={{fontSize:12,color:'var(--text-secondary)',lineHeight:1.7,marginBottom:22}}>{t('plan_step1_slogan')}<br/>{t('plan_slogan_line2')}</div>
+    <button className="btn btn-gold" onClick={()=>hasAuto?setStep(2):goToGold()}>{t('plan_step1_cta')}</button>
   </div></div>);
   // ── step 2: 习惯确认（仅当有每日习惯时出现）
   if(step===2) return(<div className="overlay"><div className="modal-box modal-welcome">
-    <div style={{fontSize:16,fontWeight:800,color:'var(--gold)',marginBottom:4}}>🔄 今日习惯确认</div>
-    <div style={{fontSize:12,color:'var(--text-secondary)',marginBottom:16}}>以下是你的每日习惯，今天要做的打勾即可</div>
+    <div style={{fontSize:16,fontWeight:800,color:'var(--gold)',marginBottom:4}}>{t('plan_habit_title')}</div>
+    <div style={{fontSize:12,color:'var(--text-secondary)',marginBottom:16}}>{t('plan_habit_hint')}</div>
     {autoHabits.map(h=>{
       const checked=checkedIds.includes(h.id);
       return(
@@ -2193,77 +3403,77 @@ function DailyPlanModal({onDone,dayN,today,habits=[],carryoverTasks=[],events={}
           </div>
           <div style={{flex:1}}>
             <div style={{fontSize:13,fontWeight:600,color:'var(--text-primary)'}}>{tierLabel[h.tier]} {h.title}</div>
-            <div style={{fontSize:11,color:'var(--text-secondary)',marginTop:2}}>{tierName[h.tier]} · {h.isCheckIn?'打卡任务':`${h.estimatedMinutes}分钟`}</div>
+            <div style={{fontSize:11,color:'var(--text-secondary)',marginTop:2}}>{tierName[h.tier]} · {h.isCheckIn?t('habits_checkin_task'):t('minutes',h.estimatedMinutes)}</div>
           </div>
         </div>
       );
     })}
     <button className="btn btn-gold" style={{width:'100%',marginTop:8}} onClick={confirmHabits}>
-      确认，开始规划今日新任务 →
+      {t('plan_habit_cta')}
     </button>
     <button className="btn btn-ghost" style={{width:'100%',marginTop:8}} onClick={()=>{silverRef.current=[];bronzeRef.current=[];goToGold();}}>
-      跳过习惯，全部手动规划
+      {t('plan_habit_skip')}
     </button>
   </div></div>);
   // ── step 3: 金牌
   if(step===3) return(<div className="overlay"><div className="modal-box modal-gold">
     <StepDots cur={1} total={4}/>
-    <div className="modal-title">🥇 今日最重要的一件事</div>
-    <div className="modal-hint">这件事必须完成。如果今天只能做一件事，就是它。</div>
+    <div className="modal-title">{t('plan_gold_title')}</div>
+    <div className="modal-hint">{t('plan_gold_hint')}</div>
     <LibChips onPick={c=>{setGoldTitle(c.title);setGoldTime(c.estimatedMinutes);setGoldIsCheckIn(!!c.isCheckIn);setGoldCiTarget(c.checkInTarget||1);setTimeout(()=>planInputRef.current?.focus(),50);}}/>
-    <div className="form-group"><label className="form-label">任务名称</label>
-      <input ref={planInputRef} className="form-input" placeholder="今天最重要的事情是…" value={goldTitle} onChange={e=>setGoldTitle(e.target.value)} onKeyDown={e=>e.key==='Enter'&&goldTitle.trim()&&setStep(4)} maxLength={100}/></div>
-    <div className="form-group"><label className="form-label">预计用时</label><TimePicker value={goldTime} onChange={setGoldTime} tier="gold" isCheckIn={goldIsCheckIn} onCheckInChange={v=>{setGoldIsCheckIn(v);if(!v)setGoldCiTarget(1);}}/></div>
+    <div className="form-group"><label className="form-label">{t('plan_task_name')}</label>
+      <input ref={planInputRef} className="form-input" placeholder={t('plan_gold_ph')} value={goldTitle} onChange={e=>setGoldTitle(e.target.value)} onKeyDown={e=>e.key==='Enter'&&goldTitle.trim()&&setStep(4)} maxLength={100}/></div>
+    <div className="form-group"><label className="form-label">{t('plan_time')}</label><TimePicker value={goldTime} onChange={setGoldTime} tier="gold" isCheckIn={goldIsCheckIn} onCheckInChange={v=>{setGoldIsCheckIn(v);if(!v)setGoldCiTarget(1);}}/></div>
     {goldIsCheckIn&&<div style={{display:'flex',alignItems:'center',gap:8,marginBottom:14}}>
-      <span style={{fontSize:12,color:'var(--text-secondary)'}}>目标次数</span>
+      <span style={{fontSize:12,color:'var(--text-secondary)'}}>{t('plan_target')}</span>
       <input type="number" min={1} max={99} value={goldCiTarget} onChange={e=>setGoldCiTarget(Math.max(1,Math.min(99,+e.target.value||1)))}
         style={{width:54,padding:'4px 8px',background:'var(--input-bg)',border:'1px solid var(--input-border)',borderRadius:8,color:'var(--text-primary)',fontSize:13,textAlign:'center'}}/>
-      <span style={{fontSize:12,color:'var(--text-secondary)'}}>次</span>
-      {goldCiTarget>1&&<span style={{fontSize:11,color:'var(--gold)'}}>满{goldCiTarget}次自动完成</span>}
+      <span style={{fontSize:12,color:'var(--text-secondary)'}}>{t('plan_target_unit')}</span>
+      {goldCiTarget>1&&<span style={{fontSize:11,color:'var(--gold)'}}>{t('plan_target_hint_n',goldCiTarget)}</span>}
     </div>}
-    <button className="btn btn-gold" disabled={!goldTitle.trim()} onClick={()=>{setSvStep(0);setStep(4);}}>确定 →</button>
+    <button className="btn btn-gold" disabled={!goldTitle.trim()} onClick={()=>{setSvStep(0);setStep(4);}}>{t('plan_confirm')}</button>
   </div></div>);
   // ── step 4: 银牌
   if(step===4){const isSvHabit=svStep<habitSvCount.current;return(<div className="overlay"><div className="modal-box modal-silver">
     <StepDots cur={2} total={4}/>
-    <div className="modal-title">🥈 重要的事 ({svStep+1}/3)</div>
-    <div className="modal-hint">{isSvHabit?'已选习惯，确认或修改后继续 →':'这些事很重要，今天尽量完成。可以跳过某项。'}</div>
+    <div className="modal-title">{t('plan_silver_title_n',svStep+1)}</div>
+    <div className="modal-hint">{isSvHabit?t('plan_silver_habit_hint'):t('plan_silver_hint')}</div>
     <LibChips onPick={c=>{setCurIn(c.title);setCurT(c.estimatedMinutes);setCurIsCheckIn(!!c.isCheckIn);setCurCiTarget(c.checkInTarget||1);setTimeout(()=>planInputRef.current?.focus(),50);}}/>
-    <div className="form-group"><label className="form-label">任务名称（可跳过）</label>
-      <input ref={planInputRef} className="form-input" placeholder={`第 ${svStep+1} 件重要的事…`} value={curIn} onChange={e=>setCurIn(e.target.value)} onKeyDown={e=>e.key==='Enter'&&curIn.trim()&&doSilver(false)} maxLength={100}/></div>
-    <div className="form-group"><label className="form-label">预计用时</label><TimePicker value={curT} onChange={setCurT} tier="silver" isCheckIn={curIsCheckIn} onCheckInChange={v=>{setCurIsCheckIn(v);if(!v)setCurCiTarget(1);}}/></div>
+    <div className="form-group"><label className="form-label">{t('plan_task_name_skip')}</label>
+      <input ref={planInputRef} className="form-input" placeholder={t('plan_silver_ph_n',svStep+1)} value={curIn} onChange={e=>setCurIn(e.target.value)} onKeyDown={e=>e.key==='Enter'&&curIn.trim()&&doSilver(false)} maxLength={100}/></div>
+    <div className="form-group"><label className="form-label">{t('plan_time')}</label><TimePicker value={curT} onChange={setCurT} tier="silver" isCheckIn={curIsCheckIn} onCheckInChange={v=>{setCurIsCheckIn(v);if(!v)setCurCiTarget(1);}}/></div>
     {curIsCheckIn&&<div style={{display:'flex',alignItems:'center',gap:8,marginBottom:14}}>
-      <span style={{fontSize:12,color:'var(--text-secondary)'}}>目标次数</span>
+      <span style={{fontSize:12,color:'var(--text-secondary)'}}>{t('plan_target')}</span>
       <input type="number" min={1} max={99} value={curCiTarget} onChange={e=>setCurCiTarget(Math.max(1,Math.min(99,+e.target.value||1)))}
         style={{width:54,padding:'4px 8px',background:'var(--input-bg)',border:'1px solid var(--input-border)',borderRadius:8,color:'var(--text-primary)',fontSize:13,textAlign:'center'}}/>
-      <span style={{fontSize:12,color:'var(--text-secondary)'}}>次</span>
-      {curCiTarget>1&&<span style={{fontSize:11,color:'var(--silver)'}}>满{curCiTarget}次自动完成</span>}
+      <span style={{fontSize:12,color:'var(--text-secondary)'}}>{t('plan_target_unit')}</span>
+      {curCiTarget>1&&<span style={{fontSize:11,color:'var(--silver)'}}>{t('plan_target_hint_n',curCiTarget)}</span>}
     </div>}
-    <button className="btn btn-silver" disabled={!curIn.trim()} onClick={()=>doSilver(false)}>{isSvHabit?'确认 →':'确定 →'}</button>
-    {!isSvHabit&&<button className="btn btn-ghost" onClick={()=>doSilver(true)}>跳过，完成银牌计划</button>}
+    <button className="btn btn-silver" disabled={!curIn.trim()} onClick={()=>doSilver(false)}>{isSvHabit?t('plan_continue'):t('plan_confirm')}</button>
+    {!isSvHabit&&<button className="btn btn-ghost" onClick={()=>doSilver(true)}>{t('plan_silver_skip')}</button>}
   </div></div>);}
   // ── step 5: 铜牌
   if(step===5){const isLast=bzStep===4;const isBzHabit=bzStep<habitBzCount.current;return(<div className="overlay"><div className="modal-box modal-bronze">
     <StepDots cur={3} total={4}/>
-    <div className="modal-title">🥉 还需要做的事 ({bzStep+1}/5)</div>
-    <div className="modal-hint">{isBzHabit?'已选习惯，确认或修改后继续 →':'这些是今日待办，完成更好，完不成也不要紧。'}</div>
+    <div className="modal-title">{t('plan_bronze_title_n',bzStep+1)}</div>
+    <div className="modal-hint">{isBzHabit?t('plan_silver_habit_hint'):t('plan_bronze_hint')}</div>
     <LibChips onPick={c=>{setCurIn(c.title);setCurT(c.estimatedMinutes);setCurIsCheckIn(!!c.isCheckIn);setCurCiTarget(c.checkInTarget||1);setTimeout(()=>planInputRef.current?.focus(),50);}}/>
-    <div className="form-group"><label className="form-label">任务名称（可跳过）</label>
-      <input ref={planInputRef} className="form-input" placeholder={`第 ${bzStep+1} 件待办…`} value={curIn} onChange={e=>setCurIn(e.target.value)} onKeyDown={e=>!isLast&&e.key==='Enter'&&curIn.trim()&&doBronze(false)} maxLength={100}/></div>
-    <div className="form-group"><label className="form-label">预计用时</label><TimePicker value={curT} onChange={setCurT} tier="bronze" isCheckIn={curIsCheckIn} onCheckInChange={v=>{setCurIsCheckIn(v);if(!v)setCurCiTarget(1);}}/></div>
+    <div className="form-group"><label className="form-label">{t('plan_task_name_skip')}</label>
+      <input ref={planInputRef} className="form-input" placeholder={t('plan_bronze_ph_n',bzStep+1)} value={curIn} onChange={e=>setCurIn(e.target.value)} onKeyDown={e=>!isLast&&e.key==='Enter'&&curIn.trim()&&doBronze(false)} maxLength={100}/></div>
+    <div className="form-group"><label className="form-label">{t('plan_time')}</label><TimePicker value={curT} onChange={setCurT} tier="bronze" isCheckIn={curIsCheckIn} onCheckInChange={v=>{setCurIsCheckIn(v);if(!v)setCurCiTarget(1);}}/></div>
     {curIsCheckIn&&<div style={{display:'flex',alignItems:'center',gap:8,marginBottom:14}}>
-      <span style={{fontSize:12,color:'var(--text-secondary)'}}>目标次数</span>
+      <span style={{fontSize:12,color:'var(--text-secondary)'}}>{t('plan_target')}</span>
       <input type="number" min={1} max={99} value={curCiTarget} onChange={e=>setCurCiTarget(Math.max(1,Math.min(99,+e.target.value||1)))}
         style={{width:54,padding:'4px 8px',background:'var(--input-bg)',border:'1px solid var(--input-border)',borderRadius:8,color:'var(--text-primary)',fontSize:13,textAlign:'center'}}/>
-      <span style={{fontSize:12,color:'var(--text-secondary)'}}>次</span>
-      {curCiTarget>1&&<span style={{fontSize:11,color:'var(--bronze)'}}>满{curCiTarget}次自动完成</span>}
+      <span style={{fontSize:12,color:'var(--text-secondary)'}}>{t('plan_target_unit')}</span>
+      {curCiTarget>1&&<span style={{fontSize:11,color:'var(--bronze)'}}>{t('plan_target_hint_n',curCiTarget)}</span>}
     </div>}
     {isBzHabit
-      ? <button className="btn btn-bronze" disabled={!curIn.trim()} onClick={()=>doBronze(false)}>确认 →</button>
+      ? <button className="btn btn-bronze" disabled={!curIn.trim()} onClick={()=>doBronze(false)}>{t('plan_continue')}</button>
       : isLast
-        ? <button className="btn btn-bronze" disabled={!curIn.trim()} onClick={()=>doBronze(false)}>完成今日计划 🎯</button>
-        : <button className="btn btn-bronze" disabled={!curIn.trim()} onClick={()=>doBronze(false)}>确定 →</button>}
-    {!isBzHabit&&<button className="btn btn-ghost" onClick={()=>doBronze(true)}>跳过，完成铜牌计划 🎯</button>}
+        ? <button className="btn btn-bronze" disabled={!curIn.trim()} onClick={()=>doBronze(false)}>{t('plan_finish_today')}</button>
+        : <button className="btn btn-bronze" disabled={!curIn.trim()} onClick={()=>doBronze(false)}>{t('plan_confirm')}</button>}
+    {!isBzHabit&&<button className="btn btn-ghost" onClick={()=>doBronze(true)}>{t('plan_bronze_skip')}</button>}
   </div></div>);}
   return null;
 }
@@ -2370,53 +3580,53 @@ function PomodoroTimer({task,onComplete,onPause}){
 
   if(phase==='success') return(<div className="timer-overlay"><div className="success-splash">
     <span className="success-emoji">🎉</span>
-    <div className="success-title">任务完成！</div>
-    <div className="success-sub">{tier==='gold'?'🥇 金牌任务拿下！太棒了！':tier==='silver'?'🥈 银牌任务完成！':'🥉 铜牌任务完成！'}</div>
+    <div className="success-title">{t('task_complete_title')}</div>
+    <div className="success-sub">{tier==='gold'?t('task_gold_success'):tier==='silver'?t('task_silver_success'):t('task_bronze_success')}</div>
   </div></div>);
 
   if(phase==='confirmEarly') return(<div className="timer-overlay"><div className="dialog-box">
     <div className="dialog-emoji">⚡</div>
-    <div className="dialog-title">确认完成任务？</div>
-    <div className="dialog-sub">{isOv?`已超时 ${Math.floor(ovTime/60)}分${ovTime%60}秒，确认标记为完成？`:`距计划还剩 ${fmt(tLeft)}，确认提前完成？`}</div>
+    <div className="dialog-title">{t('timer_confirm_title')}</div>
+    <div className="dialog-sub">{isOv?t('timer_confirm_ov', Math.floor(ovTime/60), ovTime%60):t('timer_confirm_early', fmt(tLeft))}</div>
     <div className="dialog-row">
-      <button className="dialog-btn dialog-yes" onClick={confirmDone}>✅ 确认完成</button>
-      <button className="dialog-btn dialog-no"  onClick={()=>{startTicking();setPhase('running');}}>继续计时</button>
+      <button className="dialog-btn dialog-yes" onClick={confirmDone}>✅ {t('timer_confirm')}</button>
+      <button className="dialog-btn dialog-no"  onClick={()=>{startTicking();setPhase('running');}}>{t('timer_keep_going')}</button>
     </div>
-    {!isOv&&<button className="dialog-cancel" onClick={()=>setPhase('addTime')}>➕ 加时后继续</button>}
+    {!isOv&&<button className="dialog-cancel" onClick={()=>setPhase('addTime')}>➕ {t('timer_add_continue')}</button>}
   </div></div>);
 
   if(phase==='evaluate') return(<div className="timer-overlay"><div className="dialog-box">
     <div className="dialog-emoji">🤔</div>
-    <div className="dialog-title">任务完成了吗？</div>
-    <div className="dialog-sub">{isOv?`已超时 ${Math.floor(ovTime/60)}分${ovTime%60}秒`:`提前完成，剩余 ${fmt(tLeft)}`}</div>
+    <div className="dialog-title">{t('timer_done_q')}</div>
+    <div className="dialog-sub">{isOv?t('timer_ov_short', Math.floor(ovTime/60), ovTime%60):t('timer_early_short', fmt(tLeft))}</div>
     <div className="dialog-row">
-      <button className="dialog-btn dialog-yes" onClick={confirmDone}>✅ 完成了</button>
-      <button className="dialog-btn dialog-no"  onClick={()=>setPhase('addTime')}>➕ 加时</button>
+      <button className="dialog-btn dialog-yes" onClick={confirmDone}>✅ {t('timer_done_yes')}</button>
+      <button className="dialog-btn dialog-no"  onClick={()=>setPhase('addTime')}>➕ {t('timer_add_time')}</button>
     </div>
-    <button className="dialog-cancel" onClick={()=>onPause(task,0)}>取消，回到主界面</button>
+    <button className="dialog-cancel" onClick={()=>onPause(task,0)}>{t('timer_cancel_back')}</button>
   </div></div>);
 
   if(phase==='addTime') return(<div className="timer-overlay"><div className="dialog-box">
     <div className="dialog-emoji">⏰</div>
-    <div className="dialog-title">增加时间</div>
-    <div className="dialog-sub">继续为该任务追加计时</div>
+    <div className="dialog-title">{t('timer_add_time_title')}</div>
+    <div className="dialog-sub">{t('timer_add_time_sub')}</div>
     <div className="time-chips" style={{justifyContent:'center',marginBottom:16}}>
-      {[10,15,20,25,30,45].map(t=>(<button key={t} className={`time-chip${addMin===t?' chip-gold':''}`} onClick={()=>setAddMin(t)}>+{t}分钟</button>))}
+      {[10,15,20,25,30,45].map(tm=>(<button key={tm} className={`time-chip${addMin===tm?' chip-gold':''}`} onClick={()=>setAddMin(tm)}>+{tm}{t('tp_min')}</button>))}
     </div>
-    <button className="dialog-btn dialog-yes" style={{width:'100%',padding:12,marginBottom:9}} onClick={handleAddTime}>继续计时</button>
-    <button className="dialog-cancel" onClick={()=>onPause(task,0)}>放弃，回到主界面</button>
+    <button className="dialog-btn dialog-yes" style={{width:'100%',padding:12,marginBottom:9}} onClick={handleAddTime}>{t('timer_resume')}</button>
+    <button className="dialog-cancel" onClick={()=>onPause(task,0)}>{t('timer_quit_back')}</button>
   </div></div>);
 
   return(<div className={`timer-overlay timer-overlay-${tier}`}><div className={`timer-card timer-${tier}`}>
-    <div className="timer-tier-label">{tier==='gold'?'🥇 金牌任务':tier==='silver'?'🥈 银牌任务':'🥉 铜牌任务'}</div>
+    <div className="timer-tier-label">{tier==='gold'?t('gold_title'):tier==='silver'?t('silver_title'):t('bronze_title')}</div>
     <div className="timer-task-name">{task.title}</div>
     <div className={`timer-digits ${isOv?'digits-overtime':'digits-normal'}`}>{isOv?`+${fmt(ovTime)}`:fmt(tLeft)}</div>
     {!isOv&&<div className="timer-prog-wrap"><div className="timer-prog-bar" style={{width:`${progress}%`}}/></div>}
-    <div className={`timer-status${isOv?' overtime':''}`}>{isOv?'⚠️ 超时记录中 — 点击标记完成即可结束':`预计 ${task.estimatedMinutes} 分钟 · 专注进行中…`}</div>
-    {pauses>0&&<div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:8}}>已加时 {pauses} 次</div>}
+    <div className={`timer-status${isOv?' overtime':''}`}>{isOv?t('timer_ov_tip'):t('timer_focus_n', task.estimatedMinutes)}</div>
+    {pauses>0&&<div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:8}}>{t('timer_extended_n', pauses)}</div>}
     <div style={{display:'flex',flexDirection:'column',gap:8}}>
-      <button className="btn btn-green" onClick={earlyDone}>✅ {isOv?'标记完成':'提前完成'}</button>
-      <button className="btn btn-ghost" onClick={handlePause}>← 暂停，回到主界面</button>
+      <button className="btn btn-green" onClick={earlyDone}>✅ {isOv?t('timer_mark_done'):t('timer_early_done')}</button>
+      <button className="btn btn-ghost" onClick={handlePause}>← {t('timer_pause_back')}</button>
     </div>
   </div></div>);
 }
@@ -2429,7 +3639,7 @@ function AddTaskModal({onSave,onClose,plan}){
   const silverFull= plan && (plan.silverTasks||[]).length >= 3;
   const bronzeFull = plan && (plan.bronzeTasks||[]).length >= 5;
   const isFull = t=>(t==='gold'&&goldFull)||(t==='silver'&&silverFull)||(t==='bronze'&&bronzeFull);
-  const TIER_LABEL={gold:'金牌',silver:'银牌',bronze:'铜牌'};
+  const TIER_LABEL={gold:t('tier_gold'),silver:t('tier_silver'),bronze:t('tier_bronze')};
   const TIER_LIMIT={gold:1,silver:3,bronze:5};
   const defaultTier= goldFull ? (silverFull ? (bronzeFull?'gold':'bronze') : 'silver') : 'gold';
   const [tier,setTier]=useState(defaultTier);
@@ -2442,10 +3652,10 @@ function AddTaskModal({onSave,onClose,plan}){
   const tierFull=isFull(tier);
   const mkTask=()=>({id:genId(),title:title.trim(),estimatedMinutes:isCI?0:time,tier,status:'idle',actualMinutes:null,pauseCount:0,timerStartedAt:null,completedAt:null,remainingSeconds:null,isCheckIn:isCI,checkInTarget:isCI?(ciTarget||1):1,checkInCount:0});
   const canSave=!!(title.trim());
-  const handleTierClick=t=>{
-    setTier(t);
-    if(isFull(t)){
-      setToastMsg(`1·3·5 效率法建议${TIER_LABEL[t]}任务仅设置 ${TIER_LIMIT[t]} 个，过多会分散注意力哦`);
+  const handleTierClick=tr=>{
+    setTier(tr);
+    if(isFull(tr)){
+      setToastMsg(t('add_over_tooltip', TIER_LABEL[tr], TIER_LIMIT[tr]));
       setTimeout(()=>setToastMsg(''),3000);
     } else { setToastMsg(''); }
   };
@@ -2457,44 +3667,44 @@ function AddTaskModal({onSave,onClose,plan}){
   return(
     <div className="overlay" onClick={onClose}>
       <div className="modal-box modal-welcome" style={{maxWidth:360}} onClick={e=>e.stopPropagation()}>
-        <div style={{fontSize:16,fontWeight:700,marginBottom:3,color:'var(--text-primary)'}}>➕ 新增任务</div>
-        <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:14}}>为今日计划补充任务</div>
+        <div style={{fontSize:16,fontWeight:700,marginBottom:3,color:'var(--text-primary)'}}>➕ {t('modal_add_title')}</div>
+        <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:14}}>{t('add_task_sub')}</div>
         {toastMsg&&<div className="toast-inline">💡 {toastMsg}</div>}
-        <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:6}}>任务类别</label>
+        <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:6}}>{t('task_tier_label')}</label>
         <div className="tier-btn-row">
-          <button className={`tier-btn${tier==='gold'?' active-gold':''}${goldFull?' tier-full':''}`} onClick={()=>handleTierClick('gold')}>🥇 金牌{goldFull?' ✓':''}</button>
-          <button className={`tier-btn${tier==='silver'?' active-silver':''}${silverFull?' tier-full':''}`} onClick={()=>handleTierClick('silver')}>🥈 银牌{silverFull?' 3/3':''}</button>
-          <button className={`tier-btn${tier==='bronze'?' active-bronze':''}${bronzeFull?' tier-full':''}`} onClick={()=>handleTierClick('bronze')}>🥉 铜牌{bronzeFull?' 5/5':''}</button>
+          <button className={`tier-btn${tier==='gold'?' active-gold':''}${goldFull?' tier-full':''}`} onClick={()=>handleTierClick('gold')}>🥇 {TIER_LABEL.gold}{goldFull?' ✓':''}</button>
+          <button className={`tier-btn${tier==='silver'?' active-silver':''}${silverFull?' tier-full':''}`} onClick={()=>handleTierClick('silver')}>🥈 {TIER_LABEL.silver}{silverFull?' 3/3':''}</button>
+          <button className={`tier-btn${tier==='bronze'?' active-bronze':''}${bronzeFull?' tier-full':''}`} onClick={()=>handleTierClick('bronze')}>🥉 {TIER_LABEL.bronze}{bronzeFull?' 5/5':''}</button>
         </div>
-        <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:6}}>任务名称</label>
+        <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:6}}>{t('task_name_ph')}</label>
         <input ref={addInputRef} className="plan-input" value={title} onChange={e=>setTitle(e.target.value)}
           onKeyDown={e=>{if(e.key==='Enter'&&canSave) handleSave();}}
-          placeholder="任务内容…" maxLength={100} style={{width:'100%',marginBottom:14,boxSizing:'border-box'}}/>
-        <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:8}}>预计用时</label>
+          placeholder={t('add_task_name_ph')} maxLength={100} style={{width:'100%',marginBottom:14,boxSizing:'border-box'}}/>
+        <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:8}}>{t('task_time_label')}</label>
         <TimePicker value={time} onChange={setTime} tier={tier} isCheckIn={isCI} onCheckInChange={v=>{setIsCI(v);if(!v)setCiTarget(1);}}/>
         {isCI&&<div style={{display:'flex',alignItems:'center',gap:8,marginTop:10}}>
-          <span style={{fontSize:12,color:'var(--text-secondary)'}}>目标次数</span>
+          <span style={{fontSize:12,color:'var(--text-secondary)'}}>{t('task_ci_target')}</span>
           <input type="number" min={1} max={99} value={ciTarget||''}
             onChange={e=>setCiTarget(Math.min(99,+e.target.value||0))}
             onBlur={()=>setCiTarget(v=>Math.max(1,+v||1))}
             style={{width:54,padding:'4px 8px',background:'var(--input-bg)',border:'1px solid var(--input-border)',borderRadius:8,color:'var(--text-primary)',fontSize:13,textAlign:'center'}}/>
-          <span style={{fontSize:12,color:'var(--text-secondary)'}}>次</span>
+          <span style={{fontSize:12,color:'var(--text-secondary)'}}>{t('edit_task_times_short')}</span>
         </div>}
         <div style={{display:'flex',gap:8,marginTop:16}}>
           <button className="btn btn-green" style={{flex:1,opacity:tierFull?.6:1,transition:'opacity .2s'}} disabled={!canSave} onClick={handleSave}>
-            {tierFull?'⚠️ 超限添加':'✅ 添加'}
+            {tierFull?`⚠️ ${t('add_over_btn')}`:`✅ ${t('save')}`}
           </button>
-          <button className="btn btn-ghost" style={{flex:1}} onClick={onClose}>取消</button>
+          <button className="btn btn-ghost" style={{flex:1}} onClick={onClose}>{t('modal_cancel')}</button>
         </div>
         {showOverride&&(
           <div className="overlay" onClick={()=>setShowOverride(false)}>
             <div className="dialog-box" onClick={e=>e.stopPropagation()}>
               <div className="dialog-emoji">💡</div>
-              <div className="dialog-title">超出建议数量</div>
-              <div className="dialog-sub">1·3·5 效率法建议{TIER_LABEL[tier]}任务仅设置 {TIER_LIMIT[tier]} 个，过多容易分散注意力。<br/><br/>仍然确认添加吗？</div>
+              <div className="dialog-title">{t('add_over_limit_title')}</div>
+              <div className="dialog-sub">{t('add_over_limit_body', TIER_LABEL[tier], TIER_LIMIT[tier])}</div>
               <div className="dialog-row">
-                <button className="dialog-btn" style={{background:'rgba(255,160,0,.12)',color:'var(--gold)',border:'1px solid rgba(255,160,0,.3)'}} onClick={()=>{setShowOverride(false);onSave(mkTask());}}>坚持添加</button>
-                <button className="dialog-btn dialog-no" onClick={()=>setShowOverride(false)}>取消</button>
+                <button className="dialog-btn" style={{background:'rgba(255,160,0,.12)',color:'var(--gold)',border:'1px solid rgba(255,160,0,.3)'}} onClick={()=>{setShowOverride(false);onSave(mkTask());}}>{t('add_over_limit_keep')}</button>
+                <button className="dialog-btn dialog-no" onClick={()=>setShowOverride(false)}>{t('confirm_cancel')}</button>
               </div>
             </div>
           </div>
@@ -2513,7 +3723,7 @@ function EditTaskModal({task, plan, onSave, onChangeTier, onClose}){
   const [notes,setNotes]=useState(task.notes||'');
   const [showNotes,setShowNotes]=useState(!!(task.notes));
   const tier=task.tier;
-  const tierLabel=tier==='gold'?'🥇 金牌任务':tier==='silver'?'🥈 银牌任务':'🥉 铜牌任务';
+  const tierLabel=tier==='gold'?t('gold_title'):tier==='silver'?t('silver_title'):t('bronze_title');
   const editInputRef=useRef(null);
   useEffect(()=>{ const t=setTimeout(()=>{ if(editInputRef.current){ editInputRef.current.focus(); editInputRef.current.select(); } },80); return ()=>clearTimeout(t); },[]);
   const handleSave=()=>{ if(!title.trim()) return; onSave({...task,title:title.trim(),estimatedMinutes:isCI?0:time,isCheckIn:isCI,checkInTarget:isCI?(ciTarget||1):1,notes:notes.trim()||null}); };
@@ -2534,41 +3744,41 @@ function EditTaskModal({task, plan, onSave, onChangeTier, onClose}){
     : false;          // bronze 已是最低
   const upTarget  = tier==='bronze'?'silver':tier==='silver'?'gold':null;
   const downTarget= tier==='gold'?'silver':tier==='silver'?'bronze':null;
-  const upLabel   = tier==='bronze'?'🔼 升为银牌任务':tier==='silver'?'🔼 升为金牌任务':null;
-  const downLabel = tier==='gold'?'🔽 降为银牌任务':tier==='silver'?'🔽 降为铜牌任务':null;
-  const upHint    = tier==='silver'&&goldTaken?'金牌任务已有，无法升级':'';
-  const downHint  = tier==='silver'&&bronzeCount>=5?'铜牌已满5个，无法降级':'';
+  const upLabel   = tier==='bronze'?t('edit_task_upgrade_silver'):tier==='silver'?t('edit_task_upgrade_gold'):null;
+  const downLabel = tier==='gold'?t('edit_task_downgrade_silver'):tier==='silver'?t('edit_task_downgrade_bronze'):null;
+  const upHint    = tier==='silver'&&goldTaken?t('edit_task_gold_taken'):'';
+  const downHint  = tier==='silver'&&bronzeCount>=5?t('edit_task_bronze_full'):'';
 
   const doChangeTier=newTier=>{ if(onChangeTier) onChangeTier(task,newTier); };
 
   return(
     <div className="overlay" onClick={onClose}>
       <div className="modal-box modal-welcome" style={{maxWidth:360}} onClick={e=>e.stopPropagation()}>
-        <div style={{fontSize:16,fontWeight:700,marginBottom:3,color:'var(--text-primary)'}}>✏️ 编辑任务</div>
+        <div style={{fontSize:16,fontWeight:700,marginBottom:3,color:'var(--text-primary)'}}>✏️ {t('modal_edit_title')}</div>
         <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:16}}>{tierLabel}</div>
-        <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:6}}>任务名称</label>
+        <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:6}}>{t('task_name_ph')}</label>
         <input ref={editInputRef} className="plan-input" value={title} onChange={e=>setTitle(e.target.value)}
           onKeyDown={e=>{if(e.key==='Enter') handleSave();}} maxLength={100}
           style={{width:'100%',marginBottom:8,boxSizing:'border-box'}}/>
         {/* 备注 */}
         {!showNotes
-          ? <button onClick={()=>setShowNotes(true)} style={{fontSize:11,color:'var(--text-secondary)',background:'none',border:'none',cursor:'pointer',padding:'0 0 12px',textDecoration:'underline',textUnderlineOffset:2}}>＋ 添加备注</button>
-          : <textarea value={notes} onChange={e=>setNotes(e.target.value)} placeholder="备注、背景、参考链接…" rows={2}
+          ? <button onClick={()=>setShowNotes(true)} style={{fontSize:11,color:'var(--text-secondary)',background:'none',border:'none',cursor:'pointer',padding:'0 0 12px',textDecoration:'underline',textUnderlineOffset:2}}>＋ {t('edit_task_add_notes')}</button>
+          : <textarea value={notes} onChange={e=>setNotes(e.target.value)} placeholder={t('edit_task_notes_ph')} rows={2}
               style={{width:'100%',marginBottom:12,boxSizing:'border-box',background:'var(--input-bg)',border:'1px solid var(--input-border)',borderRadius:10,padding:'8px 10px',fontSize:12,color:'var(--text-primary)',resize:'vertical',lineHeight:1.5,fontFamily:'inherit'}}/>
         }
-        <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:8}}>预计用时</label>
+        <label style={{fontSize:12,color:'var(--text-secondary)',display:'block',marginBottom:8}}>{t('task_time_label')}</label>
         <TimePicker value={time} onChange={setTime} tier={tier} isCheckIn={isCI} onCheckInChange={v=>{setIsCI(v);if(!v)setCiTarget(1);}}/>
         {isCI&&<div style={{display:'flex',alignItems:'center',gap:8,marginTop:10}}>
-          <span style={{fontSize:12,color:'var(--text-secondary)'}}>目标次数</span>
+          <span style={{fontSize:12,color:'var(--text-secondary)'}}>{t('task_ci_target')}</span>
           <input type="number" min={1} max={99} value={ciTarget||''}
             onChange={e=>setCiTarget(Math.min(99,+e.target.value||0))}
             onBlur={()=>setCiTarget(v=>Math.max(1,+v||1))}
             style={{width:54,padding:'4px 8px',background:'var(--input-bg)',border:'1px solid var(--input-border)',borderRadius:8,color:'var(--text-primary)',fontSize:13,textAlign:'center'}}/>
-          <span style={{fontSize:12,color:'var(--text-secondary)'}}>次</span>
+          <span style={{fontSize:12,color:'var(--text-secondary)'}}>{t('edit_task_times_short')}</span>
         </div>}
         <div style={{display:'flex',gap:8,marginTop:16}}>
-          <button className="btn btn-green" style={{flex:1}} onClick={handleSave}>✅ 保存</button>
-          <button className="btn btn-ghost" style={{flex:1}} onClick={onClose}>取消</button>
+          <button className="btn btn-green" style={{flex:1}} onClick={handleSave}>✅ {t('save')}</button>
+          <button className="btn btn-ghost" style={{flex:1}} onClick={onClose}>{t('modal_cancel')}</button>
         </div>
         {(upLabel||downLabel)&&<div className="tier-change-row">
           {upLabel&&<button className="tier-up-btn" disabled={!canUpgrade} onClick={()=>canUpgrade&&doChangeTier(upTarget)} title={upHint||upLabel}>
@@ -2603,18 +3813,18 @@ function TaskCard({task,locked,onStart,onEdit,onDelete,onUndoComplete,onQuickSav
             <span className={`card-badge badge-${tier}`}>✅</span>
           </div>
           <div className="card-meta">
-            {task.actualMinutes>0&&<span>用时 {task.actualMinutes}min</span>}
+            {task.actualMinutes>0&&<span>{t('task_used_time', task.actualMinutes)}</span>}
             <span className="card-btn-group">
               {onUndoComplete&&<button className="card-edit-btn"
                 onClick={e=>{e.stopPropagation();onUndoComplete(task);}}
                 onTouchStart={e=>e.stopPropagation()}
                 onTouchEnd={e=>{e.stopPropagation();onUndoComplete(task);}}
-                title="撤销完成">↩️</button>}
+                title={t('task_undo_tip')}>↩️</button>}
               {onDelete&&<button className="card-edit-btn"
                 onClick={e=>{e.stopPropagation();onDelete(task);}}
                 onTouchStart={e=>e.stopPropagation()}
                 onTouchEnd={e=>{e.stopPropagation();onDelete(task);}}
-                title="删除任务" style={{color:'var(--danger)'}}>🗑️</button>}
+                title={t('task_delete_tip')} style={{color:'var(--danger)'}}>🗑️</button>}
             </span>
           </div>
           <div className={stampClass}>DONE</div>
@@ -2704,21 +3914,21 @@ function TaskCard({task,locked,onStart,onEdit,onDelete,onUndoComplete,onQuickSav
           ):(
             <div className={`card-title title-expanded`}
                  onDoubleClick={startInlineEdit}
-                 title={'双击编辑标题·长按编辑'}>
+                 title={t('task_edit_hint')}>
               <span style={{marginRight:5}}>{tierEmoji}</span>{task.title}
             </div>
           )}
-          <span className={`card-badge badge-${tier}`}>{locked?'🔒':isMultiCI?`${ciCount}/${ciTarget}`:isCI?'✓ 打卡':isPaused?'⏸ 继续':'▶ 开始'}</span>
+          <span className={`card-badge badge-${tier}`}>{locked?t('task_locked'):isMultiCI?`${ciCount}/${ciTarget}`:isCI?t('task_checkin'):isPaused?t('task_pause'):t('task_start')}</span>
         </div>
         {task.notes&&<div style={{fontSize:11,color:'var(--text-secondary)',padding:'2px 0 4px',lineHeight:1.5,wordBreak:'break-word',opacity:.85}}>📝 {task.notes}</div>}
         <div className="card-meta">
           {isMultiCI
-            ? <span>每点一次 +1，目标 {ciTarget} 次</span>
+            ? <span>{t('task_ci_hint', ciTarget)}</span>
             : isCI
-            ? <span>点击即完成，无需计时</span>
+            ? <span>{t('task_tap_no_timer')}</span>
             : isPaused && remainMins!=null
-              ? <span>⏸ 剩余约 {remainMins} 分钟</span>
-              : <span>⏱ {task.estimatedMinutes}分钟</span>
+              ? <span>⏸ {t('task_remain_mins', remainMins)}</span>
+              : <span>⏱ {t('minutes', task.estimatedMinutes)}</span>
           }
           {!locked&&(onEdit||onDelete)&&(
             <span className="card-btn-group">
@@ -2726,12 +3936,12 @@ function TaskCard({task,locked,onStart,onEdit,onDelete,onUndoComplete,onQuickSav
                 onClick={e=>{e.stopPropagation();onEdit(task);}}
                 onTouchStart={e=>e.stopPropagation()}
                 onTouchEnd={e=>{e.stopPropagation();onEdit(task);}}
-                title="编辑任务">✏️</button>}
+                title={t('task_edit_tip')}>✏️</button>}
               {onDelete&&<button className="card-edit-btn"
                 onClick={e=>{e.stopPropagation();onDelete(task);}}
                 onTouchStart={e=>e.stopPropagation()}
                 onTouchEnd={e=>{e.stopPropagation();onDelete(task);}}
-                title="删除任务" style={{color:'var(--danger)'}}>🗑️</button>}
+                title={t('task_delete_tip')} style={{color:'var(--danger)'}}>🗑️</button>}
             </span>
           )}
         </div>
@@ -2748,9 +3958,9 @@ function GoldCompleteModal({onClose}){
       <div className="modal-box modal-welcome" style={{maxWidth:300,textAlign:'center'}} onClick={e=>e.stopPropagation()}>
         <div className="gold-celebrate">
           <div style={{fontSize:56,marginBottom:8}}>🏆</div>
-          <div style={{fontSize:19,fontWeight:800,color:'var(--gold)',marginBottom:8}}>太棒了！</div>
-          <div style={{fontSize:14,color:'var(--text-primary)',lineHeight:1.7}}>今天最重要的事<br/>已经完成 🎉</div>
-          <div style={{fontSize:11,color:'var(--text-secondary)',marginTop:10}}>专注在最重要的事上<br/>这就是高效的秘诀</div>
+          <div style={{fontSize:19,fontWeight:800,color:'var(--gold)',marginBottom:8}}>{t('gold_solo_title')}</div>
+          <div style={{fontSize:14,color:'var(--text-primary)',lineHeight:1.7}}>{t('gold_solo_line1')}<br/>{t('gold_solo_line2')}</div>
+          <div style={{fontSize:11,color:'var(--text-secondary)',marginTop:10}}>{t('gold_solo_body1')}<br/>{t('gold_solo_body2')}</div>
         </div>
       </div>
     </div>
@@ -2824,7 +4034,7 @@ function Dashboard({plan,onUpdate,onAddTask,onDeleteTask,onChangeTier}){
 
   const Sec=({tier,items})=>{
     const dc=items.filter(t=>t.status==='completed').length;
-    const label=tier==='gold'?'今日必做':tier==='silver'?'重要任务':'待办事项';
+    const label=tier==='gold'?t('gold_title'):tier==='silver'?t('silver_title'):t('bronze_title');
     const icon=tier==='gold'?'🥇':tier==='silver'?'🥈':'🥉';
     // 未完成任务在前，已完成任务沉底
     const sorted=[...items].sort((a,b)=>(a.status==='completed'?1:0)-(b.status==='completed'?1:0));
@@ -2850,7 +4060,7 @@ function Dashboard({plan,onUpdate,onAddTask,onDeleteTask,onChangeTier}){
             <span className={`tier-prog-pip${plan.goldTask.status==='completed'?' pip-done':''}`}>
               {plan.goldTask.status==='completed'?'✔':'○'}
             </span>
-            {plan.goldTask.status==='completed'&&<span className="tier-prog-badge">已获得</span>}
+            {plan.goldTask.status==='completed'&&<span className="tier-prog-badge">{t('gold_badge')}</span>}
           </div>
         )}
         {plan.silverTasks.length>0&&(
@@ -2859,7 +4069,7 @@ function Dashboard({plan,onUpdate,onAddTask,onDeleteTask,onChangeTier}){
             {plan.silverTasks.map((t,i)=>(
               <span key={i} className={`tier-prog-pip${t.status==='completed'?' pip-done':''}`}>{t.status==='completed'?'✔':'○'}</span>
             ))}
-            {plan.silverTasks.length>0&&plan.silverTasks.every(t=>t.status==='completed')&&<span className="tier-prog-badge">已获得</span>}
+            {plan.silverTasks.length>0&&plan.silverTasks.every(t=>t.status==='completed')&&<span className="tier-prog-badge">{t('gold_badge')}</span>}
           </div>
         )}
         {plan.bronzeTasks.length>0&&(
@@ -2868,7 +4078,7 @@ function Dashboard({plan,onUpdate,onAddTask,onDeleteTask,onChangeTier}){
             {plan.bronzeTasks.map((t,i)=>(
               <span key={i} className={`tier-prog-pip${t.status==='completed'?' pip-done':''}`}>{t.status==='completed'?'✔':'○'}</span>
             ))}
-            {plan.bronzeTasks.length>0&&plan.bronzeTasks.every(t=>t.status==='completed')&&<span className="tier-prog-badge">已获得</span>}
+            {plan.bronzeTasks.length>0&&plan.bronzeTasks.every(t=>t.status==='completed')&&<span className="tier-prog-badge">{t('gold_badge')}</span>}
           </div>
         )}
         <div style={{marginLeft:'auto',fontSize:11,color:'var(--text-secondary)',fontWeight:600}}>{done}/{all.length}</div>
@@ -2879,11 +4089,11 @@ function Dashboard({plan,onUpdate,onAddTask,onDeleteTask,onChangeTier}){
       {done===all.length&&all.length>0&&(
         <div className="all-done-banner">
           <div style={{fontSize:44,marginBottom:8}}>🏆</div>
-          <div style={{fontSize:19,fontWeight:800,color:'var(--gold)',marginBottom:5}}>今日任务全部完成！</div>
-          <div style={{fontSize:12,color:'var(--text-secondary)'}}>太棒了，明天继续保持！</div>
+          <div style={{fontSize:19,fontWeight:800,color:'var(--gold)',marginBottom:5}}>{t('all_done_title')}</div>
+          <div style={{fontSize:12,color:'var(--text-secondary)'}}>{t('all_done_sub')}</div>
         </div>
       )}
-      <button className="add-task-btn" onClick={()=>setShowAddTask(true)}>➕ 新增任务</button>
+      <button className="add-task-btn" onClick={()=>setShowAddTask(true)}>➕ {t('add_task')}</button>
       {showGoldComplete&&<GoldCompleteModal onClose={()=>setShowGoldComplete(false)}/>}
       {activeTask&&<PomodoroTimer task={activeTask} onComplete={complete} onPause={pause}/>}
       {editTask&&<EditTaskModal task={editTask} plan={plan} onSave={handleSaveEdit} onChangeTier={(t,tier)=>{onChangeTier&&onChangeTier(t,tier);setEditTask(null);}} onClose={()=>setEditTask(null)}/>}
@@ -2892,11 +4102,11 @@ function Dashboard({plan,onUpdate,onAddTask,onDeleteTask,onChangeTier}){
         <div className="overlay" onClick={()=>setDeleteConfirm(null)}>
           <div className="dialog-box" onClick={e=>e.stopPropagation()}>
             <div className="dialog-emoji">🗑️</div>
-            <div className="dialog-title">删除任务</div>
-            <div className="dialog-sub">确定删除「{deleteConfirm.title}」？<br/>此操作无法撤销。</div>
+            <div className="dialog-title">{t('modal_delete')}</div>
+            <div className="dialog-sub">{t('task_delete_confirm_title', deleteConfirm.title)}<br/>{t('task_delete_confirm_sub')}</div>
             <div className="dialog-row">
-              <button className="dialog-btn" style={{background:'rgba(255,82,82,0.15)',color:'var(--danger)',border:'1px solid rgba(255,82,82,0.3)'}} onClick={confirmDelete}>🗑️ 删除</button>
-              <button className="dialog-btn dialog-no" onClick={()=>setDeleteConfirm(null)}>取消</button>
+              <button className="dialog-btn" style={{background:'rgba(255,82,82,0.15)',color:'var(--danger)',border:'1px solid rgba(255,82,82,0.3)'}} onClick={confirmDelete}>🗑️ {t('delete')}</button>
+              <button className="dialog-btn dialog-no" onClick={()=>setDeleteConfirm(null)}>{t('confirm_cancel')}</button>
             </div>
           </div>
         </div>
@@ -2933,29 +4143,29 @@ function WrapUpModal({plan, plans, streak, onClose, onPlanTomorrow}){
       <div className="wrapup-modal" onClick={e=>e.stopPropagation()}>
         <div className="wrapup-hero">
           <span className="wrapup-emoji">{allDone?'🌟':'🌙'}</span>
-          <div className="wrapup-title">{allDone?'完美收工！':'今日收工'}</div>
-          <div className="wrapup-date">{allDone?'所有任务全部完成，太棒了！':'今天辛苦了，明天继续加油！'}</div>
+          <div className="wrapup-title">{allDone?t('wrapup_perfect'):t('wrapup_normal')}</div>
+          <div className="wrapup-date">{allDone?t('wrapup_perfect_sub'):t('wrapup_normal_sub')}</div>
         </div>
         <div className="wrapup-stats">
           <div className="wrapup-stat">
             <div className="wrapup-stat-val" style={{color:'var(--gold)'}}>{done.length}<span style={{fontSize:13,fontWeight:500}}>/{tasks.length}</span></div>
-            <div className="wrapup-stat-lbl">任务完成</div>
+            <div className="wrapup-stat-lbl">{t('wrapup_task_done')}</div>
           </div>
           <div className="wrapup-stat">
             <div className="wrapup-stat-val" style={{color:'var(--success)'}}>{timeStr}</div>
-            <div className="wrapup-stat-lbl">专注时长</div>
+            <div className="wrapup-stat-lbl">{t('wrapup_focus_time')}</div>
           </div>
           <div className="wrapup-stat">
-            <div className="wrapup-stat-val" style={{color:'#FF9500'}}>{streak}<span style={{fontSize:11}}>天</span></div>
-            <div className="wrapup-stat-lbl">🔥 连击</div>
+            <div className="wrapup-stat-val" style={{color:'#FF9500'}}>{streak}<span style={{fontSize:11}}>{t('wrapup_days')}</span></div>
+            <div className="wrapup-stat-lbl">{t('wrapup_streak_label')}</div>
           </div>
         </div>
         {pick&&<div className="wrapup-insight">
           <span className="wrapup-insight-emoji">{pick.emoji}</span>
           <span className="wrapup-insight-text">{pick.text}</span>
         </div>}
-        <button className="wrapup-close" onClick={onPlanTomorrow||onClose}>🌅 收好今天，迎接明天</button>
-        <button className="wrapup-continue" onClick={onClose}>继续今天</button>
+        <button className="wrapup-close" onClick={onPlanTomorrow||onClose}>{t('wrapup_goodnight')}</button>
+        <button className="wrapup-continue" onClick={onClose}>{t('wrapup_continue')}</button>
       </div>
     </div>
   );
@@ -2981,9 +4191,9 @@ function DataReview({plans}){
   const HeatMap=()=>{
     const cells=[]; const now=new Date();
     for(let i=69;i>=0;i--){const d=new Date(now);d.setDate(d.getDate()-i);const k=d.toISOString().split('T')[0],p=plans[k];const n=p?planTasks(p).filter(t=>t.status==='completed').length:0;const lvl=n>=9?4:n>=6?3:n>=3?2:n>=1?1:0;cells.push({k,lvl});}
-    return(<div className="review-card"><div className="review-card-title">📅 活跃热力图（近70天）</div>
+    return(<div className="review-card"><div className="review-card-title">{t('review_heatmap')}</div>
       <div className="heatmap">{cells.map((c,i)=><div key={i} className={`hm-cell${c.lvl>0?` hm-${c.lvl}`:''}`} title={c.k}/>)}</div>
-      <div className="hm-legend"><span>少</span>{[0,1,2,3,4].map(l=><div key={l} className="hm-sw" style={{background:l===0?'var(--chip-bg)':`rgba(200,144,10,${l*.2+.1})`}}/>)}<span>多</span></div>
+      <div className="hm-legend"><span>{t('review_heatmap_less')}</span>{[0,1,2,3,4].map(l=><div key={l} className="hm-sw" style={{background:l===0?'var(--chip-bg)':`rgba(200,144,10,${l*.2+.1})`}}/>)}<span>{t('review_heatmap_more')}</span></div>
     </div>);
   };
 
@@ -2991,11 +4201,12 @@ function DataReview({plans}){
     const rows=[]; const now=new Date();
     for(let i=6;i>=0;i--){const d=new Date(now);d.setDate(d.getDate()-i);const k=d.toISOString().split('T')[0],p=plans[k],ts=p?planTasks(p):[];
       const pl=ts.reduce((s,t)=>s+(t.estimatedMinutes||0),0),ac=ts.filter(t=>t.status==='completed').reduce((s,t)=>s+(t.actualMinutes||0),0);
-      rows.push({lbl:`周${'日一二三四五六'[d.getDay()]}`,plan:pl,act:ac});}
+      const lbl = getLang()==='en' ? ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()] : `周${'日一二三四五六'[d.getDay()]}`;
+      rows.push({lbl,plan:pl,act:ac});}
     const mx=Math.max(...rows.flatMap(r=>[r.plan,r.act]),60);
-    return(<div className="review-card"><div className="review-card-title">📊 近7天时间对比（分钟）</div>
+    return(<div className="review-card"><div className="review-card-title">{t('review_bar7d')}</div>
       <div className="bar-chart-wrap">{rows.map((r,i)=>(<div key={i} className="bar-grp"><div className="bar bar-plan" style={{height:`${(r.plan/mx)*70}px`}}/><div className="bar bar-act" style={{height:`${(r.act/mx)*70}px`}}/><span className="bar-lbl">{r.lbl}</span></div>))}</div>
-      <div className="chart-legend"><span><span className="legend-sw" style={{background:'var(--gold-bg)',border:'1px solid var(--gold-border)'}}/>计划</span><span><span className="legend-sw" style={{background:'var(--gold)',opacity:.85}}/>实际</span></div>
+      <div className="chart-legend"><span><span className="legend-sw" style={{background:'var(--gold-bg)',border:'1px solid var(--gold-border)'}}/>{t('review_bar_plan')}</span><span><span className="legend-sw" style={{background:'var(--gold)',opacity:.85}}/>{t('review_bar_actual')}</span></div>
     </div>);
   };
 
@@ -3024,7 +4235,7 @@ function DataReview({plans}){
     };
     const thisW=weekStats(thisWeekDays);
     const lastW=weekStats(lastWeekDays);
-    const dayNames=['周一','周二','周三','周四','周五','周六','周日'];
+    const dayNames=t('day_names_mon0');
     // 本周每日情况
     const dayRows=thisWeekDays.map((d,i)=>{
       const p=plans[d]; const ts=p?planTasks(p):[];
@@ -3045,48 +4256,48 @@ function DataReview({plans}){
     // 本周起止日期
     const wkStart=new Date(thisWeekDays[0]+' 12:00');
     const wkEnd=new Date(thisWeekDays[6]+' 12:00');
-    const fmtMD=d=>`${d.getMonth()+1}月${d.getDate()}日`;
+    const fmtMD=d=>t('fmt_md',d.getMonth()+1,d.getDate());
     if(thisW.activeDays===0 && lastW.activeDays===0)
-      return(<div className="empty-state"><div className="empty-icon">📅</div><div className="empty-title">暂无数据</div><div className="empty-text">开始记录任务后，这里将展示每周回顾</div></div>);
+      return(<div className="empty-state"><div className="empty-icon">📅</div><div className="empty-title">{t('review_empty')}</div><div className="empty-text">{t('review_empty_hint')}</div></div>);
     return(
       <div>
         {/* 本周标题 */}
         <div style={{textAlign:'center',marginBottom:14}}>
           <div style={{fontSize:13,color:'var(--text-secondary)',marginBottom:2}}>{fmtMD(wkStart)} – {fmtMD(wkEnd)}</div>
-          <div style={{fontSize:18,fontWeight:800,color:'var(--text-primary)'}}>本周回顾</div>
+          <div style={{fontSize:18,fontWeight:800,color:'var(--text-primary)'}}>{t('review_week_title')}</div>
         </div>
         {/* 核心数字 */}
         <div className="stats-grid" style={{marginBottom:11}}>
           <div className="stat-tile">
             <span className="stat-val" style={{color:'var(--gold)'}}>{thisW.done.length}</span>
-            <div className="stat-lbl">✅ 任务完成</div>
+            <div className="stat-lbl">{t('review_week_done')}</div>
             <div style={{fontSize:10,marginTop:3,color:arrowColor(thisW.done.length,lastW.done.length)}}>
-              {arrow(thisW.done.length,lastW.done.length)} 上周{lastW.done.length}个
+              {arrow(thisW.done.length,lastW.done.length)} {t('review_week_cmp_count',lastW.done.length)}
             </div>
           </div>
           <div className="stat-tile">
             <span className="stat-val" style={{color:'var(--success)'}}>{fmt(thisW.focusMins)}</span>
-            <div className="stat-lbl">⏱ 专注时长</div>
+            <div className="stat-lbl">{t('review_week_focus')}</div>
             <div style={{fontSize:10,marginTop:3,color:arrowColor(thisW.focusMins,lastW.focusMins)}}>
-              {arrow(thisW.focusMins,lastW.focusMins)} 上周{fmt(lastW.focusMins)}
+              {arrow(thisW.focusMins,lastW.focusMins)} {t('review_week_cmp_time',fmt(lastW.focusMins))}
             </div>
           </div>
           <div className="stat-tile">
             <span className="stat-val" style={{color:'var(--gold)'}}>{thisW.rate}%</span>
-            <div className="stat-lbl">📈 完成率</div>
+            <div className="stat-lbl">{t('review_week_rate')}</div>
             <div style={{fontSize:10,marginTop:3,color:arrowColor(thisW.rate,lastW.rate)}}>
-              {arrow(thisW.rate,lastW.rate)} 上周{lastW.rate}%
+              {arrow(thisW.rate,lastW.rate)} {t('review_week_cmp_pct',lastW.rate)}
             </div>
           </div>
         </div>
         <div className="stats-grid" style={{marginBottom:14}}>
-          <div className="stat-tile"><span className="stat-val" style={{color:'var(--gold)'}}>{thisW.goldDone}</span><div className="stat-lbl">🥇 金牌完成</div></div>
-          <div className="stat-tile"><span className="stat-val" style={{color:'#FF9500'}}>{thisW.activeDays}</span><div className="stat-lbl">📅 活跃天数</div></div>
-          <div className="stat-tile"><span className="stat-val" style={{color:'var(--success)'}}>{thisW.perfectDays}</span><div className="stat-lbl">🌟 完美天数</div></div>
+          <div className="stat-tile"><span className="stat-val" style={{color:'var(--gold)'}}>{thisW.goldDone}</span><div className="stat-lbl">{t('review_week_gold')}</div></div>
+          <div className="stat-tile"><span className="stat-val" style={{color:'#FF9500'}}>{thisW.activeDays}</span><div className="stat-lbl">{t('review_week_active')}</div></div>
+          <div className="stat-tile"><span className="stat-val" style={{color:'var(--success)'}}>{thisW.perfectDays}</span><div className="stat-lbl">{t('review_week_perfect')}</div></div>
         </div>
         {/* 每日打卡条 */}
         <div className="review-card" style={{marginBottom:11}}>
-          <div className="review-card-title">每日完成情况</div>
+          <div className="review-card-title">{t('review_week_daily')}</div>
           <div style={{display:'flex',gap:6}}>
             {dayRows.map((r,i)=>(
               <div key={r.d} style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',gap:4}}>
@@ -3104,7 +4315,7 @@ function DataReview({plans}){
         {/* 本周完成的任务 */}
         {topTasks.length>0&&(
           <div className="review-card" style={{marginBottom:11}}>
-            <div className="review-card-title">🏆 本周完成的任务</div>
+            <div className="review-card-title">{t('review_week_tasks_done')}</div>
             {topTasks.map((t,i)=>(
               <div key={i} style={{display:'flex',alignItems:'center',gap:8,padding:'7px 0',borderBottom:i<topTasks.length-1?'1px solid var(--subtle-border)':'none'}}>
                 <span style={{fontSize:16}}>{t.tier==='gold'?'🥇':t.tier==='silver'?'🥈':'🥉'}</span>
@@ -3120,11 +4331,11 @@ function DataReview({plans}){
             {thisW.rate>=100?'🎉':thisW.rate>=80?'🌟':thisW.rate>=50?'💪':'🌱'}
           </div>
           <div style={{fontSize:13,color:'var(--text-primary)',fontWeight:600,lineHeight:1.6}}>
-            {thisW.rate>=100?'完美一周！所有任务全部完成，太厉害了！'
-             :thisW.rate>=80?`表现出色！完成率 ${thisW.rate}%，继续保持！`
-             :thisW.rate>=50?`不错的一周，完成了 ${thisW.done.length} 个任务，下周继续加油！`
-             :thisW.activeDays>0?`播下了 ${thisW.activeDays} 天的种子，积累总比停止好。`
-             :'新的一周，新的开始，加油！💫'}
+            {thisW.rate>=100?t('week_msg_perfect')
+             :thisW.rate>=80?t('week_msg_great',thisW.rate)
+             :thisW.rate>=50?t('week_msg_good',thisW.done.length)
+             :thisW.activeDays>0?t('week_msg_seed',thisW.activeDays)
+             :t('week_msg_new')}
           </div>
         </div>
       </div>
@@ -3134,17 +4345,17 @@ function DataReview({plans}){
   const MonthlySummary=()=>{
     const mths={}; days.forEach(d=>{ const m=d.slice(0,7); if(!mths[m])mths[m]=[]; mths[m].push(d); });
     const list=Object.entries(mths).sort((a,b)=>b[0].localeCompare(a[0])).slice(0,12);
-    if(!list.length) return(<div className="empty-state"><div className="empty-icon">📅</div><div className="empty-title">暂无数据</div><div className="empty-text">使用满一个月后，这里将显示月度总结</div></div>);
-    return(<div className="review-card"><div className="review-card-title">🗓️ 月度总结</div>
-      <table className="sum-table"><thead><tr><th>月份</th><th>活跃</th><th>完成</th><th>金牌率</th><th>准时率</th></tr></thead>
-      <tbody>{list.map(([m,ds])=>{const ts=ds.flatMap(d=>planTasks(plans[d]));const dn=ts.filter(t=>t.status==='completed');const gl=ts.filter(t=>t.tier==='gold').length;const gr=gl?Math.round(dn.filter(t=>t.tier==='gold').length/gl*100):0;const otr=dn.length?Math.round(dn.filter(t=>t.actualMinutes&&t.actualMinutes<=t.estimatedMinutes).length/dn.length*100):0;const[y,mo]=m.split('-');return(<tr key={m}><td style={{color:'var(--gold)'}}>{y}年{parseInt(mo)}月</td><td>{ds.length}天</td><td>{dn.length}</td><td><span style={{color:gr>=80?'var(--success)':'var(--gold)'}}>{gr}%</span></td><td><span style={{color:otr>=70?'var(--success)':'var(--danger)'}}>{otr}%</span></td></tr>);})}</tbody>
+    if(!list.length) return(<div className="empty-state"><div className="empty-icon">📅</div><div className="empty-title">{t('review_empty')}</div><div className="empty-text">{t('review_month_wait')}</div></div>);
+    return(<div className="review-card"><div className="review-card-title">{t('review_month_title')}</div>
+      <table className="sum-table"><thead><tr><th>{t('review_month_col_month')}</th><th>{t('review_month_col_active')}</th><th>{t('review_month_col_done')}</th><th>{t('review_month_col_gold')}</th><th>{t('review_month_col_ontime')}</th></tr></thead>
+      <tbody>{list.map(([m,ds])=>{const ts=ds.flatMap(d=>planTasks(plans[d]));const dn=ts.filter(t=>t.status==='completed');const gl=ts.filter(t=>t.tier==='gold').length;const gr=gl?Math.round(dn.filter(t=>t.tier==='gold').length/gl*100):0;const otr=dn.length?Math.round(dn.filter(t=>t.actualMinutes&&t.actualMinutes<=t.estimatedMinutes).length/dn.length*100):0;const[y,mo]=m.split('-');return(<tr key={m}><td style={{color:'var(--gold)'}}>{t('month_cell_year_month',y,parseInt(mo))}</td><td>{t('month_cell_days_n',ds.length)}</td><td>{dn.length}</td><td><span style={{color:gr>=80?'var(--success)':'var(--gold)'}}>{gr}%</span></td><td><span style={{color:otr>=70?'var(--success)':'var(--danger)'}}>{otr}%</span></td></tr>);})}</tbody>
       </table></div>);
   };
 
   const InsightCard=()=>{
     const insights=generateInsights(plans,stats);
     return(<div className="insight-card">
-      <div className="insight-card-title">💡 专属洞察</div>
+      <div className="insight-card-title">{t('review_insight_title')}</div>
       {insights.slice(0,3).map((ins,i)=>(
         <div key={i} className={`insight-strip type-${ins.type}`}>
           <span className="insight-strip-emoji">{ins.emoji}</span>
@@ -3155,8 +4366,8 @@ function DataReview({plans}){
   };
 
   const Badges=()=>{
-    const levelNames=['未解锁','🥉 青铜','🥈 白银','🥇 黄金','👑 传奇'];
-    return(<div className="review-card"><div className="review-card-title">🏅 成就勋章</div>
+    const levelNames=[t('lvl_locked'),t('lvl_bronze'),t('lvl_silver'),t('lvl_gold'),t('lvl_legend')];
+    return(<div className="review-card"><div className="review-card-title">{t('review_badges_title')}</div>
       <div className="badge-grid">{TIERED_BADGES.map(b=>{
         const v=b.val(stats);
         let lvl=0;
@@ -3165,20 +4376,24 @@ function DataReview({plans}){
         const nextL=atMax?null:b.levels[lvl];
         const prevT=lvl>0?b.levels[lvl-1].t:0;
         const prog=nextL?Math.min(100,Math.round((v-prevT)/(nextL.t-prevT)*100)):100;
+        const bName=badgeName(b);
+        const bDesc=badgeDesc(b);
+        const nextLvlName=nextL?badgeLevels(b)[lvl].name:'';
+        const descClean=getLang()==='zh'?bDesc.replace('累计','').trim():bDesc;
         return(
           <div key={b.id} className={`badge-row lvl-${lvl}${lvl>0?' lvl-active':''}`}>
             <div className="badge-row-icon" style={{filter:lvl===0?'grayscale(1)':'none',opacity:lvl===0?.35:1}}>{b.emoji}</div>
             <div className="badge-row-body">
               <div className="badge-row-top">
-                <span className="badge-row-name">{b.name}</span>
-                <span className="badge-row-level">{lvl===0?'未解锁':levelNames[lvl]}</span>
+                <span className="badge-row-name">{bName}</span>
+                <span className="badge-row-level">{lvl===0?t('lvl_locked'):levelNames[lvl]}</span>
               </div>
               <div className="badge-prog-track">
                 <div className="badge-prog-fill" style={{width:`${prog}%`}}/>
               </div>
               <div className="badge-prog-hint">
-                {atMax?`🎉 已达传奇，当前 ${v} ${b.desc.replace('累计','').trim()}`:
-                 `${b.desc} ${v} / ${nextL.t}，距「${nextL.name}」还差 ${nextL.t-v}`}
+                {atMax?t('badge_max_line',v,descClean):
+                 t('badge_progress_line',bDesc,v,nextL.t,nextLvlName,nextL.t-v)}
               </div>
             </div>
           </div>
@@ -3188,16 +4403,16 @@ function DataReview({plans}){
   };
 
   return(<div className="review-wrap">
-    <div className="review-top"><h2>📊 数据复盘</h2><p>了解你的时间都去哪了</p></div>
-    <div className="review-tabs">{[{id:'overview',l:'概览'},{id:'weekly',l:'周回顾'},{id:'monthly',l:'每月'},{id:'badges',l:'勋章'}].map(t=>(<button key={t.id} className={`rtab${tab===t.id?' active':''}`} onClick={()=>setTab(t.id)}>{t.l}</button>))}</div>
+    <div className="review-top"><h2>{t('review_top_title')}</h2><p>{t('review_top_hint')}</p></div>
+    <div className="review-tabs">{[{id:'overview',l:t('review_overview')},{id:'weekly',l:t('review_weekly')},{id:'monthly',l:t('review_monthly')},{id:'badges',l:t('review_badges')}].map(tt=>(<button key={tt.id} className={`rtab${tab===tt.id?' active':''}`} onClick={()=>setTab(tt.id)}>{tt.l}</button>))}</div>
     {tab==='overview'&&(<><InsightCard/><div className="stats-grid">
-      <div className="stat-tile"><span className="stat-val" style={{color:'#FF9500'}}>{streak}</span><div className="stat-lbl">🔥 连续打卡</div></div>
-      <div className="stat-tile"><span className="stat-val" style={{color:'var(--gold)'}}>{stats.totalDone}</span><div className="stat-lbl">✅ 累计完成</div></div>
-      <div className="stat-tile"><span className="stat-val" style={{color:'var(--success)'}}>{stats.perfect}</span><div className="stat-lbl">🌟 完美天数</div></div>
+      <div className="stat-tile"><span className="stat-val" style={{color:'#FF9500'}}>{streak}</span><div className="stat-lbl">{t('ov_streak')}</div></div>
+      <div className="stat-tile"><span className="stat-val" style={{color:'var(--gold)'}}>{stats.totalDone}</span><div className="stat-lbl">{t('ov_total')}</div></div>
+      <div className="stat-tile"><span className="stat-val" style={{color:'var(--success)'}}>{stats.perfect}</span><div className="stat-lbl">{t('ov_perfect')}</div></div>
     </div><div className="stats-grid">
-      <div className="stat-tile"><span className="stat-val" style={{color:'var(--gold)'}}>{stats.goldDone}</span><div className="stat-lbl">🥇 金牌完成</div></div>
-      <div className="stat-tile"><span className="stat-val" style={{color:'var(--silver)'}}>{stats.onTime}</span><div className="stat-lbl">⏰ 准时完成</div></div>
-      <div className="stat-tile"><span className="stat-val" style={{color:'var(--success)'}}>{stats.early}</span><div className="stat-lbl">🚀 提前完成</div></div>
+      <div className="stat-tile"><span className="stat-val" style={{color:'var(--gold)'}}>{stats.goldDone}</span><div className="stat-lbl">{t('ov_gold')}</div></div>
+      <div className="stat-tile"><span className="stat-val" style={{color:'var(--silver)'}}>{stats.onTime}</span><div className="stat-lbl">{t('ov_ontime')}</div></div>
+      <div className="stat-tile"><span className="stat-val" style={{color:'var(--success)'}}>{stats.early}</span><div className="stat-lbl">{t('ov_early')}</div></div>
     </div><HeatMap/><BarChart/></>)}
     {tab==='weekly' &&<WeeklySummary/>}{tab==='monthly'&&<MonthlySummary/>}{tab==='badges'&&<Badges/>}
   </div>);
@@ -3221,54 +4436,54 @@ function AddEventModal({initialDate, event:editEvt, onSave, onDelete, onClose}){
     onClose();
   };
   const handleDelete=()=>{
-    if(window.confirm(`删除「${title}」？`)){onDelete(editEvt.id);onClose();}
+    if(window.confirm(t('event_delete_confirm_simple',title))){onDelete(editEvt.id);onClose();}
   };
 
   return(<div className="overlay" onClick={onClose}>
     <div className="modal-box modal-welcome" style={{maxWidth:400}} onClick={e=>e.stopPropagation()}>
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:3}}>
-        <div style={{fontSize:16,fontWeight:700,color:'var(--text-primary)'}}>{isEdit?'✏️ 编辑日历事件':'📅 添加日历事件'}</div>
-        {isEdit&&<button onClick={handleDelete} style={{background:'none',border:'none',cursor:'pointer',fontSize:18,padding:'2px 4px',color:'var(--danger)',opacity:.75}} title="删除事件">🗑️</button>}
+        <div style={{fontSize:16,fontWeight:700,color:'var(--text-primary)'}}>{isEdit?t('event_modal_edit_title'):t('event_modal_add_title')}</div>
+        {isEdit&&<button onClick={handleDelete} style={{background:'none',border:'none',cursor:'pointer',fontSize:18,padding:'2px 4px',color:'var(--danger)',opacity:.75}} title={t('event_modal_delete_tip')}>🗑️</button>}
       </div>
-      <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:15}}>{isEdit?'修改事件信息后保存':'记录计划、提醒或任何事项'}</div>
+      <div style={{fontSize:11,color:'var(--text-secondary)',marginBottom:15}}>{isEdit?t('event_edit_hint'):t('event_add_hint')}</div>
 
-      <div className="form-group"><label className="form-label">标题</label>
-        <input className="form-input" placeholder="事件名称…" value={title} onChange={e=>setTitle(e.target.value)} onKeyDown={e=>e.key==='Enter'&&save()} autoFocus/>
+      <div className="form-group"><label className="form-label">{t('event_title')}</label>
+        <input className="form-input" placeholder={t('event_title_ph')} value={title} onChange={e=>setTitle(e.target.value)} onKeyDown={e=>e.key==='Enter'&&save()} autoFocus/>
       </div>
-      <div className="form-group"><label className="form-label">日期</label>
+      <div className="form-group"><label className="form-label">{t('event_date')}</label>
         <input className="form-input form-input-sm" type="date" value={date} onChange={e=>setDate(e.target.value)}/>
       </div>
 
       <div className="form-group" style={{display:'flex',alignItems:'center',gap:10}}>
         <label style={{fontSize:13,color:'var(--text-primary)',cursor:'pointer',display:'flex',alignItems:'center',gap:6,userSelect:'none'}}>
           <input type="checkbox" checked={allDay} onChange={e=>setAllDay(e.target.checked)} style={{width:15,height:15,accentColor:'var(--gold)'}}/>
-          全天事件
+          {t('event_allday')}
         </label>
       </div>
 
-      {!allDay&&(<div className="form-group"><label className="form-label">时间段</label>
+      {!allDay&&(<div className="form-group"><label className="form-label">{t('event_time')}</label>
         <div className="time-row">
           <input className="form-input form-input-sm" type="time" value={startT} onChange={e=>setStartT(e.target.value)} style={{flex:1}}/>
-          <span>至</span>
+          <span>{t('event_time_to')}</span>
           <input className="form-input form-input-sm" type="time" value={endT} onChange={e=>setEndT(e.target.value)} style={{flex:1}}/>
         </div>
       </div>)}
 
-      <div className="form-group"><label className="form-label">颜色</label>
+      <div className="form-group"><label className="form-label">{t('event_color')}</label>
         <div className="color-picker">
           {Object.entries(EVENT_COLORS).map(([k,c])=>(
             <div key={k} className={`color-dot${color===k?' selected':''}`}
-              style={{background:c.hex}} title={COLOR_LABELS[k]}
+              style={{background:c.hex}} title={colorLabel(k)}
               onClick={()=>setColor(k)}/>
           ))}
         </div>
       </div>
-      <div className="form-group"><label className="form-label">备注（可选）</label>
-        <input className="form-input form-input-sm" placeholder="备注…" value={notes} onChange={e=>setNotes(e.target.value)}/>
+      <div className="form-group"><label className="form-label">{t('event_notes')}</label>
+        <input className="form-input form-input-sm" placeholder={t('event_notes_ph')} value={notes} onChange={e=>setNotes(e.target.value)}/>
       </div>
 
-      <button className="btn btn-gold" disabled={!title.trim()} onClick={save}>{isEdit?'保存修改':'保存事件'}</button>
-      <button className="btn btn-ghost" onClick={onClose}>取消</button>
+      <button className="btn btn-gold" disabled={!title.trim()} onClick={save}>{isEdit?t('event_save_edit'):t('event_save')}</button>
+      <button className="btn btn-ghost" onClick={onClose}>{t('confirm_cancel')}</button>
     </div>
   </div>);
 }
@@ -3321,8 +4536,8 @@ function CalendarView({plans, events, onAddEvent, onDeleteEvent}){
     return cells;
   },[curYear,curMonth]);
 
-  const MONTH_NAMES=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
-  const DAY_LABELS=['一','二','三','四','五','六','日'];
+  const MONTH_NAMES=t('months');
+  const DAY_LABELS=t('day_labels');
 
   // Timeline for selected date
   const timelineEvts=useMemo(()=>getTimelineEvents(selDate,plans,events),[selDate,plans,events]);
@@ -3342,8 +4557,8 @@ function CalendarView({plans, events, onAddEvent, onDeleteEvent}){
     <div>
       <div className="cal-month-header">
         <button className="cal-nav-btn" onClick={prevMonth}>‹</button>
-        <div className="cal-month-title">{curYear}年 {MONTH_NAMES[curMonth]}</div>
-        <button className="cal-today-btn" onClick={goToday}>今天</button>
+        <div className="cal-month-title">{t('cal_year_month', curYear, MONTH_NAMES[curMonth])}</div>
+        <button className="cal-today-btn" onClick={goToday}>{t('cal_today_btn')}</button>
         <button className="cal-nav-btn" onClick={nextMonth}>›</button>
       </div>
       <div className="cal-days-row">
@@ -3387,13 +4602,13 @@ function CalendarView({plans, events, onAddEvent, onDeleteEvent}){
     return(
       <div>
         <div className="cal-day-header">
-          <button className="cal-back-btn" onClick={()=>setView('month')}>‹ 月历</button>
+          <button className="cal-back-btn" onClick={()=>setView('month')}>{t('cal_month_back')}</button>
           <div style={{display:'flex',alignItems:'center',gap:4,flex:1,justifyContent:'center'}}>
             <button className="cal-nav-btn" style={{fontSize:18}} onClick={()=>shiftDay(-1)}>‹</button>
-            <div className="cal-day-title" style={{minWidth:100,textAlign:'center'}}>{fmtDateShort(selDate)}{selDate===today?' · 今天':''}</div>
+            <div className="cal-day-title" style={{minWidth:100,textAlign:'center'}}>{fmtDateShort(selDate)}{selDate===today?t('cal_today_suffix'):''}</div>
             <button className="cal-nav-btn" style={{fontSize:18}} onClick={()=>shiftDay(1)}>›</button>
           </div>
-          <button className="cal-add-btn" onClick={()=>setShowAdd(true)}>+ 添加</button>
+          <button className="cal-add-btn" onClick={()=>setShowAdd(true)}>{t('cal_add')}</button>
         </div>
 
         {/* All-day events */}
@@ -3428,7 +4643,7 @@ function CalendarView({plans, events, onAddEvent, onDeleteEvent}){
             {timelineEvts.length===0&&(
               <div className="day-empty" style={{position:'absolute',top:'30%',left:0,right:0}}>
                 <div className="day-empty-icon">📭</div>
-                <div style={{fontSize:13,color:'var(--text-secondary)'}}>今天还没有任何记录<br/>点击右上角"+ 添加"可添加事件</div>
+                <div style={{fontSize:13,color:'var(--text-secondary)'}}>{t('cal_empty_line1')}<br/>{t('cal_empty_line2')}</div>
               </div>
             )}
           </div>
@@ -3458,6 +4673,7 @@ function App(){
   const [planStyle,  setPlanStyle]  = useLS(SK.PLAN_STYLE, 'morning');
   const [planHour,   setPlanHour]   = useLS(SK.PLAN_HOUR, 21);
   const [habits,     setHabits]     = useLS(SK.HABITS, []);
+  const [lang,       setLang]       = useLS(SK.LANG, 'zh');
   // activeDate tracks the last day the user officially set up a plan.
   // When activeDate !== today, the planning modal shows — NO data is ever deleted.
   const [activeDate, setActiveDate] = useLS(SK.ACTIVE_DATE, null);
@@ -3523,7 +4739,7 @@ function App(){
     setStorageOk(checkStorageAvailable());
     // 监听网络变化
     const onOnline  = ()=>setIsOnline(true);
-    const onOffline = ()=>{ setIsOnline(false); showToast('📡 当前无网络，数据已保存在本地，联网后恢复正常',4000); };
+    const onOffline = ()=>{ setIsOnline(false); showToast(t('banner_offline_toast'),4000); };
     window.addEventListener('online',  onOnline);
     window.addEventListener('offline', onOffline);
     return ()=>{ window.removeEventListener('online',onOnline); window.removeEventListener('offline',onOffline); };
@@ -3593,24 +4809,24 @@ function App(){
   return(
     <div id="app-root">
       {/* 无痕模式 / 存储不可用提示 */}
-      {!storageOk&&<div className="status-banner banner-incognito">⚠️ 无痕模式或存储被禁用，关闭页面后数据将丢失，建议切换为普通模式使用</div>}
+      {!storageOk&&<div className="status-banner banner-incognito">{t('banner_incognito_body')}</div>}
       {/* 离线提示 */}
-      {!isOnline&&<div className="status-banner banner-offline">📡 当前无网络，数据已保存在本地，联网后即可正常访问</div>}
+      {!isOnline&&<div className="status-banner banner-offline">{t('banner_offline_body')}</div>}
       <div className="app-header">
         <div className="header-left">
           <div className="app-header-meta">
             <span className="header-date">{fmtDate(today)}</span>
-            <span className="header-day">第 {dc} 天</span>
-            {streak>0&&<span className="streak-chip">🔥 {streak}天连击</span>}
+            <span className="header-day">{t('day_count', dc)}</span>
+            {streak>0&&<span className="streak-chip">{t('streak', streak)}</span>}
           </div>
         </div>
-        {plan&&<button className="wrapup-btn" onClick={()=>setShowWrapUp(true)} title="今日收工">
+        {plan&&<button className="wrapup-btn" onClick={()=>setShowWrapUp(true)} title={t('btn_wrapup')}>
           <svg viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg>
         </button>}
-        <button className="habit-btn" onClick={()=>setShowHabits(true)} title="习惯管理">
+        <button className="habit-btn" onClick={()=>setShowHabits(true)} title={t('btn_habits')}>
           <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         </button>
-        <button className="settings-btn" onClick={()=>setShowTheme(true)} title="选择主题">
+        <button className="settings-btn" onClick={()=>setShowTheme(true)} title={t('btn_theme')}>
           <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
         </button>
       </div>
@@ -3618,8 +4834,8 @@ function App(){
       {view==='dash'     &&plan &&<Dashboard plan={plan} onUpdate={updateTask} onAddTask={addTask} onDeleteTask={deleteTask} onChangeTier={changeTierTask}/>}
       {view==='cal'            &&<CalendarView plans={plans} events={events} onAddEvent={addEvent} onDeleteEvent={delEvent}/>}
       {view==='review'         &&<DataReview plans={plans}/>}
-      {view==='settings'       &&<SettingsPanel soundEnabled={soundEnabled} onSoundChange={setSoundEnabled} hapticEnabled={hapticEnabled} onHapticChange={setHapticEnabled} planStyle={planStyle} onPlanStyleChange={setPlanStyle} planHour={planHour} onPlanHourChange={setPlanHour}/>}
-      {!welcomed&&<WelcomeModal onStart={(style,hour)=>{setPlanStyle(style);setPlanHour(hour);setWelcomed(true);}}/>}
+      {view==='settings'       &&<SettingsPanel soundEnabled={soundEnabled} onSoundChange={setSoundEnabled} hapticEnabled={hapticEnabled} onHapticChange={setHapticEnabled} planStyle={planStyle} onPlanStyleChange={setPlanStyle} planHour={planHour} onPlanHourChange={setPlanHour} lang={lang} onLangChange={setLang}/>}
+      {!welcomed&&<WelcomeModal lang={lang} onLangChange={setLang} onStart={(style,hour)=>{setPlanStyle(style);setPlanHour(hour);setWelcomed(true);}}/>}
       {welcomed&&!plan&&<DailyPlanModal onDone={savePlan} dayN={dc} today={planDate} habits={habits} carryoverTasks={carryoverTasks} events={events}/>}
       {showTheme&&<ThemePanel current={theme} onChange={setTheme} onClose={()=>setShowTheme(false)}/>}
       {showHabits&&<HabitsManager habits={habits} onSave={setHabits} onClose={()=>setShowHabits(false)} plan={plan} onAddToday={addTask}/>}
@@ -3629,22 +4845,22 @@ function App(){
         <button className={`nav-btn${view==='dash'?' active':''}`} onClick={()=>setView('dash')}>
           <span className="nav-icon-wrap">
             <svg className="nav-svg" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>
-          </span>今日任务
+          </span>{t('nav_today')}
         </button>
         <button className={`nav-btn${view==='cal'?' active':''}`} onClick={()=>setView('cal')}>
           <span className="nav-icon-wrap">
             <svg className="nav-svg" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
-          </span>日历
+          </span>{t('nav_cal')}
         </button>
         <button className={`nav-btn${view==='review'?' active':''}`} onClick={()=>setView('review')}>
           <span className="nav-icon-wrap">
             <svg className="nav-svg" viewBox="0 0 24 24"><path d="M3 20h18"/><rect x="5" y="13" width="3" height="7" rx="0.5"/><rect x="10.5" y="8" width="3" height="12" rx="0.5"/><rect x="16" y="4" width="3" height="16" rx="0.5"/></svg>
-          </span>数据复盘
+          </span>{t('nav_review')}
         </button>
         <button className={`nav-btn${view==='settings'?' active':''}`} onClick={()=>setView('settings')}>
           <span className="nav-icon-wrap">
             <svg className="nav-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-          </span>设置
+          </span>{t('nav_settings')}
         </button>
       </div>
     </div>
